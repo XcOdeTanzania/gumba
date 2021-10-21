@@ -13,14 +13,16 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers(){
-        List<User> users = List.of(new User(1L,
+        List<User> users = List.of(
+                new User(1L,
                         "Maria",
                         "maria@qlicue.edu",
                         Gender.FEMALE),
                 new User(2L,
                         "Ake",
                         "aleake@qlicue.edu",
-                        Gender.MALE));
+                        Gender.MALE)
+        );
         return  users;
 
     }
