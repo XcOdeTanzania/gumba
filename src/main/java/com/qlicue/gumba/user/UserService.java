@@ -14,4 +14,9 @@ public class UserService {
 
        return userRepository.findAll();
     }
+
+    public void addUser(User user) {
+        //check if the student is empty
+        userRepository.save(user);
+    }
 }

@@ -1,9 +1,7 @@
 package com.qlicue.gumba.user;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +17,11 @@ public class UserController {
 
         return userService.getAllUsers();
 
+    }
+
+    @PostMapping
+    public  void addUser(@RequestBody User user){
+        userService.addUser(user);
     }
 
 
