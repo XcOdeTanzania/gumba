@@ -1,12 +1,30 @@
-import {Drawer, Input, Col, Select, Form, Row, Button} from 'antd';
+import {Drawer, Input, Col, Select, Form, Row, Button, Spin} from 'antd';
+import {addNewUser} from "../../client";
+import {LoadingOutlined} from "@ant-design/icons";
+import {useState} from "react";
+import {successNotification, errorNotification} from "../../components/Notifications";
 
 const {Option} = Select;
 
-function UserDrawerForm({showDrawer, setShowDrawer}) {
-    const onCLose = () => setShowDrawer(false);
+const antIcon = <LoadingOutlined style={{ fontSize: 24, color:"white" }} spin />;
 
-    const onFinish = values => {
-        alert(JSON.stringify(values, null, 2));
+function UserDrawerForm({showDrawer, setShowDrawer, fetchUsers}) {
+    const onCLose = () => setShowDrawer(false);
+    const [submitting, setSubmitting]= useState(false);
+    const onFinish = user => {
+        setSubmitting(true);
+        console.log(JSON.stringify(user, null, 2));
+        addNewUser(user).then(() => {
+            console.log("user added");
+            onCLose();
+            successNotification("User successfully added", `${user.name} was added to gumba system`)
+            fetchUsers();
+        }).catch(err => {
+            console.log(err);
+        }).finally(()=>{
+            setSubmitting(false);
+        });
+        ///alert(JSON.stringify(values, null, 2));
     };
 
     const onFinishFailed = errorInfo => {
@@ -72,9 +90,9 @@ function UserDrawerForm({showDrawer, setShowDrawer}) {
             </Row>
             <Row>
                 <Col span={12}>
-                    <Form.Item >
+                    <Form.Item>
                         <Button type="primary" htmlType="submit">
-                            Submit
+                            {submitting && <Spin indicator={antIcon} />}   Submit
                         </Button>
                     </Form.Item>
                 </Col>

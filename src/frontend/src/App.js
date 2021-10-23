@@ -1,5 +1,5 @@
 import './App.css';
-import {getAllStudents} from "./client";
+import {getAllUsers} from "./client";
 import {useState, useEffect} from "react";
 import {Layout, Menu, Breadcrumb, Table, Spin, Empty, Button} from 'antd';
 import {
@@ -39,38 +39,40 @@ const columns = [
 ];
 
 function App() {
-    const [students, setStudents] = useState([]);
+    const [users, setUsers] = useState([]);
     const [collapsed, setCollapsed] = useState(false);
     const [fetching, setFetching] = useState(true);
     const [showDrawer, setShowDrawer] = useState(false);
 
-    const fetchStudents = () => getAllStudents()
+    const fetchUsers = () => getAllUsers()
         .then(resp => resp.json())
         .then(data => {
-            setStudents(data)
+            setUsers(data)
             setFetching(false);
 
         });
 
     useEffect(() => {
         console.log("Invoke only on mount");
-        fetchStudents();
+        fetchUsers();
     }, []);
 
-    const renderStudents = () => {
+    const renderUsers = () => {
         if (fetching) {
             return <Spin/>;
         }
-        if (students.length <= 0) {
+        if (users.length <= 0) {
             return <Empty/>;
         }
         return <>
+
             <UserDrawerForm
                 showDrawer={showDrawer}
                 setShowDrawer={setShowDrawer}
+                fetchUsers= {fetchUsers}
             />
             <Table
-                dataSource={students}
+                dataSource={users}
                 columns={columns}
                 title={() => <Button onClick={() => setShowDrawer(!showDrawer)} type="primary"
                                      icon={<PlusOutlined/>} size="medium">
@@ -78,8 +80,8 @@ function App() {
                 </Button>}
                 pagination={{pageSize: 50}}
                 scroll={{y: 500}}
-                rowKey={(student) => student.id}
-            />;
+                rowKey={(user) => user.id}
+            />
         </>
     }
 
@@ -114,13 +116,14 @@ function App() {
                     <Breadcrumb.Item>User</Breadcrumb.Item>
                     <Breadcrumb.Item>Bill</Breadcrumb.Item>
                 </Breadcrumb>
+
                 <div className="site-layout-background" style={{padding: 24, minHeight: 360}}>
-                    {renderStudents()}
+                    {renderUsers()}
                 </div>
             </Content>
             <Footer style={{textAlign: 'center'}}>Qlicue Analytica ©2021 Created by Qlicue Analytica</Footer>
         </Layout>
-    </Layout>;
+    </Layout>
 }
 
 export default App;

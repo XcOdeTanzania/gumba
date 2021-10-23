@@ -9,6 +9,15 @@ const checkStatus = response => {
     error.response = response;
     return Promise.reject(error);
 }
-export const getAllStudents = () =>
+export const getAllUsers = () =>
     fetch("api/v1/users")
-        .then(checkStatus)
+        .then(checkStatus);
+
+export const addNewUser = user =>
+    fetch("api/v1/users", {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(user)
+    });
