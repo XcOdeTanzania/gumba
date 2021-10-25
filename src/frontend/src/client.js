@@ -20,4 +20,10 @@ export const addNewUser = user =>
         },
         method: 'POST',
         body: JSON.stringify(user)
-    });
+    }).then(checkStatus);
+
+export const deleteUser = userId =>
+    fetch( `api/v1/users/${userId}` , {
+        method: 'DELETE',
+
+    }).then(checkStatus);

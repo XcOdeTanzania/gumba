@@ -1,21 +1,68 @@
 import './App.css';
-import {getAllUsers} from "./client";
+import {deleteUser, getAllUsers} from "./client";
 import {useState, useEffect} from "react";
-import {Layout, Menu, Breadcrumb, Table, Spin, Empty, Button} from 'antd';
+import {
+    Layout,
+    Menu,
+    Breadcrumb,
+    Table,
+    Spin,
+    Empty,
+    Button,
+    Badge,
+    Tag,
+    Avatar,
+    Dropdown,
+    Popconfirm,
+    message
+} from 'antd';
 import {
     DesktopOutlined,
     PieChartOutlined,
     FileOutlined,
     TeamOutlined,
-    UserOutlined, PlusOutlined,
+    UserOutlined, PlusOutlined, MoreOutlined, EditOutlined, DeleteOutlined,
 
 } from '@ant-design/icons';
 import UserDrawerForm from "./pages/user/UserDrawerForm";
+import {confirmPopup} from "./components/ConfirmPopup";
+import {errorNotification, successNotification} from "./components/Notifications";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
 
-const columns = [
+const TheAvatar = ({name}) => {
+    let trim = name.trim();
+    if (trim.length === 0) {
+        return <Avatar icon={<UserOutlined/>}/>
+    }
+
+    const split = trim.split(" ");
+    if (split.length === 1) {
+        return <Avatar>{name.charAt(0)} </Avatar>
+    }
+
+
+    return <Avatar>{name.charAt(0)} </Avatar>
+}
+
+const removeUser = (userId, callback) => {
+    deleteUser(userId).then(() => {
+        successNotification("User deleted", `User with ${userId} was deleted`);
+        callback();
+    }).catch(err=>{
+        err.response.json().then(res=>{
+            errorNotification("There was an issue", `${res.message} [${res.status}] [${res.error}]`);
+        });
+    });
+}
+const columns = fetchUsers => [
+    {
+        title: '',
+        dataIndex: 'avatar',
+        key: 'avatar',
+        render: (text, user) => <TheAvatar name={user.name}/>
+    },
     {
         title: 'Id',
         dataIndex: 'id',
@@ -36,7 +83,42 @@ const columns = [
         dataIndex: 'gender',
         key: 'gender',
     },
+    {
+        title: 'Action',
+        dataIndex: 'action',
+        key: 'action',
+        render: (text, user) => <Dropdown overlay={menu(user, fetchUsers)} placement="bottomLeft" arrow>
+            <MoreOutlined/>
+        </Dropdown>
+    }
 ];
+
+const menu = (user, fetchUsers) => (
+    <Menu onClick={handleMenuClick}>
+        <Menu.Item key="1"><EditOutlined style={{color: "#52c41a"}}/> Edit</Menu.Item>
+        <Menu.Item key="3"> <Popconfirm
+            title={`Are you sure to delete ${user.name}`}
+            onConfirm={() => removeUser(user.id, fetchUsers)}
+            onCancel={cancel}
+            okText="Yes"
+            cancelText="No"
+        >
+            <a href="#"><DeleteOutlined style={{color: "#ff0000"}}/> Delete</a>
+        </Popconfirm> </Menu.Item>
+
+    </Menu>
+);
+
+function cancel(e) {
+    console.log(e);
+    message.error('Click on No').then(() => {
+        console.log('deleting canceled')
+    });
+}
+
+function handleMenuClick(e) {
+    console.log('click', e);
+}
 
 function App() {
     const [users, setUsers] = useState([]);
@@ -48,8 +130,16 @@ function App() {
         .then(resp => resp.json())
         .then(data => {
             setUsers(data)
-            setFetching(false);
 
+
+        }).catch(err => {
+            console.log(err.response);
+            err.response.json().then(res=>{
+                console.log(res);
+                errorNotification("There was an issue", `${res.message} [${res.status}] [${res.error}]`)
+            });
+        }).finally(()=>{
+            setFetching(false);
         });
 
     useEffect(() => {
@@ -69,15 +159,23 @@ function App() {
             <UserDrawerForm
                 showDrawer={showDrawer}
                 setShowDrawer={setShowDrawer}
-                fetchUsers= {fetchUsers}
+                fetchUsers={fetchUsers}
             />
             <Table
                 dataSource={users}
-                columns={columns}
-                title={() => <Button onClick={() => setShowDrawer(!showDrawer)} type="primary"
-                                     icon={<PlusOutlined/>} size="medium">
-                    Add new User
-                </Button>}
+                columns={columns(fetchUsers)}
+                title={() =>
+                    <>
+
+                        <Tag style={{marginLeft: "5px"}}>Number of users </Tag>
+                        <Badge count={users.length} className="site-badge-count-4"/>
+                        <br/><br/>
+                        <Button onClick={() => setShowDrawer(!showDrawer)} type="primary"
+                                icon={<PlusOutlined/>} size="medium">
+                            Add new User
+                        </Button>
+                    </>
+                }
                 pagination={{pageSize: 50}}
                 scroll={{y: 500}}
                 rowKey={(user) => user.id}
