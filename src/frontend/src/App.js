@@ -152,7 +152,19 @@ function App() {
             return <Spin/>;
         }
         if (users.length <= 0) {
-            return <Empty/>;
+            return <>
+                <Button
+                    onClick={() => setShowDrawer(!showDrawer)}
+                    type="primary"   icon={<PlusOutlined/>} size="small">
+                    Add New User
+                </Button>
+                <UserDrawerForm
+                    showDrawer={showDrawer}
+                    setShowDrawer={setShowDrawer}
+                    fetchUsers={fetchUsers}
+                />
+                <Empty/>;
+            </>
         }
         return <>
 

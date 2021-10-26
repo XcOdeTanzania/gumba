@@ -1,5 +1,7 @@
 package com.qlicue.gumba.user;
 
+import com.qlicue.gumba.exception.BadRequestException;
+import com.qlicue.gumba.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,17 @@ public class UserService {
     }
 
     public void addUser(User user) {
-        //check if the student is empty
+        Boolean existsEmail = userRepository.selectExistsEmail(user.getEmail());
+        if(existsEmail){
+            throw new BadRequestException("Email " + user.getEmail() + " taken");
+        }
         userRepository.save(user);
+    }
+
+    public void deleteUser(Long userId) {
+         if(!userRepository.existsById(userId)){
+             throw new NotFoundException("User with id " + userId+ " does not exists");
+         }
+        userRepository.deleteById(userId);
     }
 }
