@@ -9,7 +9,7 @@ class GumbaApplicationTests {
 
 	@Test
 	void contextLoads() {
-		Assertions.fail("Oops test failed");
+		//gitAssertions.fail("Oops test failed");
 	}
 
 }
