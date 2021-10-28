@@ -3,6 +3,7 @@ package com.qlicue.gumba.user;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,8 +21,15 @@ public class UserController {
     }
 
     @PostMapping
-    public  void addUser(@RequestBody User user){
+    public  void addUser( @Valid @RequestBody User user){
+
         userService.addUser(user);
+    }
+
+
+    @DeleteMapping(path="{userId}")
+    public  void deleteUser(@PathVariable("userId")   Long userId){
+        userService.deleteUser(userId);
     }
 
 
