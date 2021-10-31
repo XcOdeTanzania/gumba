@@ -20,14 +20,14 @@ public class UserService {
     public void addUser(User user) {
         Boolean existsEmail = userRepository.selectExistsEmail(user.getEmail());
         if(existsEmail){
-            throw new BadRequestException("Email " + user.getEmail() + " taken");
+            throw new BadRequestException("Email\t" + user.getEmail() + "\ttaken");
         }
         userRepository.save(user);
     }
 
     public void deleteUser(Long userId) {
          if(!userRepository.existsById(userId)){
-             throw new NotFoundException("User with id " + userId+ " does not exists");
+             throw new NotFoundException("User\twith\tid\t" + userId+ "\tdoes\tnot\texists");
          }
         userRepository.deleteById(userId);
     }
