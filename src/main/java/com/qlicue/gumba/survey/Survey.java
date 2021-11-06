@@ -1,15 +1,15 @@
 package com.qlicue.gumba.survey;
 
-import com.qlicue.gumba.user.Gender;
+
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Date;
+
 import java.util.Objects;
 
 @ToString
@@ -18,63 +18,75 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "surveys")
+@Table
 public class Survey {
     @Id
     @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
+            name = "survey_sequence",
+            sequenceName = "survey_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
-            generator =   "user_sequence",
+            generator =   "survey_sequence",
             strategy = GenerationType.SEQUENCE
     )
     private Long id;
     @NotBlank
     @Column(nullable = false)
+    @Lob
     private String title;
+    @Lob
     private String metaTitle;
+    @Lob
     private String slug;
+    @Lob
     private String summary;
     @NotNull
     @Column(nullable = false)
-    private boolean published;
-    @NotNull
+    private boolean publish;
+
     @Column(nullable = false)
     private LocalDate createdAt;
-    @NotNull
+
     @Column(nullable = false)
     private LocalDate updatedAt;
+
     private LocalDate publishedAt;
     private LocalDate startsAt;
     private LocalDate endsAt;
     @NotBlank
     @Column(nullable = false)
+    @Lob
     private String description;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Accessibility accessibility;
 
     public Survey(String title,
                   String metaTitle,
                   String slug,
                   String summary,
-                  boolean published,
+                  boolean publish,
                   LocalDate createdAt,
                   LocalDate updatedAt,
                   LocalDate publishedAt,
                   LocalDate startsAt,
                   LocalDate endsAt,
-                  String description) {
+                  String description,
+                  Accessibility accessibility) {
         this.title = title;
         this.metaTitle = metaTitle;
         this.slug = slug;
         this.summary = summary;
-        this.published = published;
+        this.publish = publish;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.publishedAt = publishedAt;
         this.startsAt = startsAt;
         this.endsAt = endsAt;
         this.description = description;
+        this.accessibility = accessibility;
     }
 
     @Override

@@ -1,7 +1,7 @@
 import {Avatar, Badge, Button, Dropdown, Empty, Menu, message, Popconfirm, Spin, Table, Tag} from "antd";
 import {DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined, UserOutlined} from "@ant-design/icons";
 import UserDrawerForm from "./UserDrawerForm";
-import {deleteUser, getAllUsers} from "../../client";
+import {deleteUser, getAllUsers} from "../../client/UserClient";
 import {errorNotification, successNotification} from "../../components/Notifications";
 import {useEffect, useState} from "react";
 
@@ -138,7 +138,7 @@ function UserList() {
                     setShowDrawer={setShowDrawer}
                     fetchUsers={fetchUsers}
                 />
-                <Empty/>;
+                <Empty/>
             </>
         }
         return <>

@@ -1,5 +1,5 @@
 import {Drawer, Input, Col, Select, Form, Row, Button, Spin} from 'antd';
-import {addNewUser} from "../../client";
+import {addNewUser} from "../../client/UserClient";
 import {LoadingOutlined} from "@ant-design/icons";
 import {useState} from "react";
 import {successNotification, errorNotification} from "../../components/Notifications";

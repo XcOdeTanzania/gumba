@@ -6,6 +6,7 @@ import com.qlicue.gumba.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,7 +20,9 @@ public class SurveyService {
     }
 
     public void addSurvey(Survey survey) {
-
+        //add dates
+        survey.setCreatedAt(LocalDate.now());
+        survey.setUpdatedAt(LocalDate.now());
         surveyRepository.save(survey);
     }
 

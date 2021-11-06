@@ -9,13 +9,15 @@ import {
     TeamOutlined,
     UserOutlined
 } from "@ant-design/icons";
+import SurveyList from "./survey/SurveyList";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
 
 function HomeScreen() {
     const [collapsed, setCollapsed] = useState(false);
-    const pages = ["First page", "Second page", UserList(), "Forth page", "Fifth page", "Sixth page", "Seventh Page", "Eighth page", "Ninth page"];
+    const pages = ["First page", "Second page", UserList(), "Forth page", "Fifth page", "Sixth page", SurveyList(), "Eighth page", "Ninth page"];
+    const pageTitles = ["First page", "Second page", "User", "Forth page", "Fifth page", "Sixth page",  "Survey", "Eighth page", "Ninth page"];
     const [contentIndex, setContentIndex] = useState(0);
 
 
@@ -42,15 +44,15 @@ function HomeScreen() {
                 </Menu.Item>
 
                 <SubMenu key="sub2" icon={<TeamOutlined/>} title="Team">
-                    <Menu.Item key="3">Administrators</Menu.Item>
-                    <Menu.Item key="4">Surveyors</Menu.Item>
+                    <Menu.Item key="3" onClick={changeSelectedKey}>Administrators</Menu.Item>
+                    <Menu.Item key="4" onClick={changeSelectedKey}>Surveyors</Menu.Item>
                 </SubMenu>
                 <SubMenu key="sub3" icon={<FileOutlined/>} title="Surveys">
-                    <Menu.Item key="5">Create</Menu.Item>
-                    <Menu.Item key="6">All</Menu.Item>
-                    <Menu.Item key="7">Draft</Menu.Item>
+                    <Menu.Item key="5" onClick={changeSelectedKey}>Create</Menu.Item>
+                    <Menu.Item key="6" onClick={changeSelectedKey}>All</Menu.Item>
+                    <Menu.Item key="7" onClick={changeSelectedKey}>Draft</Menu.Item>
                 </SubMenu>
-                <Menu.Item key="8" icon={<SettingOutlined/>}>
+                <Menu.Item key="8" icon={<SettingOutlined/>} onClick={changeSelectedKey}>
                     Settings
                 </Menu.Item>
             </Menu>
@@ -59,7 +61,7 @@ function HomeScreen() {
             <Header className="site-layout-background" style={{padding: 0}}/>
             <Content style={{margin: '0 16px'}}>
                 <Breadcrumb style={{margin: '16px 0'}}>
-                    <Breadcrumb.Item>User</Breadcrumb.Item>
+                    <Breadcrumb.Item> {pageTitles[contentIndex]}</Breadcrumb.Item>
                     <Breadcrumb.Item>List</Breadcrumb.Item>
                 </Breadcrumb>
 
