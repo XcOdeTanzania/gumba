@@ -8,93 +8,102 @@ import {
     ShrinkOutlined
 } from "@ant-design/icons";
 import QuestionCard from "./QuestionCard";
-import {useState} from "react";
-import {successNotification} from "../../components/Notifications";
-import ResponseTab from "./response/ResponseTab";
+import {useEffect, useState} from "react";
+import {errorNotification, successNotification} from "../../components/Notifications";
+import ResponseTab from "../survey/response/ResponseTab";
+import {addNewQuestion, deleteQuestion, getAllQuestions} from "../../client/QuestionClient";
 
 
-function SurveyQuestionsDrawer({showDrawer, setShowDrawer, fetchSurveys, survey}) {
+
+
+function QuestionsDrawer({showDrawer, setShowDrawer,   survey}) {
 
     const onCLose = () => setShowDrawer(false);
     const [selectedCardIndex, setSelectedCardIndex] = useState(0);
-
-    const initialQuestionList = [
-        {
-            id: 1,
-            title: 'Question',
-            isRequired:false
-        }
-
-    ];
+    const [fetching, setFetching] = useState(true);
 
 
-    const [questionList, setQuestionList] = useState(initialQuestionList);
 
-    const handleChange = (index) => (event) => {
+    const [questions, setQuestions] = useState( []);
+    const fetchQuestions = () => getAllQuestions()
+        .then(resp => resp.json())
+        .then(data => {
+            setQuestions(data)
+           //select a question
+            setSelectedCardIndex(data.length -1);
+
+        }).catch(err => {
+            console.log(err.response);
+            err.response.json().then(res => {
+                console.log(res);
+                errorNotification("There was an issue", `${res.message} [${res.status}] [${res.error}]`)
+            });
+        }).finally(() => {
+            setFetching(false);
+
+        });
+
+    useEffect(() => {
+        console.log("Invoke only on mount");
+        fetchQuestions();
+    }, []);
 
 
-        let newEntry = questionList[index]
-        newEntry["title"] = event.target.value;
-        questionList[index] = newEntry
-        setQuestionList([...questionList])
-
-        //save the question to database
-
-    }
 
     const addQuestion  = () => {
-        const newList = questionList.concat({id: 0, title: `Question`,isRequired: false});
+        const question = {  title: `Untitled question`,type:'MULTIPLE',   isRequired: false};
+        addNewQuestion(question).then(() => {
 
-        setQuestionList(newList);
+            successNotification("Question successfully added", `${question.title} was added to gumba system`)
 
-        //select the newly added question
-        setSelectedCardIndex(newList.length -1);
+        }).catch(err => {
+            console.log(err);
+            err.response.json().then(res => {
+                errorNotification("There was an issue", `${res.message}   [${res.status}]  [${res.error}]`, "bottomLeft");
+            });
+
+        }).finally(() => {
+             fetchQuestions();
+        });
+
+
     }
 
     const duplicateQuestion  =(index) =>  () => {
-        const newList = questionList.concat(questionList[index]);
+        const newList = questions.concat(questions[index]);
 
-        setQuestionList(newList);
+        setQuestions(newList);
 
         //select the newly added question
         setSelectedCardIndex(newList.length-1  );
     }
 
 
-    const deleteQuestion = (index) => () => {
-        if(questionList.length >1){
-            let copy_list = [...questionList]
-            copy_list.splice(index, 1)
-            setQuestionList(copy_list)
-            setSelectedCardIndex(index -1);
-            successNotification("Item successfully deleted", `item deleted`)
-        }
+    const removeQuestion  = (index) => () => {
+        console.log('noooooooo');
+        console.log(questions[index].id);
+        console.log('noooooooo');
+
+
+
+            deleteQuestion(questions[index].id).then(() => {
+                let copy_list = [...questions]
+                copy_list.splice(index, 1)
+                setQuestions(copy_list)
+                setSelectedCardIndex(index -1);
+                successNotification("Survey deleted", `Survey with ${questions[index].id} was deleted`);
+
+            }).catch(err => {
+                err.response.json().then(res => {
+                    errorNotification("There was an issue", `${res.message} [${res.status}] [${res.error}]`);
+                });
+            }) ;
+
 
     }
     const { Title } = Typography;
-    // const onFinish = survey => {
-    //     setSubmitting(true);
-    //     console.log(JSON.stringify(survey, null, 2));
-    //     addNewSurvey(survey).then(() => {
-    //         console.log("survey added");
-    //         onCLose();
-    //         successNotification("Survey successfully added", `${survey.name} was added to gumba system`)
-    //         fetchSurveys();
-    //     }).catch(err => {
-    //         console.log(err);
-    //         err.response.json().then(res => {
-    //             errorNotification("There was an issue", `${res.message}   [${res.status}]  [${res.error}]`, "bottomLeft");
-    //         });
-    //
-    //     }).finally(() => {
-    //         setSubmitting(false);
-    //     });
-    //     ///alert(JSON.stringify(values, null, 2));
-    // };
 
-    // const onFinishFailed = errorInfo => {
-    //     alert(JSON.stringify(errorInfo, null, 2));
-    // };
+
 
     const {TabPane} = Tabs;
 
@@ -163,10 +172,10 @@ function SurveyQuestionsDrawer({showDrawer, setShowDrawer, fetchSurveys, survey}
                 <br/><br/>
 
 
-                {questionList.map(function (question, index) {
+                {questions.map(function (question, index) {
                     return <>
                     <div onClick={() => setSelectedCardIndex(index)}>
-                        <QuestionCard question={question} index={index} selectedCardIndex={selectedCardIndex} deleteQuestion={deleteQuestion(index)} handleChange={handleChange(index)} duplicateQuestion={duplicateQuestion(index)} />
+                        <QuestionCard question={question} index={index} selectedCardIndex={selectedCardIndex} deleteQuestion={removeQuestion(index)}   duplicateQuestion={duplicateQuestion(index)} />
                     </div>
                         <br/><br/>
 
@@ -187,4 +196,4 @@ function SurveyQuestionsDrawer({showDrawer, setShowDrawer, fetchSurveys, survey}
     </Drawer>
 }
 
-export default SurveyQuestionsDrawer;
+export default QuestionsDrawer;

@@ -4,7 +4,7 @@ import SurveyDrawerForm from "./SurveyDrawerForm";
 import {deleteSurvey, getAllSurveys} from "../../client/SurveyClient";
 import {errorNotification, successNotification} from "../../components/Notifications";
 import {useEffect, useState} from "react";
-import SurveyQuestionsDrawer from "./SurveyQuestionsDrawer";
+import QuestionsDrawer from "../question/QuestionsDrawer";
 
 
 const TheAvatar = ({name}) => {
@@ -151,7 +151,7 @@ function SurveyList() {
         }
         return <>
 
-            <SurveyQuestionsDrawer
+            <QuestionsDrawer
                 showDrawer={showQuestionDrawer}
                 setShowDrawer={setShowQuestionDrawer}
                 fetchSurveys={fetchSurveys}
