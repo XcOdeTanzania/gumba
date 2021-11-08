@@ -4,6 +4,8 @@ package com.qlicue.gumba.answer;
 import com.qlicue.gumba.exception.NotFoundException;
 
 
+import com.qlicue.gumba.question.Question;
+import com.qlicue.gumba.question.QuestionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +18,26 @@ import java.util.Objects;
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
-
+    private  final QuestionRepository questionRepository;
     public List<Answer> getAllAnswers() {
 
         return answerRepository.findAll();
     }
 
-    public void addAnswer(Answer answer) {
+    public void addAnswer(Answer answer, Long questionId) {
+
+        //find the question by id
+        Question question = questionRepository.findById(questionId).orElseThrow(() ->
+                new NotFoundException("Question\twith\tid\t" + questionId + "\tdoes\tnot\texists"));
+
         //add dates
         answer.setCreatedAt(LocalDate.now());
         answer.setUpdatedAt(LocalDate.now());
+
+        //add question to answer
+        answer.setQuestion(question);
+
+        //save the answer
         answerRepository.save(answer);
     }
 

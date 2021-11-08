@@ -1,15 +1,18 @@
 package com.qlicue.gumba.question;
 
-
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.qlicue.gumba.answer.Answer;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @ToString
 @Getter
@@ -18,7 +21,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table
-public class Question {
+
+
+public class Question implements Serializable {
     @Id
     @SequenceGenerator(
             name = "question_sequence",
@@ -47,6 +52,13 @@ public class Question {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private QuestionType type;
+
+    //relationships
+    @JsonManagedReference
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
+
+    private Set<Answer> answers;
 
     public Question(String title,
                     boolean isRequired,

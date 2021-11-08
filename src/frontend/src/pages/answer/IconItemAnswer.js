@@ -2,7 +2,7 @@
 import {  CheckSquareTwoTone, PlusSquareTwoTone} from "@ant-design/icons";
 
 
-function IconItem({index, type} ) {
+function IconItemAnswer({index, type} ) {
 
 
     if(type ==='Radio'){
@@ -17,4 +17,4 @@ function IconItem({index, type} ) {
     }
 }
 
-export default IconItem;
+export default IconItemAnswer;

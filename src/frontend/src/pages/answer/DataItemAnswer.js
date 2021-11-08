@@ -4,7 +4,7 @@ import {Col, Divider, Input, Row, Space} from "antd";
 import TextArea from "antd/es/input/TextArea";
 
 
-function DataItem({ type} ) {
+function DataItemAnswer({ type} ) {
 
 
     if(type ==='File'){
@@ -63,4 +63,4 @@ function DataItem({ type} ) {
     }
 }
 
-export default DataItem;
+export default DataItemAnswer;

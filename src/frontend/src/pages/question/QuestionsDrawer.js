@@ -25,6 +25,8 @@ function QuestionsDrawer({showDrawer, setShowDrawer,   survey}) {
 
 
     const [questions, setQuestions] = useState( []);
+
+
     const fetchQuestions = () => getAllQuestions()
         .then(resp => resp.json())
         .then(data => {
@@ -80,18 +82,13 @@ function QuestionsDrawer({showDrawer, setShowDrawer,   survey}) {
 
 
     const removeQuestion  = (index) => () => {
-        console.log('noooooooo');
-        console.log(questions[index].id);
-        console.log('noooooooo');
-
-
 
             deleteQuestion(questions[index].id).then(() => {
                 let copy_list = [...questions]
                 copy_list.splice(index, 1)
                 setQuestions(copy_list)
                 setSelectedCardIndex(index -1);
-                successNotification("Survey deleted", `Survey with ${questions[index].id} was deleted`);
+                successNotification("Question deleted", `Question with ${questions[index].id} was deleted`);
 
             }).catch(err => {
                 err.response.json().then(res => {

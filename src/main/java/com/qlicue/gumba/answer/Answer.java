@@ -1,8 +1,12 @@
 package com.qlicue.gumba.answer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import com.qlicue.gumba.question.Question;
 import lombok.*;
 import org.hibernate.Hibernate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -13,7 +17,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table
-public class Answer {
+
+public class Answer implements Serializable {
     @Id
     @SequenceGenerator(
             name = "answer_sequence",
@@ -35,15 +40,23 @@ public class Answer {
     private LocalDate createdAt;
     @Column(nullable = false)
     private LocalDate updatedAt;
-   
+
+    //relationship
+    @JsonBackReference
+    @ManyToOne( fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "question_id", nullable = false)
+
+    private Question question;
 
     public Answer(String title, 
                   LocalDate createdAt,
-                  LocalDate updatedAt 
+                  LocalDate updatedAt ,
+                  Question question
                  ) {
         this.title = title; 
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.question = question;
          
     }
 

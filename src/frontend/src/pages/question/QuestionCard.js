@@ -22,18 +22,18 @@ import {
 
 import {useEffect, useRef, useState} from "react";
 
-import OptionAnswer from "./components/OptionAnswer";
+import OptionAnswer from "../answer/OptionAnswer";
 
 
 import {Option} from "antd/es/mentions";
-import SingleAnswer from "./components/SingleAnswer";
+import SingleAnswer from "../answer/SingleAnswer";
 import {errorNotification, successNotification} from "../../components/Notifications";
 import {  updateQuestion} from "../../client/QuestionClient";
 
 function QuestionCard({question, index, selectedCardIndex, deleteQuestion,   duplicateQuestion}) {
     const ref = useRef();
     const questionAnswerTypes = [<SingleAnswer type='Short'/>, <SingleAnswer type='Paragraph'/>,
-        <OptionAnswer type='Radio'/>, <OptionAnswer type='Checkbox'/>, <OptionAnswer type='Dropdown'/>,
+        <OptionAnswer type='Radio' questionId={question.id}/>, <OptionAnswer type='Checkbox' questionId={question.id}/>, <OptionAnswer type='Dropdown' questionId={question.id}/>,
         <SingleAnswer type='File'/>, <SingleAnswer type='Date'/>, <SingleAnswer type='Time'/>];
 
     const [questionAnswerTypeIndex, setQuestionAnswerTypeIndex] = useState(2);
@@ -161,7 +161,10 @@ function QuestionCard({question, index, selectedCardIndex, deleteQuestion,   dup
                     <Col span={14}>
                         <Form.Item
                             name="title">
-                            <Input placeholder="Untitled question" defaultValue={question.title} onChange={onChange}/>
+                            <Input placeholder="Untitled question"
+                                   placeholder={question.title === 'Untitled question' ? question.title   : ""}
+                                   defaultValue={question.title === 'Untitled question' ? null:question.title}
+                                   onChange={onChange}/>
                         </Form.Item>
                     </Col>
                     <Col span={4}>
@@ -170,7 +173,9 @@ function QuestionCard({question, index, selectedCardIndex, deleteQuestion,   dup
                     <Col span={6}>
                         <Form.Item
                             name="type">
-                            <Select placeholder="Please select a gender" defaultValue={question.type}
+                            <Select placeholder="Please select a question type"
+                                    defaultValue={question.type}
+
                                     onChange={onChangeQuestionType}>
 
                                 <Option value="SHORT"><MenuUnfoldOutlined/> Short answer</Option>
