@@ -5,6 +5,7 @@ import { DropOption } from 'components';
 import { Ellipsis } from 'components';
 import { t } from "@lingui/macro"
 import { Trans } from "@lingui/macro"
+import { Link } from 'umi'
 
 import styles from './List.less'
 
@@ -12,11 +13,14 @@ const { confirm } = Modal
 
 class List extends PureComponent {
   handleMenuClick = (record, e) => {
-    const { onDeleteItem, onEditItem } = this.props
+    const { onDeleteItem, onEditItem, onViewItem } = this.props
 
     if (e.key === '1') {
+      onViewItem(record)
+    }
+    else if (e.key === '2') {
       onEditItem(record)
-    } else if (e.key === '2') {
+    } else if (e.key === '3') {
       confirm({
         title: t`Are you sure delete this record?`,
         onOk() {
@@ -40,11 +44,7 @@ class List extends PureComponent {
       {
         title: t`Name`,
         dataIndex: 'name',
-        render: text => (
-          <Ellipsis tooltip length={30}>
-            {text}
-          </Ellipsis>
-        ),
+        render: (text, record) => <Ellipsis><Link to={`survey/${record.id}`}>{text}</Link></Ellipsis>,
       },
       {
         title: <Trans>Description</Trans>,
@@ -78,8 +78,9 @@ class List extends PureComponent {
             <DropOption
               onMenuClick={e => this.handleMenuClick(record, e)}
               menuOptions={[
-                { key: '1', name: t`Update` },
-                { key: '2', name: t`Delete` },
+                { key: '1', name: t`View` },
+                { key: '2', name: t`Update` },
+                { key: '3', name: t`Delete` },
               ]}
             />
           )

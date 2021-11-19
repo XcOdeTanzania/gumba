@@ -113,6 +113,9 @@ class Survey extends PureComponent {
           },
         })
       },
+      onViewItem(item) {
+        history.push(`/survey/${item.id}`)
+      },
       rowSelection: {
         selectedRowKeys,
         onChange: keys => {

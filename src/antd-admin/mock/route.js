@@ -67,6 +67,13 @@ const database = [
     route: '/survey',
   },
   {
+    id: '9',
+    menuParentId: '-1',
+    breadcrumbParentId: '8',
+    name: 'Survey Detail',
+    route: '/survey/:id',
+  },
+  {
     id: '21',
     menuParentId: '-1',
     breadcrumbParentId: '2',

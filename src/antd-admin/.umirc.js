@@ -132,4 +132,11 @@ export default {
       },
     })
   },
+  // routes: [
+  //   {
+  //     path: 'survey/:id',
+  //     component: '@/pages/survey/item',
+  //     exact: true,
+  //   }
+  // ],
 }
