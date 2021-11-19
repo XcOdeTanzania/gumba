@@ -1,7 +1,9 @@
 package com.qlicue.gumba.question;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.qlicue.gumba.answer.Answer;
+import com.qlicue.gumba.survey.Survey;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -60,16 +62,23 @@ public class Question implements Serializable {
 
     private Set<Answer> answers;
 
+    @JsonBackReference
+    @ManyToOne( fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "survey_id", nullable = false)
+    private Survey survey;
+
     public Question(String title,
                     boolean isRequired,
                     LocalDate createdAt,
                     LocalDate updatedAt,
-                    QuestionType type) {
+                    QuestionType type,
+                    Survey survey) {
         this.title = title;
         this.isRequired = isRequired;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.type = type;
+        this.survey = survey;
     }
 
     @Override

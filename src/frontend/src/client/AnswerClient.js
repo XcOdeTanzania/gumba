@@ -6,6 +6,10 @@ export const getAllAnswers = () =>
     fetch("api/v1/answers")
         .then(checkStatus);
 
+export const getQuestionAnswers = (questionId) =>
+    fetch( `api/v1/answers/${questionId}` )
+        .then(checkStatus);
+
 export const addNewAnswer = (answer, questionId) =>
     fetch( `api/v1/answers/${questionId}`, {
         headers: {
@@ -25,6 +29,4 @@ export const updateAnswer = (answer,answerId) =>
     fetch( `api/v1/answers/${answerId}?title=${answer.title}` , {
 
         method: 'PUT',
-
-
     }).then(checkStatus);

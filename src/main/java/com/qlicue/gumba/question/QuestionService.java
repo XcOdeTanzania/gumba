@@ -1,9 +1,13 @@
 package com.qlicue.gumba.question;
 
 
+import com.qlicue.gumba.answer.Answer;
 import com.qlicue.gumba.exception.NotFoundException;
 
+import com.qlicue.gumba.survey.Survey;
+import com.qlicue.gumba.survey.SurveyRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,16 +19,35 @@ import java.util.Objects;
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private  final SurveyRepository surveyRepository;
 
     public List<Question> getAllQuestions() {
 
         return questionRepository.findAll();
     }
 
-    public void addQuestion(Question question) {
+    public List<Question> getSurveyQuestions(Long surveyId) {
+        //find the question by id
+        Survey survey = surveyRepository.findById(surveyId).orElseThrow(() ->
+                new NotFoundException("Question\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
+
+        return   questionRepository .findBySurvey(survey, Sort.by("id"));
+    }
+
+    public void addQuestion(Question question, Long surveyId) {
+
+        //find the survey by id
+        Survey survey = surveyRepository.findById(surveyId).orElseThrow(() ->
+                new NotFoundException("Survey\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
+
         //add dates
         question.setCreatedAt(LocalDate.now());
         question.setUpdatedAt(LocalDate.now());
+
+        //add survey to question
+        question.setSurvey(survey);
+
+
         questionRepository.save(question);
     }
 

@@ -1,6 +1,9 @@
 package com.qlicue.gumba.survey;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.qlicue.gumba.question.Question;
+import com.qlicue.gumba.vote.Vote;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -11,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 import java.util.Objects;
+import java.util.Set;
 
 @ToString
 @Getter
@@ -27,7 +31,7 @@ public class Survey {
             allocationSize = 1
     )
     @GeneratedValue(
-            generator =   "survey_sequence",
+            generator = "survey_sequence",
             strategy = GenerationType.SEQUENCE
     )
     private Long id;
@@ -62,6 +66,19 @@ public class Survey {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Accessibility accessibility;
+
+    //relationships
+    @JsonManagedReference
+    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
+
+    private Set<Question> questions;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
+
+    private Set<Vote> votes;
 
     public Survey(String title,
                   String metaTitle,

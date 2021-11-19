@@ -6,109 +6,12 @@ import {errorNotification, successNotification} from "../../components/Notificat
 import {useEffect, useState} from "react";
 import QuestionsDrawer from "../question/QuestionsDrawer";
 
-
-const TheAvatar = ({name}) => {
-    let trim = name.trim();
-    if (trim.length === 0) {
-        return <Avatar icon={<UnlockOutlined/>}/>
-    }
-
-    const split = trim.split(" ");
-    if (split.length === 1) {
-        return <Avatar>{name.charAt(0)} </Avatar>
-    }
-
-
-    return <Avatar>{name.charAt(0)} </Avatar>
-}
-
-const removeSurvey = (surveyId, callback) => {
-    deleteSurvey(surveyId).then(() => {
-        successNotification("Survey deleted", `Survey with ${surveyId} was deleted`);
-        callback();
-    }).catch(err => {
-        err.response.json().then(res => {
-            errorNotification("There was an issue", `${res.message} [${res.status}] [${res.error}]`);
-        });
-    });
-}
-const columns = (fetchSurveys,setShowQuestionDrawer,showQuestionDrawer,  setSelectedSurvey, selectedSurvey) => [
-    {
-        title: '',
-        dataIndex: 'avatar',
-        key: 'avatar',
-        render: (text, survey) => <TheAvatar name={survey.title}/>
-    },
-
-    {
-        title: 'Title',
-        dataIndex: 'title',
-        key: 'title',
-    },
-    {
-        title: 'Publish',
-        dataIndex: 'publish',
-        key: 'publish',
-        render: (text, survey) => <Switch defaultChecked={survey.publish}/>
-    },
-    {
-        title: 'Created At',
-        dataIndex: 'createdAt',
-        key: 'createdAt',
-    },
-
-    {
-        title: 'Accessibility',
-        dataIndex: 'accessibility',
-        key: 'accessibility',
-    },
-    {
-        title: 'Action',
-        dataIndex: 'action',
-        key: 'action',
-        render: (text, survey) => <Dropdown overlay={menu(survey, fetchSurveys,setShowQuestionDrawer,showQuestionDrawer, setSelectedSurvey, selectedSurvey)} placement="bottomLeft" arrow>
-            <MoreOutlined/>
-        </Dropdown>
-    }
-];
-
-const menu = (survey, fetchSurveys,setShowQuestionDrawer,showQuestionDrawer, setSelectedSurvey, selectedSurvey) => (
-    <Menu onClick={handleMenuClick}>
-        <Menu.Item key="1"><EditOutlined style={{color: "#52c41a"}}/> Edit</Menu.Item>
-        <Menu.Item key="2" onClick={()=>  {
-            setSelectedSurvey(survey)
-            setShowQuestionDrawer(!showQuestionDrawer)
-        }}>< EyeOutlined  /> View</Menu.Item>
-        <Menu.Item key="3"> <Popconfirm
-            title={`Are you sure to delete ${survey.name}`}
-            onConfirm={() => removeSurvey(survey.id, fetchSurveys)}
-            onCancel={cancel}
-            okText="Yes"
-            cancelText="No"
-        >
-            <a href="#"><DeleteOutlined style={{color: "#ff0000"}}/> Delete</a>
-        </Popconfirm> </Menu.Item>
-
-    </Menu>
-);
-
-function cancel(e) {
-    console.log(e);
-    message.error('Click on No').then(() => {
-        console.log('deleting canceled')
-    });
-}
-
-function handleMenuClick(e) {
-    console.log('click', e);
-}
-
 function SurveyList() {
     const [surveys, setSurveys] = useState([]);
     const [fetching, setFetching] = useState(true);
     const [showDrawer, setShowDrawer] = useState(false);
     const [showQuestionDrawer, setShowQuestionDrawer] = useState(false);
-    const [selectedSurvey, setSelectedSurvey] = useState(  {'title':'',});
+    const [selectedSurvey, setSelectedSurvey] = useState({});
     const fetchSurveys = () => getAllSurveys()
         .then(resp => resp.json())
         .then(data => {
@@ -129,6 +32,105 @@ function SurveyList() {
         console.log("Invoke only on mount");
         fetchSurveys();
     }, []);
+
+
+    const TheAvatar = ({name}) => {
+        let trim = name.trim();
+        if (trim.length === 0) {
+            return <Avatar icon={<UnlockOutlined/>}/>
+        }
+
+        const split = trim.split(" ");
+        if (split.length === 1) {
+            return <Avatar>{name.charAt(0)} </Avatar>
+        }
+
+
+        return <Avatar>{name.charAt(0)} </Avatar>
+    }
+
+    const removeSurvey = (surveyId, callback) => {
+        deleteSurvey(surveyId).then(() => {
+            successNotification("Survey deleted", `Survey with ${surveyId} was deleted`);
+            callback();
+        }).catch(err => {
+            err.response.json().then(res => {
+                errorNotification("There was an issue", `${res.message} [${res.status}] [${res.error}]`);
+            });
+        });
+    }
+    const columns = (fetchSurveys, setShowQuestionDrawer, showQuestionDrawer, setSelectedSurvey, selectedSurvey) => [
+        {
+            title: '',
+            dataIndex: 'avatar',
+            key: 'avatar',
+            render: (text, survey) => <TheAvatar name={survey.title}/>
+        },
+
+        {
+            title: 'Title',
+            dataIndex: 'title',
+            key: 'title',
+        },
+        {
+            title: 'Publish',
+            dataIndex: 'publish',
+            key: 'publish',
+            render: (text, survey) => <Switch defaultChecked={survey.publish}/>
+        },
+        {
+            title: 'Created At',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+        },
+
+        {
+            title: 'Accessibility',
+            dataIndex: 'accessibility',
+            key: 'accessibility',
+        },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
+            render: (text, survey) => <Dropdown
+                overlay={menu(survey, fetchSurveys, setShowQuestionDrawer, showQuestionDrawer, setSelectedSurvey, selectedSurvey)}
+                placement="bottomLeft" arrow>
+                <MoreOutlined/>
+            </Dropdown>
+        }
+    ];
+
+    const menu = (survey) => (
+        <Menu onClick={handleMenuClick}>
+            <Menu.Item key="1"><EditOutlined style={{color: "#52c41a"}}/> Edit</Menu.Item>
+            <Menu.Item key="2" onClick={() => {
+                setSelectedSurvey(survey)
+                setShowQuestionDrawer(!showQuestionDrawer)
+            }}>< EyeOutlined/> View</Menu.Item>
+            <Menu.Item key="3"> <Popconfirm
+                title={`Are you sure to delete ${survey.name}`}
+                onConfirm={() => removeSurvey(survey.id, fetchSurveys)}
+                onCancel={cancel}
+                okText="Yes"
+                cancelText="No"
+            >
+                <a href="#"><DeleteOutlined style={{color: "#ff0000"}}/> Delete</a>
+            </Popconfirm> </Menu.Item>
+
+        </Menu>
+    );
+
+    function cancel(e) {
+        console.log(e);
+        message.error('Click on No').then(() => {
+            console.log('deleting canceled')
+        });
+    }
+
+    function handleMenuClick(e) {
+        console.log('click', e);
+    }
 
     const renderSurveys = () => {
         if (fetching) {
@@ -154,9 +156,7 @@ function SurveyList() {
             <QuestionsDrawer
                 showDrawer={showQuestionDrawer}
                 setShowDrawer={setShowQuestionDrawer}
-                fetchSurveys={fetchSurveys}
-                survey={selectedSurvey}
-            />
+                survey={selectedSurvey} />
 
             <SurveyDrawerForm
                 showDrawer={showDrawer}
@@ -165,7 +165,7 @@ function SurveyList() {
             />
             <Table
                 dataSource={surveys}
-                columns={columns(fetchSurveys,setShowQuestionDrawer,showQuestionDrawer, setSelectedSurvey, selectedSurvey)}
+                columns={columns(fetchSurveys, setShowQuestionDrawer, showQuestionDrawer, setSelectedSurvey, selectedSurvey)}
                 title={() =>
                     <>
 

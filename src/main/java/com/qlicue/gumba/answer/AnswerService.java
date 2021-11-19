@@ -7,6 +7,7 @@ import com.qlicue.gumba.exception.NotFoundException;
 import com.qlicue.gumba.question.Question;
 import com.qlicue.gumba.question.QuestionRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -59,5 +60,13 @@ public class AnswerService {
         }
 
 
+    }
+
+    public List<Answer> getQuestionAnswers(Long questionId) {
+        //find the question by id
+        Question question = questionRepository.findById(questionId).orElseThrow(() ->
+                new NotFoundException("Question\twith\tid\t" + questionId + "\tdoes\tnot\texists"));
+
+        return   answerRepository.findByQuestion(question, Sort.by("id"));
     }
 }

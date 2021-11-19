@@ -45,6 +45,7 @@ public class Answer implements Serializable {
     @JsonBackReference
     @ManyToOne( fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "question_id", nullable = false)
+    @ToString.Exclude
 
     private Question question;
 

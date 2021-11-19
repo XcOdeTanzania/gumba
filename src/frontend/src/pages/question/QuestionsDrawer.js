@@ -1,6 +1,6 @@
 import {
     Drawer, Button, Tabs,
-    Card,  Image, Typography, Badge
+    Card, Image, Typography, Badge
 } from 'antd';
 import {
 
@@ -8,31 +8,28 @@ import {
     ShrinkOutlined
 } from "@ant-design/icons";
 import QuestionCard from "./QuestionCard";
-import {useEffect, useState} from "react";
+import {  useState} from "react";
 import {errorNotification, successNotification} from "../../components/Notifications";
 import ResponseTab from "../survey/response/ResponseTab";
-import {addNewQuestion, deleteQuestion, getAllQuestions} from "../../client/QuestionClient";
+import {addNewQuestion, deleteQuestion, getSurveyQuestions} from "../../client/QuestionClient";
 
 
-
-
-function QuestionsDrawer({showDrawer, setShowDrawer,   survey}) {
+function QuestionsDrawer({showDrawer, setShowDrawer, survey }) {
 
     const onCLose = () => setShowDrawer(false);
     const [selectedCardIndex, setSelectedCardIndex] = useState(0);
     const [fetching, setFetching] = useState(true);
 
 
+    const [questions, setQuestions] = useState(  []);
 
-    const [questions, setQuestions] = useState( []);
 
-
-    const fetchQuestions = () => getAllQuestions()
+    const fetchQuestions = () => getSurveyQuestions(survey.id)
         .then(resp => resp.json())
         .then(data => {
             setQuestions(data)
-           //select a question
-            setSelectedCardIndex(data.length -1);
+            //select a question
+            setSelectedCardIndex(data.length - 1);
 
         }).catch(err => {
             console.log(err.response);
@@ -45,16 +42,12 @@ function QuestionsDrawer({showDrawer, setShowDrawer,   survey}) {
 
         });
 
-    useEffect(() => {
-        console.log("Invoke only on mount");
-        fetchQuestions();
-    }, []);
 
 
 
-    const addQuestion  = () => {
-        const question = {  title: `Untitled question`,type:'MULTIPLE',   isRequired: false};
-        addNewQuestion(question).then(() => {
+    const addQuestion = () => {
+     const question = {title: `Untitled question`, type: 'MULTIPLE', isRequired: false};
+        addNewQuestion(question, survey.id).then(() => {
 
             successNotification("Question successfully added", `${question.title} was added to gumba system`)
 
@@ -65,53 +58,52 @@ function QuestionsDrawer({showDrawer, setShowDrawer,   survey}) {
             });
 
         }).finally(() => {
-             fetchQuestions();
+            fetchQuestions();
         });
 
 
     }
 
-    const duplicateQuestion  =(index) =>  () => {
+    const duplicateQuestion = (index) => () => {
         const newList = questions.concat(questions[index]);
 
         setQuestions(newList);
 
         //select the newly added question
-        setSelectedCardIndex(newList.length-1  );
+        setSelectedCardIndex(newList.length - 1);
     }
 
 
-    const removeQuestion  = (index) => () => {
+    const removeQuestion = (index) => () => {
 
-            deleteQuestion(questions[index].id).then(() => {
-                let copy_list = [...questions]
-                copy_list.splice(index, 1)
-                setQuestions(copy_list)
-                setSelectedCardIndex(index -1);
-                successNotification("Question deleted", `Question with ${questions[index].id} was deleted`);
+        deleteQuestion(questions[index].id).then(() => {
+            let copy_list = [...questions]
+            copy_list.splice(index, 1)
+            setQuestions(copy_list)
+            setSelectedCardIndex(index - 1);
+            successNotification("Question deleted", `Question with ${questions[index].id} was deleted`);
 
-            }).catch(err => {
-                err.response.json().then(res => {
-                    errorNotification("There was an issue", `${res.message} [${res.status}] [${res.error}]`);
-                });
-            }) ;
+        }).catch(err => {
+            err.response.json().then(res => {
+                errorNotification("There was an issue", `${res.message} [${res.status}] [${res.error}]`);
+            });
+        });
 
 
     }
-    const { Title } = Typography;
-
+    const {Title} = Typography;
 
 
     const {TabPane} = Tabs;
 
     return <Drawer
 
-        title={survey.title}
+        // title={survey.title}
         width={920}
         onClose={onCLose}
         visible={showDrawer}
         placement="left"
-        bodyStyle={{paddingBottom: 80}}
+        bodyStyle={{paddingBottom: 80, backgroundColor:'#e6f7ff'}}
         footer={
             <div
                 style={{
@@ -148,32 +140,35 @@ function QuestionsDrawer({showDrawer, setShowDrawer,   survey}) {
                 <br/><br/>
                 <Card
                     className={'customSurveyCardBorder'}
-                    title= {<Title level={2}>{survey.title}</Title>}
+                   customSurveyCardBorder title={<Title level={2}>{survey.title}</Title>}
 
-                         extra={
-                    <>  <Button type="text" icon={<ShrinkOutlined/>}>
-
-                    </Button>
-                        <Button type="text" icon={<MoreOutlined/>}>
+                    extra={
+                        <>  <Button type="text" icon={<ShrinkOutlined/>}>
 
                         </Button>
-                    </>
-                } style={{
+                            <Button type="text" icon={<MoreOutlined/>}>
+
+                            </Button>
+                        </>
+                    } style={{
                     borderRadius: "5px",
                     overflow: "hidden"
                 }}>
 
-                    <p   > {survey.metaTitle}</p>
+                    <p> {survey.metaTitle}</p>
                     <p>{survey.description}</p>
+                    {/*<p>{survey.questions}</p>*/}
                 </Card>
                 <br/><br/>
 
 
-                {questions.map(function (question, index) {
+                { questions.map(function (question, index) {
                     return <>
-                    <div onClick={() => setSelectedCardIndex(index)}>
-                        <QuestionCard question={question} index={index} selectedCardIndex={selectedCardIndex} deleteQuestion={removeQuestion(index)}   duplicateQuestion={duplicateQuestion(index)} />
-                    </div>
+                        <div onClick={() => setSelectedCardIndex(index)}>
+                            <QuestionCard question={question} index={index} selectedCardIndex={selectedCardIndex}
+                                          deleteQuestion={removeQuestion(index)}
+                                          duplicateQuestion={duplicateQuestion(index)}/>
+                        </div>
                         <br/><br/>
 
                     </>
@@ -183,7 +178,7 @@ function QuestionsDrawer({showDrawer, setShowDrawer,   survey}) {
 
             </TabPane>
             <TabPane tab={<>Responses {<Badge count={400} className="site-badge-count-4"></Badge>}</>} key="2">
-                 <ResponseTab/>
+                <ResponseTab/>
             </TabPane>
             <TabPane tab="Settings" key="3">
                 Content of Tab Pane 3

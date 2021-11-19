@@ -1,4 +1,4 @@
-package com.qlicue.gumba.vote;
+package com.qlicue.gumba.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Converter
 public class HashMapConverter implements AttributeConverter<Map<String, Object>, String> {
-    private static ObjectMapper mapper;
+    private static final ObjectMapper mapper;
 
     static {
         // To avoid instantiating ObjectMapper again and again.

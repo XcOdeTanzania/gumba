@@ -17,7 +17,10 @@
 .site-layout .site-layout-background {
   background: #fff;
 }
+.site-layout .site-header-layout-background {
+  background:  #fff;
 
+}
 .site-badge-count-4 .ant-badge-count {
   margin-left: 10px;
   color: #999;
@@ -82,4 +85,28 @@
 
 .drawer{
   color: #5fff43;
+}
+
+
+.rightContainer {
+  display: flex;
+  align-items: center;
+}
+
+.notification {
+  padding: 24px 0;
+  width: 320px;
+}
+
+.notificationItem {
+  transition: all 0.3s;
+  padding: 12px 24px;
+  cursor: pointer;
+
+}
+.clearButton {
+  text-align: center;
+  height: 48px;
+  line-height: 48px;
+  cursor: pointer;
 }

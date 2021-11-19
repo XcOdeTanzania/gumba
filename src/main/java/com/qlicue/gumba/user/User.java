@@ -1,5 +1,8 @@
 package com.qlicue.gumba.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.qlicue.gumba.answer.Answer;
+import com.qlicue.gumba.vote.Vote;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -8,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.Set;
 
 @ToString
 @Getter
@@ -38,6 +42,13 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Gender gender;
+
+    //relationship
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
+
+    private Set<Vote> votes;
 
     public User(String name, String email, Gender gender) {
         this.name = name;

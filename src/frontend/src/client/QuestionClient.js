@@ -6,8 +6,12 @@ export const getAllQuestions = () =>
     fetch("api/v1/questions")
         .then(checkStatus);
 
-export const addNewQuestion = question =>
-    fetch("api/v1/questions", {
+export const getSurveyQuestions = (surveyId) =>
+    fetch( `api/v1/questions/${surveyId}` )
+        .then(checkStatus);
+
+export const addNewQuestion = (question, surveyId) =>
+    fetch(  `api/v1/questions/${surveyId}`, {
         headers: {
             'Content-Type': 'application/json'
         },

@@ -18,10 +18,17 @@ public class QuestionController {
 
     }
 
-    @PostMapping
-    public  void addQuestion( @Valid @RequestBody Question question){
+    @GetMapping(path = "{surveyId}")
+    public List<Question> getSurveyQuestions(@PathVariable("surveyId") Long surveyId ) {
 
-        questionService.addQuestion(question);
+        return questionService.getSurveyQuestions(surveyId);
+
+    }
+
+    @PostMapping(path="{surveyId}")
+    public  void addQuestion(@PathVariable("surveyId") Long surveyId, @Valid @RequestBody Question question){
+
+        questionService.addQuestion(question,surveyId);
     }
 
     @PutMapping(path = "{questionId}")

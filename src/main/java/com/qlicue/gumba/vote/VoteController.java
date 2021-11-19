@@ -1,5 +1,7 @@
-package com.qlicue.gumba.answer;
+package com.qlicue.gumba.vote;
 
+import com.qlicue.gumba.answer.Answer;
+import com.qlicue.gumba.answer.AnswerService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping(path = "api/v1/answers")
-public class AnswerController {
+public class VoteController {
     private final AnswerService answerService;
 
 

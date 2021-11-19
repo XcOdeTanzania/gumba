@@ -20,6 +20,13 @@ public class AnswerController {
 
     }
 
+    @GetMapping(path = "{questionId}")
+    public List<Answer> getQuestionAnswers(@PathVariable("questionId") Long questionId ) {
+
+        return answerService.getQuestionAnswers(questionId);
+
+    }
+
     @PostMapping(path="{questionId}")
     public  void addAnswer(@PathVariable("questionId") Long questionId, @Valid @RequestBody Answer answer){
 

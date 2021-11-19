@@ -1,9 +1,9 @@
-package com.qlicue.gumba.answer;
+package com.qlicue.gumba.vote;
 
 
+import com.qlicue.gumba.answer.Answer;
+import com.qlicue.gumba.answer.AnswerRepository;
 import com.qlicue.gumba.exception.NotFoundException;
-
-
 import com.qlicue.gumba.question.Question;
 import com.qlicue.gumba.question.QuestionRepository;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @AllArgsConstructor
 @Service
-public class AnswerService {
+public class VoteService {
     private final AnswerRepository answerRepository;
     private  final QuestionRepository questionRepository;
     public List<Answer> getAllAnswers() {

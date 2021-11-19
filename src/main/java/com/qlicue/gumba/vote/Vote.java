@@ -1,13 +1,18 @@
-package com.qlicue.gumba.answer;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+package com.qlicue.gumba.vote;
 
-import com.qlicue.gumba.question.Question;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.qlicue.gumba.converter.HashMapConverter;
+import com.qlicue.gumba.survey.Survey;
+import com.qlicue.gumba.user.User;
 import lombok.*;
 import org.hibernate.Hibernate;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 
 @ToString
@@ -18,58 +23,71 @@ import java.util.Objects;
 @Entity
 @Table
 
-public class Answer implements Serializable {
+public class Vote implements Serializable {
     @Id
     @SequenceGenerator(
-            name = "answer_sequence",
-            sequenceName = "answer_sequence",
+            name = "vote_sequence",
+            sequenceName = "vote_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
-            generator =   "answer_sequence",
+            generator = "vote_sequence",
             strategy = GenerationType.SEQUENCE
     )
     private Long id;
+
+
+
     @NotBlank
     @Column(nullable = false)
     @Lob
-    private String title;
+    private String formAttributeJSON;
 
-    
     @Column(nullable = false)
     private LocalDate createdAt;
     @Column(nullable = false)
     private LocalDate updatedAt;
 
-    //relationship
-    @JsonBackReference
-    @ManyToOne( fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "question_id", nullable = false)
+    @Transient
+    @Convert(converter = HashMapConverter.class)
+    private Map<String, Object> customerAttributes;
 
-    private Question question;
 
-    public Answer(String title, 
-                  LocalDate createdAt,
-                  LocalDate updatedAt ,
-                  Question question
-                 ) {
-        this.title = title; 
+    public Vote( LocalDate createdAt, LocalDate updatedAt, Map<String, Object> customerAttributes, User user, Survey survey) {
+         this.user = user;
+        this.survey = survey;
+        this.customerAttributes = customerAttributes;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.question = question;
-         
     }
+    //relationship
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
+    private User user;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "survey_id", nullable = false)
+    @ToString.Exclude
+    private Survey survey;
+
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Answer answer = (Answer) o;
-        return Objects.equals(id, answer.id);
+        Vote vote = (Vote) o;
+        return Objects.equals(id, vote.id);
     }
 
     @Override
     public int hashCode() {
         return 0;
     }
+
+
+
 }

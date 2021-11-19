@@ -28,12 +28,14 @@ import OptionAnswer from "../answer/OptionAnswer";
 import {Option} from "antd/es/mentions";
 import SingleAnswer from "../answer/SingleAnswer";
 import {errorNotification, successNotification} from "../../components/Notifications";
-import {  updateQuestion} from "../../client/QuestionClient";
+import {updateQuestion} from "../../client/QuestionClient";
 
-function QuestionCard({question, index, selectedCardIndex, deleteQuestion,   duplicateQuestion}) {
+function QuestionCard({question, index, selectedCardIndex, deleteQuestion, duplicateQuestion  }) {
     const ref = useRef();
     const questionAnswerTypes = [<SingleAnswer type='Short'/>, <SingleAnswer type='Paragraph'/>,
-        <OptionAnswer type='Radio' questionId={question.id}/>, <OptionAnswer type='Checkbox' questionId={question.id}/>, <OptionAnswer type='Dropdown' questionId={question.id}/>,
+        <OptionAnswer type='Radio' question={question} />,
+        <OptionAnswer type='Checkbox' question={question} />,
+        <OptionAnswer type='Dropdown' question={question} />,
         <SingleAnswer type='File'/>, <SingleAnswer type='Date'/>, <SingleAnswer type='Time'/>];
 
     const [questionAnswerTypeIndex, setQuestionAnswerTypeIndex] = useState(2);
@@ -162,8 +164,8 @@ function QuestionCard({question, index, selectedCardIndex, deleteQuestion,   dup
                         <Form.Item
                             name="title">
                             <Input placeholder="Untitled question"
-                                   placeholder={question.title === 'Untitled question' ? question.title   : ""}
-                                   defaultValue={question.title === 'Untitled question' ? null:question.title}
+                                   placeholder={question.title === 'Untitled question' ? question.title : ""}
+                                   defaultValue={question.title === 'Untitled question' ? null : question.title}
                                    onChange={onChange}/>
                         </Form.Item>
                     </Col>
