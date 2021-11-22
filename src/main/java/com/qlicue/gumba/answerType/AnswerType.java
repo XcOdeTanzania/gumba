@@ -1,21 +1,15 @@
-package com.qlicue.gumba.answer;
+package com.qlicue.gumba.answerType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.qlicue.gumba.converter.HashMapConverter;
-import com.qlicue.gumba.survey.Survey;
-import com.qlicue.gumba.user.User;
+import com.qlicue.gumba.question.Question;
 import lombok.*;
-import org.hibernate.FetchMode;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Map;
 import java.util.Objects;
 
 @ToString
@@ -26,7 +20,7 @@ import java.util.Objects;
 @Entity
 @Table
 
-public class Answer implements Serializable {
+public class AnswerType implements Serializable {
     @Id
     @SequenceGenerator(
             name = "answer_sequence",
@@ -34,16 +28,15 @@ public class Answer implements Serializable {
             allocationSize = 1
     )
     @GeneratedValue(
-            generator = "answer_sequence",
+            generator =   "answer_sequence",
             strategy = GenerationType.SEQUENCE
     )
     private Long id;
-
-    @NotNull
+    @NotBlank
     @Column(nullable = false)
     @Lob
-    @Convert(converter = HashMapConverter.class)
-    private Map<String, Object> formAttributes;
+    private String title;
+
 
     @Column(nullable = false)
     private LocalDate createdAt;
@@ -51,34 +44,22 @@ public class Answer implements Serializable {
     private LocalDate updatedAt;
 
     //relationship
-//    @JsonBackReference
+    //@JsonBackReference
     @ManyToOne( optional = false)
-    @JoinColumn(name = "survey_id", nullable = true)
+    @JoinColumn(name = "question_id", nullable = false)
     @ToString.Exclude
     @JsonIgnore
-    private Survey survey;
+    private Question question;
 
-
-    //@JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "user_id", nullable = true)
-    @ToString.Exclude
-
-    private User user;
-
-
-    public Answer(Map<String, Object> formAttributes,
-                  LocalDate createdAt,
-                  LocalDate updatedAt
-                  ,
-                  Survey survey,
-                  User user
-    ) {
-        this.formAttributes = formAttributes;
+    public AnswerType(String title,
+                      LocalDate createdAt,
+                      LocalDate updatedAt ,
+                      Question question
+                 ) {
+        this.title = title;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.survey = survey;
-        this.user = user;
+        this.question = question;
 
     }
 
@@ -86,7 +67,7 @@ public class Answer implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Answer answer = (Answer) o;
+        AnswerType answer = (AnswerType) o;
         return Objects.equals(id, answer.id);
     }
 

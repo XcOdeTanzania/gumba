@@ -3,6 +3,7 @@ package com.qlicue.gumba.user;
 import com.qlicue.gumba.exception.BadRequestException;
 import com.qlicue.gumba.exception.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class UserService {
     private  final  UserRepository userRepository;
 
     public List<User> getAllUsers(){
-
+        
        return userRepository.findAll();
     }
 

@@ -1,5 +1,4 @@
-package com.qlicue.gumba.vote;
-import com.qlicue.gumba.answer.Answer;
+package com.qlicue.gumba.answerType;
 import com.qlicue.gumba.question.Question;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface VoteRepository extends JpaRepository<Answer, Long> {
+public interface AnswerTypeRepository extends JpaRepository<AnswerType
+        , Long> {
 
-    List<Answer> findByQuestion(Question question, Sort sort);
+    List<AnswerType> findByQuestion(Question question, Sort sort);
 }

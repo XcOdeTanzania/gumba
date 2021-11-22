@@ -1,8 +1,10 @@
 package com.qlicue.gumba.question;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.qlicue.gumba.answer.Answer;
+
+import com.qlicue.gumba.answerType.AnswerType;
 import com.qlicue.gumba.survey.Survey;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -12,9 +14,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
+
 import java.util.Objects;
 import java.util.Set;
+
 
 @ToString
 @Getter
@@ -57,14 +60,15 @@ public class Question implements Serializable {
 
     //relationships
     @JsonManagedReference
-    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER,
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "question",
             cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    private Set<AnswerType> answerTypes;
 
-    private Set<Answer> answers;
-
-    @JsonBackReference
-    @ManyToOne( fetch = FetchType.LAZY, optional = false)
+    //@JsonBackReference
+    @ManyToOne( fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "survey_id", nullable = false)
+    @JsonIgnore
     private Survey survey;
 
     public Question(String title,

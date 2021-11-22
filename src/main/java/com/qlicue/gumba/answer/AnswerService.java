@@ -6,6 +6,10 @@ import com.qlicue.gumba.exception.NotFoundException;
 
 import com.qlicue.gumba.question.Question;
 import com.qlicue.gumba.question.QuestionRepository;
+import com.qlicue.gumba.survey.Survey;
+import com.qlicue.gumba.survey.SurveyRepository;
+import com.qlicue.gumba.user.User;
+import com.qlicue.gumba.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -19,24 +23,33 @@ import java.util.Objects;
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
-    private  final QuestionRepository questionRepository;
+    private  final SurveyRepository surveyRepository;
+    private  final UserRepository userRepository;
     public List<Answer> getAllAnswers() {
 
         return answerRepository.findAll();
     }
 
-    public void addAnswer(Answer answer, Long questionId) {
+    public void addAnswer(Answer answer, Long surveyId, Long userId) {
 
         //find the question by id
-        Question question = questionRepository.findById(questionId).orElseThrow(() ->
-                new NotFoundException("Question\twith\tid\t" + questionId + "\tdoes\tnot\texists"));
+        Survey survey = surveyRepository.findById(surveyId ).orElseThrow(() ->
+                new NotFoundException("Survey\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
+
+
+        //find the question by id
+        User user = userRepository.findById(userId ).orElseThrow(() ->
+                new NotFoundException("User\twith\tid\t" + userId + "\tdoes\tnot\texists"));
 
         //add dates
         answer.setCreatedAt(LocalDate.now());
         answer.setUpdatedAt(LocalDate.now());
 
         //add question to answer
-        answer.setQuestion(question);
+        answer.setSurvey(survey);
+
+        //add user to answer
+        answer.setUser(user);
 
         //save the answer
         answerRepository.save(answer);
@@ -55,18 +68,18 @@ public class AnswerService {
                 new NotFoundException("Answer\twith\tid\t" + answerId + "\tdoes\tnot\texists"));
 
 
-        if (title != null && title.length() > 0 && !Objects.equals(answer.getTitle(), title)) {
-            answer.setTitle(title);
-        }
+//        if (title != null && title.length() > 0 && !Objects.equals(answer.getTitle(), title)) {
+//            answer.setTitle(title);
+//        }
 
 
     }
 
-    public List<Answer> getQuestionAnswers(Long questionId) {
-        //find the question by id
-        Question question = questionRepository.findById(questionId).orElseThrow(() ->
-                new NotFoundException("Question\twith\tid\t" + questionId + "\tdoes\tnot\texists"));
+    public List<Answer> getSurveyAnswers(Long surveyId) {
+        //find the survey by id
+        Survey survey = surveyRepository.findById(surveyId).orElseThrow(() ->
+                new NotFoundException("Survey\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
 
-        return   answerRepository.findByQuestion(question, Sort.by("id"));
+        return   answerRepository.findBySurvey(survey, Sort.by("id"));
     }
 }

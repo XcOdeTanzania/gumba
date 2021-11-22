@@ -1,11 +1,15 @@
 package com.qlicue.gumba.survey;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.qlicue.gumba.answer.Answer;
 import com.qlicue.gumba.question.Question;
-import com.qlicue.gumba.vote.Vote;
+
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 
@@ -69,16 +73,20 @@ public class Survey {
 
     //relationships
     @JsonManagedReference
-    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER,
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey",
             cascade = CascadeType.ALL)
-
+    @OrderBy("id ASC")
     private Set<Question> questions;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
 
-    private Set<Vote> votes;
+    //relationships
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey",
+            cascade = CascadeType.ALL)
+    //@JsonIgnore
+    @OrderBy("id ASC")
+    private Set<Answer> answers;
+
 
     public Survey(String title,
                   String metaTitle,
