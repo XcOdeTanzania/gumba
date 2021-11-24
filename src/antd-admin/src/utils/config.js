@@ -34,7 +34,7 @@ module.exports = {
         flag: '/china.svg',
       },
       {
-        key: 'en',
+        key: 'sw',
         title: 'Swahili',
         flag:'/tanzania.svg',
       },
