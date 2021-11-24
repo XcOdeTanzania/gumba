@@ -18,6 +18,6 @@ public interface UserRepository  extends JpaRepository<User, Long> {
     )
     Boolean selectExistsEmail(String email);
 
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.answers" )
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.responses" )
     List<User> findAll();
 }

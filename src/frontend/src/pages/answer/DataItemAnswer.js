@@ -37,11 +37,11 @@ function DataItemAnswer({ type} ) {
         </div>
     }
     else if(type==='Paragraph'){
-        return <Space><TextArea rows={4} placeholder="Long answer text" disabled/></Space>
+        return <Space><TextArea rows={4} placeholder="Long response text" disabled/></Space>
 
     }
     else if(type ==='Short'){
-        return <Space>  <Input placeholder="Short answer text" disabled/>  </Space>
+        return <Space>  <Input placeholder="Short response text" disabled/>  </Space>
 
     }
     else if(type ==='Time'){

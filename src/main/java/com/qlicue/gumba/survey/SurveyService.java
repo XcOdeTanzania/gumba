@@ -1,10 +1,8 @@
 package com.qlicue.gumba.survey;
 
 
-import com.qlicue.gumba.answer.Answer;
 import com.qlicue.gumba.exception.NotFoundException;
 
-import com.qlicue.gumba.question.Question;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,7 @@ public class SurveyService {
 
     public List<Survey> getAllSurveys(){
 
-       return surveyRepository.findAll();
+       return surveyRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     public void addSurvey(Survey survey) {

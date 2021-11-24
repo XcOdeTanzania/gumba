@@ -1,8 +1,9 @@
-package com.qlicue.gumba.answerType;
+package com.qlicue.gumba.section;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.qlicue.gumba.question.Question;
+import com.qlicue.gumba.survey.Survey;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -10,7 +11,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @ToString
 @Getter
@@ -20,7 +23,7 @@ import java.util.Objects;
 @Entity
 @Table
 
-public class AnswerType implements Serializable {
+public class Section implements Serializable {
     @Id
     @SequenceGenerator(
             name = "answer_sequence",
@@ -37,6 +40,10 @@ public class AnswerType implements Serializable {
     @Lob
     private String title;
 
+    @NotBlank
+    @Column(nullable = false)
+    @Lob
+    private String subtitle;
 
     @Column(nullable = false)
     private LocalDate createdAt;
@@ -46,20 +53,33 @@ public class AnswerType implements Serializable {
     //relationship
     //@JsonBackReference
     @ManyToOne( optional = false)
-    @JoinColumn(name = "question_id", nullable = false)
+    @JoinColumn(name = "survey_id", nullable = false)
     @ToString.Exclude
     @JsonIgnore
-    private Question question;
+    private Survey survey;
 
-    public AnswerType(String title,
-                      LocalDate createdAt,
-                      LocalDate updatedAt ,
-                      Question question
+
+    //relationships
+    //@JsonManagedReference
+    //@JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "section",
+            cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+
+    private List<Question> questions;
+
+
+    public Section(String title,
+                   String subtitle,
+                   LocalDate createdAt,
+                   LocalDate updatedAt ,
+                   Survey survey
                  ) {
         this.title = title;
+        this.subtitle = subtitle;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.question = question;
+        this.survey = survey;
 
     }
 
@@ -67,7 +87,7 @@ public class AnswerType implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        AnswerType answer = (AnswerType) o;
+        Section answer = (Section) o;
         return Objects.equals(id, answer.id);
     }
 

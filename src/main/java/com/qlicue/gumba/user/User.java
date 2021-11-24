@@ -1,12 +1,9 @@
 package com.qlicue.gumba.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.qlicue.gumba.answer.Answer;
+import com.qlicue.gumba.response.Response;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -23,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-@NamedEntityGraph(name ="user_entity_graph", attributeNodes = @NamedAttributeNode("answers"))
+@NamedEntityGraph(name ="user_entity_graph", attributeNodes = @NamedAttributeNode("responses"))
 public class User {
     @Id
     @SequenceGenerator(
@@ -53,7 +50,7 @@ public class User {
             cascade = CascadeType.ALL)
      @JsonIgnore
     @OrderBy("id ASC")
-    private Set<Answer> answers;
+    private Set<Response> responses;
 
     public User(String name, String email, Gender gender) {
         this.name = name;

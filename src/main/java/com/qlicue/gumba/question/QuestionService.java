@@ -1,11 +1,10 @@
 package com.qlicue.gumba.question;
 
 
-import com.qlicue.gumba.answer.Answer;
 import com.qlicue.gumba.exception.NotFoundException;
 
-import com.qlicue.gumba.survey.Survey;
-import com.qlicue.gumba.survey.SurveyRepository;
+import com.qlicue.gumba.section.Section;
+import com.qlicue.gumba.section.SectionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -14,38 +13,40 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
-    private  final SurveyRepository surveyRepository;
+    private  final SectionRepository sectionRepository;
 
     public List<Question> getAllQuestions() {
 
         return questionRepository.findAll();
     }
 
-    public List<Question> getSurveyQuestions(Long surveyId) {
+    public List<Question> getSectionQuestions(Long sectionId) {
         //find the question by id
-        Survey survey = surveyRepository.findById(surveyId).orElseThrow(() ->
-                new NotFoundException("Question\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
+        Section section = sectionRepository.findById(sectionId).orElseThrow(() ->
+                new NotFoundException("Question\twith\tid\t" + sectionId + "\tdoes\tnot\texists"));
 
-        return   questionRepository .findBySurvey(survey, Sort.by("id"));
+        return   questionRepository .findBySection(section, Sort.by("id"));
     }
 
-    public void addQuestion(Question question, Long surveyId) {
+    public void addQuestion(Question question, Long sectionId) {
 
-        //find the survey by id
-        Survey survey = surveyRepository.findById(surveyId).orElseThrow(() ->
-                new NotFoundException("Survey\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
+        //find the section by id
+        Section section = sectionRepository.findById(sectionId).orElseThrow(() ->
+                new NotFoundException("Section\twith\tid\t" + sectionId + "\tdoes\tnot\texists"));
 
         //add dates
         question.setCreatedAt(LocalDate.now());
         question.setUpdatedAt(LocalDate.now());
 
-        //add survey to question
-        question.setSurvey(survey);
+
+        //add section to question
+        question.setSection(section);
 
 
         questionRepository.save(question);

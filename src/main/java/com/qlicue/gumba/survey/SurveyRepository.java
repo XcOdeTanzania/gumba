@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
-    @Query("select s from Survey s LEFT join fetch s.answers")
+    @Query("select s from Survey s LEFT join fetch s.responses LEFT join fetch s.sections")
     List<Survey> findAll();
 }

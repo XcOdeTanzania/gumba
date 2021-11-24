@@ -1,20 +1,22 @@
 package com.qlicue.gumba.question;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import com.qlicue.gumba.answerType.AnswerType;
+import com.qlicue.gumba.answer.Answer;
+import com.qlicue.gumba.section.Section;
 import com.qlicue.gumba.survey.Survey;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -49,6 +51,7 @@ public class Question implements Serializable {
     @Column(nullable = false)
     private boolean isRequired;
 
+
     @Column(nullable = false)
     private LocalDate createdAt;
     @Column(nullable = false)
@@ -59,30 +62,30 @@ public class Question implements Serializable {
     private QuestionType type;
 
     //relationships
-    @JsonManagedReference
+    //@JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "question",
             cascade = CascadeType.ALL)
     @OrderBy("id ASC")
-    private Set<AnswerType> answerTypes;
+    private List<Answer> answers;
 
     //@JsonBackReference
     @ManyToOne( fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "survey_id", nullable = false)
+    @JoinColumn(name = "section_id", nullable = false)
     @JsonIgnore
-    private Survey survey;
+    private Section section;
 
     public Question(String title,
                     boolean isRequired,
                     LocalDate createdAt,
                     LocalDate updatedAt,
                     QuestionType type,
-                    Survey survey) {
+                    Section section) {
         this.title = title;
         this.isRequired = isRequired;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.type = type;
-        this.survey = survey;
+        this.section = section;
     }
 
     @Override

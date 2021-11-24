@@ -20,17 +20,17 @@ public class AnswerController {
 
     }
 
-    @GetMapping(path = "{surveyId}")
-    public List<Answer> getSurveyAnswers(@PathVariable("surveyId") Long surveyId ) {
+    @GetMapping(path = "{questionId}")
+    public List<Answer> getQuestionAnswers(@PathVariable("questionId") Long questionId ) {
 
-        return answerService.getSurveyAnswers(surveyId);
+        return answerService.getQuestionAnswers(questionId);
 
     }
 
-    @PostMapping(path="{surveyId}/{userId}")
-    public  void addAnswer(@PathVariable("surveyId" ) Long surveyId,@PathVariable("userId" ) Long userId, @Valid @RequestBody Answer answer){
+    @PostMapping(path="{questionId}")
+    public  void addAnswer(@PathVariable("questionId") Long questionId, @Valid @RequestBody Answer answer){
 
-        answerService.addAnswer(answer,surveyId, userId);
+        answerService.addAnswer(answer,questionId);
     }
 
     @PutMapping(path = "{answerId}")

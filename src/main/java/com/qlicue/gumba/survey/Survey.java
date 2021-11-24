@@ -1,11 +1,10 @@
 package com.qlicue.gumba.survey;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.qlicue.gumba.answer.Answer;
-import com.qlicue.gumba.question.Question;
+import com.qlicue.gumba.response.Response;
 
+import com.qlicue.gumba.section.Section;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Fetch;
@@ -17,8 +16,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+
 
 @ToString
 @Getter
@@ -71,21 +72,24 @@ public class Survey {
     @Column(nullable = false)
     private Accessibility accessibility;
 
+
     //relationships
     @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey",
             cascade = CascadeType.ALL)
+
+    @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("id ASC")
-    private Set<Question> questions;
-
+    private List<Section> sections;
 
     //relationships
     @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey",
             cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
     //@JsonIgnore
     @OrderBy("id ASC")
-    private Set<Answer> answers;
+    private Set<Response> responses;
 
 
     public Survey(String title,
