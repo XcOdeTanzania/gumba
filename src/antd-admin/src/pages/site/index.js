@@ -10,6 +10,7 @@ import List from './components/List'
 import Filter from './components/Filter'
 import Modal from './components/Modal'
 
+
 @connect(({ site, loading }) => ({ site, loading }))
 class Site extends PureComponent {
   handleRefresh = newQuery => {

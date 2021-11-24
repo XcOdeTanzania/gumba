@@ -26,6 +26,7 @@ export default {
   removeSurvey: 'DELETE /survey/:id',
   removeSurveyList: 'POST /surveys/delete',
 
+
   queryPostList: '/posts',
 
   queryDashboard: '/dashboard',
