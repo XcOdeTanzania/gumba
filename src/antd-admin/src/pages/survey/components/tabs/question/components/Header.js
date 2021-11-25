@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react'
-import { Image } from 'antd'
+import { Image } from 'antd';
 
 class Header extends PureComponent {
     render() {
-        return (<div>
-            <Image src="/logo.png" preview={false} width='100%' height='15rem'/>
+        return (<div style={{width:'100%', height:'15rem', backgroundColor:"#ffdd77", marginBottom:"50px" }}>
+            {/*<Image src="/logo.png" width='100%' height='15rem'/>*/}
         </div>)
     }
 }

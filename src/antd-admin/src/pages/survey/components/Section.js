@@ -5,7 +5,7 @@ class Section extends PureComponent {
     render() {
         return (
             <div>
-                <div style={{background: 'red', padding: '0.5rem', display: 'inline-block', color: '#fff'}}>
+                <div style={{background: 'blue', padding: '0.5rem', display: 'inline-block', color: '#fff'}}>
                     {this.props.title}
                 </div>
                 <div style={{marginBottom: '1rem'}}>

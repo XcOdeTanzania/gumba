@@ -64,8 +64,7 @@ const NOTFOUND = {
 }
 
 module.exports = {
-
-  [`GET ${ApiPrefix}/surveys`](req, res) {
+   [`GET ${ApiPrefix}/surveys`](req, res) {
     const { query } = req
     let { pageSize, page, ...other } = query
     pageSize = pageSize || 10

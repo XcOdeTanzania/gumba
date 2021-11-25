@@ -32,6 +32,15 @@ APIFunction.queryWeather = params => {
   return request({
     url: `${apiPrefix}/weather/now.json`,
     data: params,
+    method:'GET'
+  })
+}
+
+APIFunction.querySurveyList = params => {
+   
+  return request({
+    url: `${apiPrefix}/surveys`, 
+    method:'GET'
   })
 }
 

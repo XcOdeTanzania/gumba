@@ -1,7 +1,6 @@
 package com.qlicue.gumba.section;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.qlicue.gumba.question.Question;
 import com.qlicue.gumba.survey.Survey;
 import lombok.*;

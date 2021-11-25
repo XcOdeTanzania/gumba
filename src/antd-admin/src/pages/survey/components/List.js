@@ -38,12 +38,12 @@ class List extends PureComponent {
         title: t`Image`,
         dataIndex: 'image',
         width: '7%',
-        render: text => <Avatar shape="square" src={text} />,
+        render: text => <Avatar shape="square" src="http://dummyimage.com/100x100/f279c7/757575.png&text=W"  />,
       },
 
       {
-        title: t`Name`,
-        dataIndex: 'name',
+        title: t`Title`,
+        dataIndex: 'title',
         render: (text, record) => <Ellipsis><Link to={`survey/${record.id}`}>{text}</Link></Ellipsis>,
       },
       {
@@ -54,19 +54,19 @@ class List extends PureComponent {
 
 
       {
-        title: <Trans>Address</Trans>,
-        dataIndex: 'address',
-        key: 'address',
+        title: <Trans>Slug</Trans>,
+        dataIndex: 'slug',
+        key: 'slug',
       },
       {
-        title: t`Privacy`,
-        dataIndex: 'privacy',
+        title: t`Accessibility`,
+        dataIndex: 'accessibility',
         width: '7%',
       },
       {
         title: <Trans>CreateTime</Trans>,
-        dataIndex: 'createTime',
-        key: 'createTime',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
       },
       {
         title: <Trans>Operation</Trans>,

@@ -62,18 +62,13 @@ public class Answer implements Serializable {
     @JsonIgnore
     private Question question;
 
-    public Answer(String title,
-                  boolean selected,
-                  LocalDate createdAt,
-                  LocalDate updatedAt ,
-                  Question question
-                 ) {
+    public Answer(String title, boolean selected, LocalDate createdAt, LocalDate updatedAt, List<Skip> skip, Question question) {
         this.title = title;
+        this.selected = selected;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.skip = skip;
         this.question = question;
-        this.selected = selected;
-
     }
 
     @Override

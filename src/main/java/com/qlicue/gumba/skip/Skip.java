@@ -56,14 +56,9 @@ public class Skip implements Serializable {
     @JsonIgnore
     private Answer answer;
 
-    public Skip(
-                Long skippedId,
-                SkipType skippedType,
-                LocalDate createdAt,
-                LocalDate updatedAt,
-                Answer answer) {
-        this.skippedId = skippedId;
+    public Skip(SkipType skippedType, Long skippedId, LocalDate createdAt, LocalDate updatedAt, Answer answer) {
         this.skippedType = skippedType;
+        this.skippedId = skippedId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.answer = answer;

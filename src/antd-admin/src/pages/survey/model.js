@@ -1,8 +1,8 @@
 import modelExtend from 'dva-model-extend'
 const { pathToRegexp } = require("path-to-regexp")
-import api from 'api'
-import { pageModel } from 'utils/model'
-
+import api from 'api';
+import { pageModel } from 'utils/model';
+import      fetch   from '../../services/survey';
 const {
   querySurveyList,
   createSurvey,
@@ -37,7 +37,7 @@ export default modelExtend(pageModel, {
 
   effects: {
     *query({ payload = {} }, { call, put }) {
-      const data = yield call(querySurveyList, payload)
+      const data = yield call( fetch, payload)
       if (data) {
         yield put({
           type: 'querySuccess',

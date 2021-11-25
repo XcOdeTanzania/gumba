@@ -1,16 +1,15 @@
 package com.qlicue.gumba.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import com.qlicue.gumba.answer.Answer;
 import com.qlicue.gumba.section.Section;
-import com.qlicue.gumba.survey.Survey;
+
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -18,7 +17,7 @@ import java.time.LocalDate;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+
 
 
 @ToString
@@ -74,17 +73,13 @@ public class Question implements Serializable {
     @JsonIgnore
     private Section section;
 
-    public Question(String title,
-                    boolean isRequired,
-                    LocalDate createdAt,
-                    LocalDate updatedAt,
-                    QuestionType type,
-                    Section section) {
+    public Question(String title, boolean isRequired, LocalDate createdAt, LocalDate updatedAt, QuestionType type, List<Answer> answers, Section section) {
         this.title = title;
         this.isRequired = isRequired;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.type = type;
+        this.answers = answers;
         this.section = section;
     }
 
