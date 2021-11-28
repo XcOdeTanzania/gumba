@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types'
 import { Table, Modal, Avatar } from 'antd';
 import { DropOption } from 'components';
-import { Ellipsis } from 'components';
 import { t } from "@lingui/macro"
 import { Trans } from "@lingui/macro"
 
 import styles from './List.less'
+import {Link} from "umi";
 
 const { confirm } = Modal
 
@@ -40,11 +40,9 @@ class List extends PureComponent {
       {
         title: t`Name`,
         dataIndex: 'name',
-        render: text => (
-          <Ellipsis tooltip length={30}>
-            {text}
-          </Ellipsis>
-        ),
+
+        render: (text, record) => <Link to={`site/${record.id}`}>{text}</Link>,
+
       },
       {
         title: <Trans>Description</Trans>,
@@ -65,8 +63,8 @@ class List extends PureComponent {
       },
       {
         title: <Trans>CreateTime</Trans>,
-        dataIndex: 'createTime',
-        key: 'createTime',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
       },
       {
         title: <Trans>Operation</Trans>,

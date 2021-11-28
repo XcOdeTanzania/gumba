@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input,  Radio, Modal } from 'antd'
+import {Form, Input, Radio, Modal, Cascader} from 'antd'
 import { Trans } from "@lingui/macro"
+
+import city from 'utils/city';
 
 import { t } from "@lingui/macro"
 
@@ -53,13 +55,13 @@ class SiteModal extends PureComponent {
           <FormItem name='privacy' rules={[{ required: true }]}
             label={t`Privacy`} hasFeedback {...formItemLayout}>
             <Radio.Group>
-              <Radio value>
+              <Radio value="PUBLIC" >
                 <Trans>Public</Trans>
               </Radio>
-              <Radio value={false}>
+              <Radio value="PROTECTED" >
                 <Trans>Protected</Trans>
               </Radio>
-              <Radio value={false}>
+              <Radio value="PRIVATE" >
                 <Trans>Private</Trans>
               </Radio>
             </Radio.Group>
@@ -68,7 +70,12 @@ class SiteModal extends PureComponent {
 
           <FormItem name='address' rules={[{ required: true  }]}
             label={t`Address`} hasFeedback {...formItemLayout}>
-            <Input />
+
+            <Cascader
+              style={{ width: '100%' }}
+              options={city}
+              placeholder={t`Pick an address`}
+            />
           </FormItem>
 
 

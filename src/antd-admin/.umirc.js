@@ -56,9 +56,9 @@ export default {
   // Webpack Configuration
   proxy: {
     '/api/v1': {
-      target: 'http://localhost:8080',
+      target: 'http://localhost:8080/api/v1/',
       changeOrigin: true,
-      pathRewrite: { '^/api/v1': ' ' },
+      pathRewrite: { '^/api/v1':  "" },
     },
   },
   // Theme for antd

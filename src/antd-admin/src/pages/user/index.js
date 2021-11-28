@@ -155,6 +155,8 @@ class User extends PureComponent {
     const { user } = this.props
     const { selectedRowKeys } = user
 
+    console.log(this.listProps);
+
     return (
       <Page inner>
         <Filter {...this.filterProps} />

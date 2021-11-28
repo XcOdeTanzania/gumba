@@ -1,17 +1,24 @@
 package com.qlicue.gumba.survey;
 
+import com.github.javafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 @Configuration
 public class SurveyConfig {
     @Bean
     CommandLineRunner commandLineSurveyRunner(SurveyRepository  repository){
         return args -> {
+
+            Faker f = new Faker();
+            String title1 = "Auntie Rafiki";
+            String title2 = "Nyumba ni Choo";
+
             Survey survey1 = new Survey(
                    "Auntie Rafiki" ,
                   "Auntie Rafiki Survey",
@@ -24,7 +31,10 @@ public class SurveyConfig {
                     LocalDate.now(),
                     LocalDate.now(),
                     "Marshmallow liquorice chocolate bar chocolate bar cupcake cotton candy tootsie roll halvah. Chocolate bar cookie sweet macaroon gummies. Halvah jelly marzipan gummi bears marzipan topping cupcake.",
-                    Accessibility.PUBLIC
+                    Accessibility.PUBLIC,
+
+                    "http://dummyimage.com/100x100"+ f.color().hex().replaceFirst("#","/")+"/757575.png&text="+ title1.substring(0,1).toUpperCase(Locale.ROOT)
+
 
             ) ;
 
@@ -40,7 +50,8 @@ public class SurveyConfig {
                     LocalDate.now(),
                     LocalDate.now(),
                     "Marshmallow liquorice chocolate bar chocolate bar cupcake cotton candy tootsie roll halvah. Chocolate bar cookie sweet macaroon gummies. Halvah jelly marzipan gummi bears marzipan topping cupcake.",
-                    Accessibility.PUBLIC
+                    Accessibility.PUBLIC,
+                    "http://dummyimage.com/100x100"+ f.color().hex().replaceFirst("#","/")+"/757575.png&text="+ title2.substring(0,1).toUpperCase(Locale.ROOT)
 
             ) ;
 

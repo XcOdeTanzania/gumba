@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import { Table, Modal, Avatar } from 'antd';
 import { DropOption } from 'components';
 import { Ellipsis } from 'components';
-import { t } from "@lingui/macro"
-import { Trans } from "@lingui/macro"
-import { Link } from 'umi'
+import { t } from "@lingui/macro";
+import { Trans } from "@lingui/macro";
+import { Link } from 'umi';
 
-import styles from './List.less'
+import styles from './List.less';
 
 const { confirm } = Modal
 
@@ -38,8 +38,8 @@ class List extends PureComponent {
         title: t`Image`,
         dataIndex: 'image',
         width: '7%',
-        render: text => <Avatar shape="square" src="http://dummyimage.com/100x100/f279c7/757575.png&text=W"  />,
-      },
+        render: text => <Avatar shape="square" src={text} />,
+          },
 
       {
         title: t`Title`,
@@ -47,9 +47,9 @@ class List extends PureComponent {
         render: (text, record) => <Ellipsis><Link to={`survey/${record.id}`}>{text}</Link></Ellipsis>,
       },
       {
-        title: <Trans>Description</Trans>,
-        dataIndex: 'description',
-        key: 'description',
+        title: <Trans>MetaTitle</Trans>,
+        dataIndex: 'metaTitle',
+        key: 'metaTitle',
       },
 
 
@@ -61,7 +61,7 @@ class List extends PureComponent {
       {
         title: t`Accessibility`,
         dataIndex: 'accessibility',
-        width: '7%',
+
       },
       {
         title: <Trans>CreateTime</Trans>,

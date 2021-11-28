@@ -1,9 +1,9 @@
 import { cloneDeep } from 'lodash'
-const { pathToRegexp } = require("path-to-regexp")
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import store from 'store';
 import { i18n } from './config';
+const { pathToRegexp } = require("path-to-regexp")
 
 export classnames from 'classnames';
 export config from './config';

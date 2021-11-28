@@ -45,8 +45,8 @@ class List extends PureComponent {
       },
       {
         title: <Trans>NickName</Trans>,
-        dataIndex: 'nickName',
-        key: 'nickName',
+        dataIndex: 'nickname',
+        key: 'nickname',
       },
       {
         title: <Trans>Age</Trans>,
@@ -78,8 +78,8 @@ class List extends PureComponent {
       },
       {
         title: <Trans>CreateTime</Trans>,
-        dataIndex: 'createTime',
-        key: 'createTime',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
       },
       {
         title: <Trans>Operation</Trans>,

@@ -1,7 +1,5 @@
 package com.qlicue.gumba.section;
 
-import com.qlicue.gumba.section.Section;
-import com.qlicue.gumba.section.SectionService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

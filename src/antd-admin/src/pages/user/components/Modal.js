@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio, Modal, Cascader } from 'antd'
+import {Form, Input,   Radio, Modal, Cascader, DatePicker} from 'antd'
 import { Trans } from "@lingui/macro"
 import city from 'utils/city'
 import { t } from "@lingui/macro"
 
+
+const { RangePicker } = DatePicker;
 const FormItem = Form.Item
 
 const formItemLayout = {
@@ -46,25 +48,28 @@ class UserModal extends PureComponent {
             label={t`Name`} hasFeedback {...formItemLayout}>
             <Input />
           </FormItem>
-          <FormItem name='nickName' rules={[{ required: true }]}
+          <FormItem name='nickname' rules={[{ required: true }]}
             label={t`NickName`} hasFeedback {...formItemLayout}>
             <Input />
           </FormItem>
-          <FormItem name='isMale' rules={[{ required: true }]}
+          <FormItem name='gender' rules={[{ required: true }]}
             label={t`Gender`} hasFeedback {...formItemLayout}>
             <Radio.Group>
-              <Radio value>
+              <Radio value="MALE">
                 <Trans>Male</Trans>
               </Radio>
-              <Radio value={false}>
+              <Radio value="FEMALE">
                 <Trans>Female</Trans>
               </Radio>
             </Radio.Group>
           </FormItem>
-          <FormItem name='age' label={t`Age`} hasFeedback {...formItemLayout}>
-            <InputNumber min={18} max={100} />
+
+          <FormItem name='dob' label={t`Date of birth`} hasFeedback {...formItemLayout} rules={[{ required: true }]} >
+
+            <Input/>
           </FormItem>
-          <FormItem name='phone' rules={[{ required: true, pattern: /^1[34578]\d{9}$/, message: t`The input is not valid phone!`, }]}
+
+          <FormItem name='phone' rules={[{ required: true, pattern: /^([+]?[012345789]\d{11})+$/, message: t`The input is not valid phone!`, }]}
             label={t`Phone`} hasFeedback {...formItemLayout}>
             <Input />
           </FormItem>

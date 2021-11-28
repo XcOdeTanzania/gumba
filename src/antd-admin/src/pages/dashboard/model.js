@@ -59,7 +59,7 @@ export default modelExtend(model, {
         const data = result.results[0]
         const weather = {
           city: data.location.name,
-          temperature: data.now.temperature,
+          temperature:  "33",
           name: data.now.text,
           icon: `//cdn.antd-admin.zuiidea.com/web/icons/3d_50/${data.now.code}.png`,
         }

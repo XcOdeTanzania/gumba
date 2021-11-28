@@ -36,12 +36,6 @@ APIFunction.queryWeather = params => {
   })
 }
 
-APIFunction.querySurveyList = params => {
-   
-  return request({
-    url: `${apiPrefix}/surveys`, 
-    method:'GET'
-  })
-}
+
 
 export default APIFunction
