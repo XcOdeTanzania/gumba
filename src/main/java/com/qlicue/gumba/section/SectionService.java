@@ -1,10 +1,12 @@
 package com.qlicue.gumba.section;
 
 
+import com.qlicue.gumba.event.EntityCreatedEvent;
 import com.qlicue.gumba.exception.NotFoundException;
 import com.qlicue.gumba.survey.Survey;
 import com.qlicue.gumba.survey.SurveyRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ import java.util.Objects;
 public class SectionService {
     private final SectionRepository sectionRepository;
     private  final SurveyRepository surveyRepository;
+    private ApplicationEventPublisher applicationEventPublisher;
+
+
     public List<Section> getAllSections() {
 
         return sectionRepository.findAll();
@@ -38,6 +43,9 @@ public class SectionService {
 
         //save the section type
         sectionRepository.save(section);
+
+        //publish section created event
+        publishSectionCreatedEvent(section);
     }
 
     public void deleteSection(Long sectionId) {
@@ -66,5 +74,12 @@ public class SectionService {
                 new NotFoundException("Survey\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
 
         return   sectionRepository.findBySurvey(survey, Sort.by("id"));
+    }
+
+    //events
+
+    void publishSectionCreatedEvent(final Section section) {
+        EntityCreatedEvent entityCreatedEvent = new EntityCreatedEvent(this, section);
+        applicationEventPublisher.publishEvent(entityCreatedEvent);
     }
 }

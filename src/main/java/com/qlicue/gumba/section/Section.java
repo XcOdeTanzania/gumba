@@ -69,16 +69,10 @@ public class Section implements Serializable {
 
 
     public Section(String title,
-                   String subtitle,
-                   LocalDate createdAt,
-                   LocalDate updatedAt ,
-                   Survey survey
+                   String subtitle
                  ) {
         this.title = title;
         this.subtitle = subtitle;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.survey = survey;
 
     }
 

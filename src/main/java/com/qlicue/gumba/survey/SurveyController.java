@@ -1,7 +1,11 @@
 package com.qlicue.gumba.survey;
 
 
+import com.qlicue.gumba.resource.ResponseHandler;
+import com.qlicue.gumba.user.User;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,9 +19,13 @@ public class SurveyController {
 
 
     @GetMapping
-    public List<Survey> getAllSurveys() {
-
-        return surveyService.getAllSurveys();
+    public ResponseEntity<Object> getAllSurveys() {
+        try {
+            List<Survey> result = surveyService.getAllSurveys();
+            return ResponseHandler.generateResponse("Successfully retrieved surveys!", HttpStatus.OK, result, result.size());
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null, 0);
+        }
 
     }
 
@@ -33,5 +41,17 @@ public class SurveyController {
         surveyService.deleteSurvey(surveyId);
     }
 
+    @GetMapping(path="{surveyId}")
+    public Survey getSurvey(@PathVariable("surveyId")   Long surveyId) {
 
+        return surveyService.getSurvey(surveyId);
+    }
+
+
+    @PutMapping(path = "{surveyId}")
+    public void updateSurvey(@PathVariable("surveyId")   Long surveyId,
+                           @RequestBody Survey survey )
+    {
+        surveyService.updateSurvey(surveyId, survey);
+    }
 }

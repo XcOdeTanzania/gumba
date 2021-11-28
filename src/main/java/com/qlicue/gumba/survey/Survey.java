@@ -45,11 +45,17 @@ public class Survey {
     @Lob
     private String title;
     @Lob
+    @Column
     private String metaTitle;
     @Lob
+    @Column
     private String slug;
     @Lob
+    @Column
     private String summary;
+    @Column
+    private String image;
+
     @NotNull
     @Column(nullable = false)
     private boolean publish;
@@ -103,7 +109,8 @@ public class Survey {
                   LocalDate startsAt,
                   LocalDate endsAt,
                   String description,
-                  Accessibility accessibility) {
+                  Accessibility accessibility,
+                  String image) {
         this.title = title;
         this.metaTitle = metaTitle;
         this.slug = slug;
@@ -116,7 +123,11 @@ public class Survey {
         this.endsAt = endsAt;
         this.description = description;
         this.accessibility = accessibility;
+        this.image = image;
     }
+
+
+
 
     @Override
     public boolean equals(Object o) {

@@ -1,11 +1,13 @@
 package com.qlicue.gumba.question;
 
 
+import com.qlicue.gumba.event.EntityCreatedEvent;
 import com.qlicue.gumba.exception.NotFoundException;
 
 import com.qlicue.gumba.section.Section;
 import com.qlicue.gumba.section.SectionRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +15,14 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @AllArgsConstructor
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private  final SectionRepository sectionRepository;
+    private ApplicationEventPublisher applicationEventPublisher;
+
 
     public List<Question> getAllQuestions() {
 
@@ -50,6 +53,9 @@ public class QuestionService {
 
 
         questionRepository.save(question);
+
+        //publish question created event
+        publishQuestionCreatedEvent(question);
     }
 
     public void deleteQuestion(Long questionId) {
@@ -76,5 +82,12 @@ public class QuestionService {
         if (!Objects.equals(question.getType(), isRequired)) {
             question.setRequired(isRequired);
         }
+    }
+
+    //events
+
+    void publishQuestionCreatedEvent(final Question question) {
+        EntityCreatedEvent entityCreatedEvent = new EntityCreatedEvent(this, question);
+        applicationEventPublisher.publishEvent(entityCreatedEvent);
     }
 }
