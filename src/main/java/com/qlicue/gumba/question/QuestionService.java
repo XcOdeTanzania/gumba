@@ -66,21 +66,21 @@ public class QuestionService {
     }
 
     @Transactional
-    public void updateQuestion(Long questionId, String title, QuestionType type, boolean isRequired) {
+    public void updateQuestion(Long questionId, Question questionParams) {
         Question question = questionRepository.findById(questionId).orElseThrow(() ->
                 new NotFoundException("Question\twith\tid\t" + questionId + "\tdoes\tnot\texists"));
 
 
-        if (title != null && title.length() > 0 && !Objects.equals(question.getTitle(), title)) {
-            question.setTitle(title);
+        if (questionParams.getTitle() != null && questionParams.getTitle().length() > 0 && !Objects.equals(question.getTitle(), questionParams.getTitle())) {
+            question.setTitle(questionParams.getTitle());
         }
 
-        if (type != null && !Objects.equals(question.getType(), type)) {
-            question.setType(type);
+        if ( questionParams.getType() != null && !Objects.equals(question.getType(), questionParams.getType())) {
+            question.setType(questionParams.getType());
         }
 
-        if (!Objects.equals(question.getType(), isRequired)) {
-            question.setRequired(isRequired);
+        if (!Objects.equals(question.getType(), questionParams.isRequired())) {
+            question.setRequired(questionParams.isRequired());
         }
     }
 

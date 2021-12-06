@@ -48,13 +48,13 @@ public class AnswerService {
     }
 
     @Transactional
-    public void updateAnswer(Long answerId, String title ) {
+    public void updateAnswer(Long answerId, Answer answerParams ) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() ->
                 new NotFoundException("Answer\twith\tid\t" + answerId + "\tdoes\tnot\texists"));
 
 
-        if (title != null && title.length() > 0 && !Objects.equals(answer.getTitle(), title)) {
-            answer.setTitle(title);
+        if (answerParams.getTitle() != null && answerParams.getTitle().length() > 0 && !Objects.equals(answer.getTitle(), answerParams.getTitle())) {
+            answer.setTitle(answerParams.getTitle());
         }
 
 

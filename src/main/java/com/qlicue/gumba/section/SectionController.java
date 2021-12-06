@@ -35,9 +35,9 @@ public class SectionController {
 
     @PutMapping(path = "{sectionId}")
     public void updateSection(@PathVariable("sectionId") Long sectionId,
-                               @RequestParam(required = false) String title
+                              @Valid @RequestBody Section section
                                ){
-        sectionService.updateSection(sectionId, title );
+        sectionService.updateSection(sectionId, section );
     }
 
     @DeleteMapping(path="{sectionId}")

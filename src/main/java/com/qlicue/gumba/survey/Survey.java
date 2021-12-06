@@ -1,7 +1,7 @@
 package com.qlicue.gumba.survey;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import com.qlicue.gumba.response.Response;
 
 import com.qlicue.gumba.section.Section;
@@ -80,7 +80,7 @@ public class Survey {
 
 
     //relationships
-    @JsonManagedReference
+    //@JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey",
             cascade = CascadeType.ALL)
 
@@ -89,7 +89,7 @@ public class Survey {
     private List<Section> sections;
 
     //relationships
-    @JsonManagedReference
+    //@JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey",
             cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)

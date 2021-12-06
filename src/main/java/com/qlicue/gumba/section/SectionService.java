@@ -45,7 +45,7 @@ public class SectionService {
         sectionRepository.save(section);
 
         //publish section created event
-        publishSectionCreatedEvent(section);
+         publishSectionCreatedEvent(section);
     }
 
     public void deleteSection(Long sectionId) {
@@ -56,13 +56,13 @@ public class SectionService {
     }
 
     @Transactional
-    public void updateSection(Long sectionId, String title ) {
+    public void updateSection(Long sectionId, Section sectionParams ) {
         Section section = sectionRepository.findById(sectionId).orElseThrow(() ->
                 new NotFoundException("Section\twith\tid\t" + sectionId + "\tdoes\tnot\texists"));
 
 
-        if (title != null && title.length() > 0 && !Objects.equals(section.getTitle(), title)) {
-            section.setTitle(title);
+        if (sectionParams.getTitle() != null && sectionParams.getTitle().length() > 0 && !Objects.equals(section.getTitle(), sectionParams.getTitle())) {
+            section.setTitle(sectionParams.getTitle());
         }
 
 

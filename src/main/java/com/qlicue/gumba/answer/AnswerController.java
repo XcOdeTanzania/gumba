@@ -35,9 +35,9 @@ public class AnswerController {
 
     @PutMapping(path = "{answerId}")
     public void updateAnswer(@PathVariable("answerId") Long answerId,
-                               @RequestParam(required = false) String title
+                             @Valid @RequestBody Answer answer
                                ){
-        answerService.updateAnswer(answerId, title );
+        answerService.updateAnswer(answerId, answer );
     }
 
     @DeleteMapping(path="{answerId}")

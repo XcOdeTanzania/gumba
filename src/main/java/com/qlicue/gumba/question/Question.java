@@ -73,8 +73,10 @@ public class Question implements Serializable {
     @JsonIgnore
     private Section section;
 
-    public Question(String title  ) {
+    public Question(String title, boolean isRequired, QuestionType type  ) {
         this.title = title;
+        this.isRequired = isRequired;
+        this.type= type;
     }
 
     @Override

@@ -33,11 +33,9 @@ public class QuestionController {
 
     @PutMapping(path = "{questionId}")
     public void updateQuestion(@PathVariable("questionId") Long questionId,
-                               @RequestParam(required = false) String title,
-                               @RequestParam(required= false) QuestionType type,
-                               @RequestParam(required = false) boolean isRequired
+                               @Valid @RequestBody Question question
                                ){
-        questionService.updateQuestion(questionId, title,type,isRequired);
+        questionService.updateQuestion(questionId, question);
     }
 
     @DeleteMapping(path="{questionId}")
