@@ -25,15 +25,15 @@ public class QuestionController {
 
     }
 
-    @PostMapping(path="{sectionId}")
-    public  void addQuestion(@PathVariable("sectionId") Long sectionId, @Valid @RequestBody Question question){
+    @PostMapping
+    public  Question addQuestion( @Valid @RequestBody Question question){
 
-        questionService.addQuestion(question,sectionId);
+     return    questionService.addQuestion(question );
     }
 
     @PutMapping(path = "{questionId}")
-    public void updateQuestion(@PathVariable("questionId") Long questionId,
-                               @Valid @RequestBody Question question
+    public void updateQuestion(@PathVariable("questionId") Long questionId ,
+                               @RequestBody Question question
                                ){
         questionService.updateQuestion(questionId, question);
     }

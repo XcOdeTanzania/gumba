@@ -35,7 +35,7 @@ public class SectionController {
 
     @PutMapping(path = "{sectionId}")
     public void updateSection(@PathVariable("sectionId") Long sectionId,
-                              @Valid @RequestBody Section section
+                              @RequestBody Section section
                                ){
         sectionService.updateSection(sectionId, section );
     }

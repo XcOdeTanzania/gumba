@@ -60,8 +60,7 @@ public class Section implements Serializable {
     //relationships
     //@JsonManagedReference
     //@JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "section",
-            cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "section" )
     @OrderBy("id ASC")
 
     private List<Question> questions;

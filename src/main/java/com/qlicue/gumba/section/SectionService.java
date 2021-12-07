@@ -65,6 +65,10 @@ public class SectionService {
             section.setTitle(sectionParams.getTitle());
         }
 
+        if (sectionParams.getSubtitle() != null && sectionParams.getSubtitle().length() > 0 && !Objects.equals(section.getSubtitle(), sectionParams.getSubtitle())) {
+            section.setSubtitle(sectionParams.getSubtitle());
+        }
+
 
     }
 

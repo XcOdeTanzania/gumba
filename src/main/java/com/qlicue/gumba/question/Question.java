@@ -60,10 +60,12 @@ public class Question implements Serializable {
     @Column(nullable = false)
     private QuestionType type;
 
+    @Transient
+    private Long sectionId;
     //relationships
     //@JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "question",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.PERSIST, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<Answer> answers;
 
@@ -73,10 +75,11 @@ public class Question implements Serializable {
     @JsonIgnore
     private Section section;
 
-    public Question(String title, boolean isRequired, QuestionType type  ) {
+    public Question(String title, boolean isRequired, QuestionType type, Long sectionId  ) {
         this.title = title;
         this.isRequired = isRequired;
         this.type= type;
+        this.sectionId = sectionId;
     }
 
     @Override

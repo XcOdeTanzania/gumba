@@ -37,11 +37,11 @@ public class QuestionService {
         return   questionRepository .findBySection(section, Sort.by("id"));
     }
 
-    public void addQuestion(Question question, Long sectionId) {
+    public Question addQuestion(Question question) {
 
         //find the section by id
-        Section section = sectionRepository.findById(sectionId).orElseThrow(() ->
-                new NotFoundException("Section\twith\tid\t" + sectionId + "\tdoes\tnot\texists"));
+        Section section = sectionRepository.findById(question.getSectionId()).orElseThrow(() ->
+                new NotFoundException("Section\twith\tid\t" + question.getSectionId() + "\tdoes\tnot\texists"));
 
         //add dates
         question.setCreatedAt(LocalDate.now());
@@ -55,7 +55,9 @@ public class QuestionService {
         questionRepository.save(question);
 
         //publish question created event
-        publishQuestionCreatedEvent(question);
+         publishQuestionCreatedEvent(question);
+
+        return question;
     }
 
     public void deleteQuestion(Long questionId) {
@@ -79,7 +81,7 @@ public class QuestionService {
             question.setType(questionParams.getType());
         }
 
-        if (!Objects.equals(question.getType(), questionParams.isRequired())) {
+        if (!Objects.equals(question.isRequired(), questionParams.isRequired())) {
             question.setRequired(questionParams.isRequired());
         }
     }

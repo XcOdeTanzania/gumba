@@ -35,7 +35,7 @@ public class AnswerController {
 
     @PutMapping(path = "{answerId}")
     public void updateAnswer(@PathVariable("answerId") Long answerId,
-                             @Valid @RequestBody Answer answer
+                              @RequestBody Answer answer
                                ){
         answerService.updateAnswer(answerId, answer );
     }

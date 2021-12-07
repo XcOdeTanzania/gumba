@@ -50,7 +50,7 @@ public class Answer implements Serializable {
     private LocalDate updatedAt;
 
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "answer",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.PERSIST, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<Skip> skip;
 
