@@ -53,6 +53,7 @@ public class Skip implements Serializable {
     //@JsonBackReference
     @ManyToOne( fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "answer_id", nullable = false)
+    @ToString.Exclude
     @JsonIgnore
     private Answer answer;
 

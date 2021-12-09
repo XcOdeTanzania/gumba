@@ -27,10 +27,10 @@ public class AnswerController {
 
     }
 
-    @PostMapping(path="{questionId}")
-    public  void addAnswer(@PathVariable("questionId") Long questionId, @Valid @RequestBody Answer answer){
+    @PostMapping
+    public  void addAnswer(@Valid @RequestBody Answer answer){
 
-        answerService.addAnswer(answer,questionId);
+        answerService.addAnswer(answer);
     }
 
     @PutMapping(path = "{answerId}")

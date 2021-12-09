@@ -38,6 +38,9 @@ public class Section implements Serializable {
     @Lob
     private String title;
 
+    @Transient
+    private Long surveyId;
+
     @NotBlank
     @Column(nullable = false)
     @Lob
@@ -67,10 +70,12 @@ public class Section implements Serializable {
 
 
     public Section(String title,
-                   String subtitle
+                   String subtitle,
+                   Long surveyId
                  ) {
         this.title = title;
         this.subtitle = subtitle;
+        this.surveyId =surveyId;
 
     }
 

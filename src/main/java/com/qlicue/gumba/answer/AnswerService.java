@@ -23,11 +23,11 @@ public class AnswerService {
         return answerRepository.findAll();
     }
 
-    public void addAnswer(Answer answer, Long questionId) {
+    public void addAnswer(Answer answer) {
 
         //find the question by id
-        Question question = questionRepository.findById(questionId).orElseThrow(() ->
-                new NotFoundException("Question\twith\tid\t" + questionId + "\tdoes\tnot\texists"));
+        Question question = questionRepository.findById(answer.getQuestionId()).orElseThrow(() ->
+                new NotFoundException("Question\twith\tid\t" + answer.getQuestionId() + "\tdoes\tnot\texists"));
 
         //add dates
         answer.setCreatedAt(LocalDate.now());

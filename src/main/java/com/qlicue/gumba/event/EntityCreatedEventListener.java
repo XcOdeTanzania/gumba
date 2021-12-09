@@ -30,9 +30,9 @@ public class EntityCreatedEventListener implements
 
       //create a section
         if (event.getEntity() != null && event.getEntity() instanceof Survey) {
-            Section section = new Section("Untitled Section","Description (Optional)");
+            Section section = new Section("Untitled Section","Description (Optional)",( (Survey)  event.getEntity()).getId() );
              System.out.println("i reach here...");
-           sectionService.addSection(section,  ( (Survey)  event.getEntity()).getId()  );
+           sectionService.addSection(section );
         }
 
         //create a question
@@ -45,9 +45,9 @@ public class EntityCreatedEventListener implements
 
         //create an answer
         if (event.getEntity() != null && event.getEntity() instanceof Question) {
-            Answer answer = new Answer("Option" );
+            Answer answer = new Answer("Option",( (Question)  event.getEntity()).getId() );
 
-            answerService.addAnswer(answer,  ( (Question)  event.getEntity()).getId()  );
+            answerService.addAnswer(answer  );
         }
     }
 }

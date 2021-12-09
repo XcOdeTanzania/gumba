@@ -44,26 +44,31 @@ public class Answer implements Serializable {
     private boolean selected;
 
 
+    @Transient
+    private Long questionId;
+
     @Column(nullable = false)
     private LocalDate createdAt;
     @Column(nullable = false)
     private LocalDate updatedAt;
+
+
+    //relationship
 
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "answer",
             cascade = CascadeType.PERSIST, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<Skip> skip;
 
-    //relationship
-    //@JsonBackReference
     @ManyToOne( optional = false)
     @JoinColumn(name = "question_id", nullable = false)
     @ToString.Exclude
     @JsonIgnore
     private Question question;
 
-    public Answer(String title ) {
+    public Answer(String title, Long questionId ) {
         this.title = title;
+        this.questionId=questionId;
 
     }
 

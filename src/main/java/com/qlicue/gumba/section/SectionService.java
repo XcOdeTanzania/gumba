@@ -28,11 +28,11 @@ public class SectionService {
         return sectionRepository.findAll();
     }
 
-    public void addSection(Section section, Long surveyId) {
+    public void addSection(Section section) {
 
         //find the survey by id
-        Survey survey = surveyRepository.findById(surveyId).orElseThrow(() ->
-                new NotFoundException("Survey\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
+        Survey survey = surveyRepository.findById(section.getSurveyId()).orElseThrow(() ->
+                new NotFoundException("Survey\twith\tid\t" + section.getSurveyId() + "\tdoes\tnot\texists"));
 
         //add dates
         section.setCreatedAt(LocalDate.now());

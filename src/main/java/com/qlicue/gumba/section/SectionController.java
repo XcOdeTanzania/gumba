@@ -27,10 +27,10 @@ public class SectionController {
 
     }
 
-    @PostMapping(path="{surveyId}")
-    public  void addSection(@PathVariable("surveyId") Long surveyId, @Valid @RequestBody Section section){
+    @PostMapping
+    public  void addSection(@Valid @RequestBody Section section){
 
-        sectionService.addSection(section,surveyId);
+        sectionService.addSection(section);
     }
 
     @PutMapping(path = "{sectionId}")
