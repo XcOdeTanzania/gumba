@@ -1,17 +1,29 @@
-import { PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import Header from './components/Header'
 import Section from './Section'
 import PropTypes from "prop-types";
+import {Button} from "antd";
 
 class QuestionTab extends PureComponent {
 
+  handlePublishSurvey= () =>{
+    const {surveyId,   onEditSurvey } = this.props
 
+        const data = {
+          "publish":true
+
+        }
+
+        onEditSurvey(data,surveyId)
+
+  }
 
   render() {
       const {
         sections,
         onCreateSection,
         onEditSection,
+        onDeleteSection,
         onEditQuestion,
         onCreateQuestion,
         onDeleteQuestion,
@@ -23,6 +35,11 @@ class QuestionTab extends PureComponent {
         return (
             <>
                 <Header />
+              <Button  onClick={this.handlePublishSurvey} >
+                Publish Survey
+              </Button>
+              <br/>
+              <br/>
               {sections.map(function (section, index) {
                 const sectionProps ={
                   section: section,
@@ -30,7 +47,7 @@ class QuestionTab extends PureComponent {
                   sectionNumber:index+1,
                   title:  "Section "+(index+1)+"/"+sections.length,
                   onCreateSection:onCreateSection,
-
+                  onDeleteSection:onDeleteSection,
                   onEditSection:onEditSection,
                   onEditQuestion:onEditQuestion,
                   onCreateQuestion:onCreateQuestion,
@@ -55,6 +72,8 @@ class QuestionTab extends PureComponent {
 QuestionTab.propTypes = {
   sections: PropTypes.array,
 
+  onEditSurvey:PropTypes.func,
+
   onCreateSection: PropTypes.func,
   onEditSection:PropTypes.func,
   onDeleteSection:PropTypes.func,
@@ -66,6 +85,6 @@ QuestionTab.propTypes = {
   onCreateAnswer:PropTypes.func,
   onEditAnswer:PropTypes.func,
   onDeleteAnswer:PropTypes.func,
-  surveyId:PropTypes.any
-}
+  surveyId:PropTypes.any,
+ }
 export default QuestionTab

@@ -45,6 +45,18 @@ class SurveyDetail extends PureComponent {
       surveyId:data.id,
       sections: data.sections,
 
+      onEditSurvey: (data, id) => {
+
+        dispatch({
+          type: `surveyDetail/update`,
+          payload: data,
+          id:id
+        }).then(() => {
+
+        })
+      },
+
+
       onCreateSection: (data, id) => {
 
         dispatch({
@@ -58,6 +70,7 @@ class SurveyDetail extends PureComponent {
 
         })
       },
+
       onEditSection: (data, id) => {
 
 
@@ -69,7 +82,9 @@ class SurveyDetail extends PureComponent {
 
         })
       },
-      onDeleteSection:()=>{
+
+
+      onDeleteSection:(id)=>{
 
         dispatch({
           type: 'section/delete',

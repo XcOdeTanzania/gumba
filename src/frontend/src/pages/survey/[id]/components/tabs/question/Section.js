@@ -34,11 +34,15 @@ class Section extends PureComponent {
     }
     onCreateSection(data,surveyId);
   }
+  handleDeleteSection = ( ) => {
+    const {section,   onDeleteSection } = this.props
+    onDeleteSection(section.id);
+  }
 
     render() {
       const {section, title,onEditQuestion,onCreateQuestion,onDeleteQuestion,onEditAnswer,onCreateAnswer,onDeleteAnswer,showAddSectionButton,sections,sectionNumber}= this.props;
         return (
-            <div>
+            <Card style={{marginBottom:"16px", backgroundColor:'#d1eaff'}}>
                 <div style={{background: '#8fc9fb', padding: '0.5rem', display: 'inline-block', color: '#fff'}}>
                     {title}
                 </div>
@@ -104,17 +108,18 @@ class Section extends PureComponent {
                 </Col>
 
                 <Col span={4}>
-                  <Button  onClick={this.handleCreateSection} >
+                  {showAddSectionButton ? <Button  onClick={this.handleCreateSection} >
                     Add Section
-                  </Button>
-                  <Button  onClick={this.handleCreateSection} danger>
+                  </Button>: <div></div>}
+                </Col>
+                <Col span={4}>
+                  <Button  onClick={this.handleDeleteSection} danger>
                     Delete
                   </Button>
-
                 </Col>
               </Row>
 
-            </div>
+            </Card>
         )
     }
 }

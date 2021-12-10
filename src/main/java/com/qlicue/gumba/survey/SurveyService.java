@@ -92,7 +92,7 @@ public class SurveyService {
         if(surveyParams.getDescription() !=null && surveyParams.getDescription().length() >0 && !Objects.equals(survey.getDescription(),surveyParams.getDescription())) survey.setDescription(surveyParams.getDescription());
 
         //update publishedAt
-        if(surveyParams.getPublishedAt() !=null  && !Objects.equals(survey.getPublishedAt(),surveyParams.getPublishedAt())) survey.setPublishedAt(surveyParams.getPublishedAt());
+      //  if(surveyParams.getPublishedAt() !=null  && !Objects.equals(survey.getPublishedAt(),surveyParams.getPublishedAt())) survey.setPublishedAt(surveyParams.getPublishedAt());
 
         //update startAt
         if(surveyParams.getStartsAt() !=null  && !Objects.equals(survey.getStartsAt(),surveyParams.getStartsAt())) survey.setStartsAt(surveyParams.getStartsAt());
@@ -105,7 +105,10 @@ public class SurveyService {
 
 
         //update publish
-        if((surveyParams.isPublish() || !surveyParams.isPublish()) && !Objects.equals(survey.isPublish(),surveyParams.isPublish())) survey.setPublish(surveyParams.isPublish());
+        if((surveyParams.isPublish() || !surveyParams.isPublish()) && !Objects.equals(survey.isPublish(),surveyParams.isPublish())) {
+            survey.setPublish(surveyParams.isPublish());
+            survey.setPublishedAt(LocalDate.now());
+        }
 
 
     }
@@ -115,5 +118,6 @@ public class SurveyService {
     void publishSurveyCreatedEvent(final Survey survey) {
         EntityCreatedEvent entityCreatedEvent = new EntityCreatedEvent(this, survey);
         applicationEventPublisher.publishEvent(entityCreatedEvent);
+
     }
 }

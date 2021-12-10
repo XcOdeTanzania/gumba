@@ -1,7 +1,7 @@
 const { pathToRegexp } = require("path-to-regexp")
 import api from 'api'
 
-const { querySurvey } = api
+const { querySurvey,updateSurvey } = api
 
 export default {
   namespace: 'surveyDetail',
@@ -32,6 +32,19 @@ export default {
             data: other,
           },
         })
+      } else {
+        throw data
+      }
+    },
+    *update({ payload,id }, { select, call, put }) {
+
+      const newSurvey = { ...payload, id }
+
+      const data = yield call(updateSurvey, newSurvey)
+
+      if (data.success) {
+        console.log('survey updated successfully');
+
       } else {
         throw data
       }

@@ -73,6 +73,7 @@ const database = [
     name: 'Survey Detail',
     route: '/survey/:id',
   },
+
   {
     id: '21',
     menuParentId: '-1',
