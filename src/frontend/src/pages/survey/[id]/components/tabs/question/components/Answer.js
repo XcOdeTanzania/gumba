@@ -40,7 +40,7 @@ class Answer extends PureComponent {
         </Row>
         <br/>
       </>
-    if (value === 'MULTIPLE'){
+    if (value === 'MULTIPLE'||value === 'CHECKBOX'||value === 'DROPDOWN'){
       const {onEditAnswer,onCreateAnswer, onDeleteAnswer,questionId } = this.props;
       return <>
         {
@@ -66,10 +66,6 @@ class Answer extends PureComponent {
       </>
     }
 
-    if (value === 'CHECKBOX')
-      return <div>CHECKBOX</div>
-    if (value === 'DROPDOWN')
-      return <div>DROPDOWN</div>
     if (value === 'FILE')
       return  <>
         <Row gutter={16}>
