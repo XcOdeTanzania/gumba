@@ -191,7 +191,7 @@ class Question extends PureComponent {
                               checkedChildren="Required"
                               unCheckedChildren="Not required"
                               defaultChecked={question.required}
-                              onChange={this.onChangeQuestionType}
+                              onChange={this.handleEditQuestion}
 
                             />
                           </FormItem>,

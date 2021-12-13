@@ -15,8 +15,8 @@ export const addNewSurvey = survey =>
         body: JSON.stringify(survey)
     }).then(checkStatus);
 
-export const addNewSurveyResponse = (surveyResponse,surveyId) =>
-    fetch(`api/v1/responses/${surveyId}`, {
+export const addNewSurveyResponse = (surveyResponse) =>
+    fetch(`api/v1/responses/1`, {
         headers: {
             'Content-Type': 'application/json'
         },

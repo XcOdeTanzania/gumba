@@ -3,10 +3,13 @@ package com.qlicue.gumba.question;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.qlicue.gumba.answer.Answer;
+import com.qlicue.gumba.response.Response;
 import com.qlicue.gumba.section.Section;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 
@@ -17,7 +20,7 @@ import java.time.LocalDate;
 
 import java.util.List;
 import java.util.Objects;
-
+import java.util.Set;
 
 
 @ToString
@@ -68,6 +71,15 @@ public class Question implements Serializable {
             cascade = CascadeType.PERSIST, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<Answer> answers;
+
+    //relationships
+    //@JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question",
+            cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
+    //@JsonIgnore
+    @OrderBy("id ASC")
+    private Set<Response> responses;
 
     //@JsonBackReference
     @ManyToOne( fetch = FetchType.EAGER, optional = false)

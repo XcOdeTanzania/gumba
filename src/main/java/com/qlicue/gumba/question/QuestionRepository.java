@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    @Query("select q from Question q LEFT join fetch q.section")
+    @Query("select q from Question q LEFT join fetch q.section  LEFT join fetch q.responses")
     List<Question> findBySection(Section section, Sort sort);
 }

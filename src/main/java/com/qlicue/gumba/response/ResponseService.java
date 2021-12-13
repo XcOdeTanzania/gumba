@@ -4,8 +4,9 @@ package com.qlicue.gumba.response;
 import com.qlicue.gumba.exception.NotFoundException;
 
 
+import com.qlicue.gumba.question.Question;
+import com.qlicue.gumba.question.QuestionRepository;
 import com.qlicue.gumba.survey.Survey;
-import com.qlicue.gumba.survey.SurveyRepository;
 import com.qlicue.gumba.user.User;
 import com.qlicue.gumba.user.UserRepository;
 import lombok.AllArgsConstructor;
@@ -20,18 +21,14 @@ import java.util.List;
 @Service
 public class ResponseService {
     private final ResponseRepository responseRepository;
-    private  final SurveyRepository surveyRepository;
+    private  final QuestionRepository questionRepository;
     private  final UserRepository userRepository;
     public List<Response> getAllResponses() {
 
         return responseRepository.findAll();
     }
 
-    public void addResponse(Response response, Long surveyId, Long userId) {
-
-        //find the question by id
-        Survey survey = surveyRepository.findById(surveyId ).orElseThrow(() ->
-                new NotFoundException("Survey\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
+    public void addResponse(List<Response> responses , Long userId) {
 
 
         //find the question by id
@@ -39,17 +36,32 @@ public class ResponseService {
                 new NotFoundException("User\twith\tid\t" + userId + "\tdoes\tnot\texists"));
 
         //add dates
-        response.setCreatedAt(LocalDate.now());
-        response.setUpdatedAt(LocalDate.now());
+         System.out.println(responses);
+        for (Response response:responses
+             ) {
+            //find the question by id
+            Question question = questionRepository.findById(response.getQuestionNumber() ).orElseThrow(() ->
+                    new NotFoundException("Question\twith\tid\t" + response.getQuestion() + "\tdoes\tnot\texists"));
 
-        //add question to response
-        response.setSurvey(survey);
 
-        //add user to response
-        response.setUser(user);
 
-        //save the response
-        responseRepository.save(response);
+            response.setCreatedAt(LocalDate.now());
+            response.setUpdatedAt(LocalDate.now());
+            //add question to response
+            response.setQuestion(question);
+
+            //add user to response
+            response.setUser(user);
+
+            //save the response
+            responseRepository.save(response);
+
+        }
+
+
+
+
+
     }
 
     public void deleteResponse(Long responseId) {
@@ -72,11 +84,11 @@ public class ResponseService {
 
     }
 
-    public List<Response> getSurveyResponses(Long surveyId) {
+    public List<Response> getQuestionResponses(Long questionId) {
         //find the survey by id
-        Survey survey = surveyRepository.findById(surveyId).orElseThrow(() ->
-                new NotFoundException("Survey\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
+        Question question = questionRepository.findById(questionId).orElseThrow(() ->
+                new NotFoundException("Question\twith\tid\t" + questionId + "\tdoes\tnot\texists"));
 
-        return   responseRepository.findBySurvey(survey, Sort.by("id"));
+        return   responseRepository.findByQuestion(question, Sort.by("id"));
     }
 }

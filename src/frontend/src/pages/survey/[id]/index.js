@@ -35,7 +35,14 @@ class SurveyDetail extends PureComponent {
   }
 
 
+  get responseProps(){
+    const {  surveyDetail } = this.props
 
+    const { data } = surveyDetail
+  return   { surveyId:data.id,
+    sections: data.sections,}
+
+  }
   get questionTabProps() {
     const { dispatch,surveyDetail } = this.props
 
@@ -178,7 +185,7 @@ console.log("reload this page again");
                 <QuestionTab {...this.questionTabProps}/>
             </TabPane>
             <TabPane tab="Responses" key="2">
-                <ResponseTab />
+                <ResponseTab {...this.responseProps} />
             </TabPane>
             <TabPane tab="Settings" key="3">
                 <SettingTab />
@@ -192,6 +199,7 @@ console.log("reload this page again");
 
 SurveyDetail.propTypes = {
   surveyDetail: PropTypes.object,
+
 }
 
 export default SurveyDetail

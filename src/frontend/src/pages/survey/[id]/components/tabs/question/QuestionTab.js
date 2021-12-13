@@ -4,9 +4,11 @@ import Section from './Section'
 import PropTypes from "prop-types";
 import {Button} from "antd";
 
+
 class QuestionTab extends PureComponent {
 
   handlePublishSurvey= () =>{
+    console.log(React.version);
     const {surveyId,   onEditSurvey } = this.props
 
         const data = {

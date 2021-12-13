@@ -35,8 +35,8 @@ const antIcon = <LoadingOutlined style={{fontSize: 24, color: "white"}} spin/>;
 
 const CheckboxGroup = Checkbox.Group;
 
-const plainOptions = ['Apple', 'Pear', 'Orange'];
-const defaultCheckedList = ['Apple', 'Orange'];
+const plainOptions = ['Ugali', 'Samaki', 'Pilau'];
+
 
 
 
@@ -51,8 +51,7 @@ function onSearch(val) {
 
 function SurveyForm() {
     const [currentSectionIndex, setCurrentSection] = useState(0);
-
-    const [survey, setSurvey] = useState([]);
+     const [survey, setSurvey] = useState({});
     const [fetching, setFetching] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     //pagination
@@ -71,21 +70,44 @@ function SurveyForm() {
     ////
 
     const onFinish = surveyResponse => {
-        setSubmitting(true);
-        console.log(JSON.stringify(surveyResponse, null, 2));
-        // addNewSurveyResponse(surveyResponse).then(() => {
-        //
-        //     successNotification("Survey response successfully added", `Your response was added to gumba system`)
-        //
-        // }).catch(err => {
-        //     console.log(err);
-        //     err.response.json().then(res => {
-        //         errorNotification("There was an issue", `${res.message}   [${res.status}]  [${res.error}]`, "bottomLeft");
-        //     });
-        //
-        // }).finally(() => {
-        //     setSubmitting(false);
-        // });
+
+         const formData = [];
+
+
+        for (const [key, value] of Object.entries(surveyResponse)) {
+
+            console.log(`${key}: ${value}`);
+             formData.push({
+                'answer':` ${value}`,
+                'questionNumber':parseInt(key.replace("answer", "")),
+                'surveyId': 1,
+                 'sectionId':1});
+
+
+
+        }
+
+        console.log("+++++++++++++++++++++++++++++++++++++++");
+        console.log(formData);
+        console.log("+++++++++++++++++++++++++++++++++++++++");
+
+
+         alert(JSON.stringify(formData, null, 2));
+       setSubmitting(true);
+
+        addNewSurveyResponse(formData ).then(() => {
+
+            successNotification("Survey response successfully added", `Your response was added to gumba system`)
+
+        }).catch(err => {
+            console.log(err);
+            err.response.json().then(res => {
+                errorNotification("There was an issue", `${res.message}   [${res.status}]  [${res.error}]`, "bottomLeft");
+            });
+
+        }).finally(() => {
+            setSubmitting(false);
+        });
         ///alert(JSON.stringify(values, null, 2));
     };
 
@@ -119,7 +141,7 @@ function SurveyForm() {
 
     ///check box logic
 
-    const [checkedList, setCheckedList] = useState(defaultCheckedList);
+    const [checkedList, setCheckedList] = useState([]);
     const [indeterminate, setIndeterminate] = useState(true);
     const [checkAll, setCheckAll] = useState(false);
 
@@ -151,12 +173,7 @@ function SurveyForm() {
     ///file upload.....
 
     const [fileList, setFileList] = useState([
-        {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
+
     ]);
 
     const onChangeFile = ({ fileList: newFileList }) => {
@@ -214,21 +231,22 @@ if(currentSectionIndex < (survey.sections.length-1)){
             <Layout>
                 <Header style={{backgroundColor:"#8fc9fb",fontSize:'1.8rem'}}>{survey.title}</Header>
                 <Content style={{padding:"20px"}}>
-                    <Form layout="vertical"
-                          onFinishFailed={onFinishFailed}
-                          onFinish={onFinish}
-                          hideRequiredMark>
+                    {/*{survey ===! {}? */}
+                        <Form layout="vertical"
+                                           onFinishFailed={onFinishFailed}
+                                           onFinish={onFinish}
+                                           >
                         <Row>
                             <Col span={4}></Col>
                             <Col span={16}>      <Card style={{padding:"20px", borderRadius:"10px", marginBottom:"40px"}}>
 
-                                    <Title style={{textAlign:"start"}}>{survey.title}</Title>
+                                <Title style={{textAlign:"start"}}>{survey.title}</Title>
 
 
-                                    <Paragraph style={{textAlign:"start"}}>{survey.description}</Paragraph>
+                                <Paragraph style={{textAlign:"start"}}>{survey.description}</Paragraph>
 
 
-                                    <Paragraph style={{textAlign:"start"}}>{survey.summary}</Paragraph>
+                                <Paragraph style={{textAlign:"start"}}>{survey.summary}</Paragraph>
 
 
                             </Card></Col>
@@ -255,13 +273,15 @@ if(currentSectionIndex < (survey.sections.length-1)){
                                                 return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}}>
                                                     <Row gutter={16}>
 
-                                                        <Form.Item
-                                                            name="answer"
-                                                            label={question.title}
-                                                            rules={[{required: question.required, message: 'This field is required'}]}
-                                                        >
-                                                            <Input placeholder="Write your answer here.."/>
-                                                        </Form.Item>
+                                                      <Col span="12">
+                                                          <Form.Item
+                                                              name={`answer`+question.id}
+                                                              label={question.title}
+                                                              rules={[{required: question.required, message: 'This field is required'}]}
+                                                          >
+                                                              <Input placeholder="Write your answer here.." />
+                                                          </Form.Item>
+                                                      </Col>
 
 
                                                     </Row>
@@ -269,15 +289,15 @@ if(currentSectionIndex < (survey.sections.length-1)){
                                             case "PARAGRAPH":
                                                 return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}}>
                                                     <Row gutter={16}>
-
+                                                        <Col span="16">
                                                         <Form.Item
-                                                            name="answer"
+                                                            name={`answer`+question.id}
                                                             label={question.title}
                                                             rules={[{required: question.required, message: 'This field is required'}]}
                                                         >
                                                             <TextArea rows={4} placeholder="Write your answer here.."/>
                                                         </Form.Item>
-
+                                                        </Col>
 
                                                     </Row>
                                                 </Card>
@@ -286,14 +306,14 @@ if(currentSectionIndex < (survey.sections.length-1)){
                                                     <Row gutter={16}>
 
                                                         <Form.Item
-                                                            name="answer"
+                                                            name={`answer`+question.id}
                                                             label={question.title}
                                                             rules={[{required: question.required, message: 'This field is required'}]}
                                                         >
                                                             <Radio.Group onChange={onChangeRadio} value="0">
                                                                 <Space direction="vertical">
                                                                     {question.answers.map(function (answer, index) {
-                                                                        return <Row> <Radio value={index}>{answer.title}</Radio></Row>;
+                                                                        return <Row> <Radio value={answer.title}>{answer.title}</Radio></Row>;
                                                                     })}
 
 
@@ -309,7 +329,7 @@ if(currentSectionIndex < (survey.sections.length-1)){
                                                     <Row gutter={16}>
 
                                                         <Form.Item
-                                                            name="answer"
+                                                            name={`answer`+question.id}
                                                             label={question.title}
                                                             rules={[{required: question.required, message: 'This field is required'}]}
                                                         >
@@ -330,7 +350,7 @@ if(currentSectionIndex < (survey.sections.length-1)){
                                                     <Row gutter={16}>
 
                                                         <Form.Item
-                                                            name="answer"
+                                                            name={`answer`+question.id}
                                                             label={question.title}
                                                             rules={[{required: question.required, message: 'This field is required'}]}
                                                         >
@@ -360,7 +380,7 @@ if(currentSectionIndex < (survey.sections.length-1)){
                                                     <Row gutter={16}>
 
                                                         <Form.Item
-                                                            name="answerFile"
+                                                            name={`answer`+question.id}
                                                             label={question.title}
                                                             rules={[{required: question.required, message: 'This field is required'}]}
                                                         >
@@ -385,7 +405,7 @@ if(currentSectionIndex < (survey.sections.length-1)){
                                                     <Row gutter={16}>
 
                                                         <Form.Item
-                                                            name="answerDate"
+                                                            name={`answer`+question.id}
                                                             label={question.title}
                                                             rules={[{required: question.required, message: 'This field is required'}]}
                                                         >
@@ -400,7 +420,7 @@ if(currentSectionIndex < (survey.sections.length-1)){
                                                     <Row gutter={16}>
 
                                                         <Form.Item
-                                                            name="answerTime"
+                                                            name={`answer`+question.id}
                                                             label={question.title}
                                                             rules={[{required: question.required, message: 'This field is required'}]}
                                                         >
@@ -433,6 +453,9 @@ if(currentSectionIndex < (survey.sections.length-1)){
 
 
                     </Form>
+
+                        {/*: <Text>NO SURVEY</Text> }*/}
+
                 </Content>
 
                 <Footer style={{textAlign: 'center'}}>Gumba Survey Tool © Project Clear</Footer>

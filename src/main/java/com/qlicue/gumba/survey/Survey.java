@@ -88,14 +88,7 @@ public class Survey {
     @OrderBy("id ASC")
     private List<Section> sections;
 
-    //relationships
-    //@JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey",
-            cascade = CascadeType.ALL)
-    @Fetch(value = FetchMode.SUBSELECT)
-    //@JsonIgnore
-    @OrderBy("id ASC")
-    private Set<Response> responses;
+
 
 
     public Survey(String title,

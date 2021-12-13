@@ -20,17 +20,17 @@ public class ResponseController {
 
     }
 
-    @GetMapping(path = "{surveyId}")
-    public List<Response> getSurveyResponses(@PathVariable("surveyId") Long surveyId ) {
+    @GetMapping(path = "{questionId}")
+    public List<Response> getSurveyResponses(@PathVariable("questionId") Long questionId ) {
 
-        return responseService.getSurveyResponses(surveyId);
+        return responseService.getQuestionResponses(questionId);
 
     }
 
-    @PostMapping(path="{surveyId}/{userId}")
-    public  void addResponse(@PathVariable("surveyId" ) Long surveyId,@PathVariable("userId" ) Long userId, @Valid @RequestBody Response response){
+    @PostMapping(path="{userId}")
+    public  void addResponse( @PathVariable("userId" ) Long userId, @Valid @RequestBody List<Response> responses){
 
-        responseService.addResponse(response,surveyId, userId);
+        responseService.addResponse(responses, userId);
     }
 
     @PutMapping(path = "{responseId}")
