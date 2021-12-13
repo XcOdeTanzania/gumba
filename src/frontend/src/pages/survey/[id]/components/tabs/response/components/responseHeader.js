@@ -23,13 +23,23 @@ class ResponseHeader extends PureComponent {
                     <div>
                         <Tabs defaultActiveKey="1" centered>
                             <TabPane tab="Summary" key="1">
-                              {sections.map(function (section, index){
-                                return  <Card>
-                                  <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                    {section.title}
-                                  </div>
+                              {sections.map(function (section, i){
 
-                                </Card>
+                               return  section.questions.map(function(qns,j){
+
+                                  return  <Card>
+                                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                      <>
+                                        <p>    {qns.title}</p>
+                                        <hr/>
+                                      </>
+
+
+
+                                    </div>
+
+                                  </Card>
+                                })
                               })}
 
                             </TabPane>
