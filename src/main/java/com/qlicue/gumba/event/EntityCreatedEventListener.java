@@ -30,7 +30,7 @@ public class EntityCreatedEventListener implements
 
       //create a section
         if (event.getEntity() != null && event.getEntity() instanceof Survey) {
-            Section section = new Section("Untitled Section","Description (Optional)",( (Survey)  event.getEntity()).getId() );
+            Section section = new Section("Untitled Section","Description (Optional)",( (Survey)  event.getEntity()).getId(),"SUBMIT" );
              System.out.println("i reach here...");
            sectionService.addSection(section );
         }

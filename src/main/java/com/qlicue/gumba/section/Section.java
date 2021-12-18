@@ -46,6 +46,11 @@ public class Section implements Serializable {
     @Lob
     private String subtitle;
 
+    @NotBlank
+    @Column(nullable = false)
+    @Lob
+    private String goTo;
+
     @Column(nullable = false)
     private LocalDate createdAt;
     @Column(nullable = false)
@@ -71,11 +76,14 @@ public class Section implements Serializable {
 
     public Section(String title,
                    String subtitle,
-                   Long surveyId
+
+                   Long surveyId,
+                   String goTo
                  ) {
         this.title = title;
         this.subtitle = subtitle;
         this.surveyId =surveyId;
+        this.goTo =goTo;
 
     }
 
