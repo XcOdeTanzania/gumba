@@ -2,17 +2,17 @@ import React, { PureComponent } from 'react'
 import Header from './components/Header'
 import Section from './Section'
 import PropTypes from "prop-types";
-import {Button} from "antd";
+import {Button, Switch} from "antd";
 
 
 class QuestionTab extends PureComponent {
 
   handlePublishSurvey= () =>{
     console.log(React.version);
-    const {surveyId,   onEditSurvey } = this.props
+    const {surveyId,   onEditSurvey,publish } = this.props
 
         const data = {
-          "publish":true
+          "publish": !publish
 
         }
 
@@ -32,14 +32,14 @@ class QuestionTab extends PureComponent {
         onEditAnswer,
         onCreateAnswer,
         onDeleteAnswer,
-        surveyId} = this.props
+        surveyId,
+        publish} = this.props
 
         return (
             <>
                 <Header />
-              <Button  onClick={this.handlePublishSurvey} >
-                Publish Survey
-              </Button>
+
+              <Switch checkedChildren="Un-publish Survey" unCheckedChildren="Publish Survey"  onChange={this.handlePublishSurvey}  defaultChecked={publish}/>
               <br/>
               <br/>
               {sections.map(function (section, index) {
@@ -58,7 +58,8 @@ class QuestionTab extends PureComponent {
                   onCreateAnswer:onCreateAnswer,
                   onDeleteAnswer:onDeleteAnswer,
                   showAddSectionButton:index === sections.length -1,
-                  surveyId:surveyId
+                  surveyId:surveyId,
+                  publish:publish
 
 
 
@@ -88,5 +89,6 @@ QuestionTab.propTypes = {
   onEditAnswer:PropTypes.func,
   onDeleteAnswer:PropTypes.func,
   surveyId:PropTypes.any,
+  publish:PropTypes.bool
  }
 export default QuestionTab

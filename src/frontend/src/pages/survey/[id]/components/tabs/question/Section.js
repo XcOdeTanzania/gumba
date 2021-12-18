@@ -17,6 +17,7 @@ class Section extends PureComponent {
           ...values,
           key: section.id,
         }
+
        onEditSection(data,section.id)
       })
       .catch(errorInfo => {
@@ -30,7 +31,8 @@ class Section extends PureComponent {
     const data={
       "title":"Untitled Section",
       "subtitle":"Description (Optional)",
-       "surveyId":surveyId
+       "surveyId":surveyId,
+      "goTo":"SUBMIT"
     }
     onCreateSection(data,surveyId);
   }
@@ -40,15 +42,16 @@ class Section extends PureComponent {
   }
 
     render() {
-      const {section, title,onEditQuestion,onCreateQuestion,onDeleteQuestion,onEditAnswer,onCreateAnswer,onDeleteAnswer,showAddSectionButton,sections,sectionNumber}= this.props;
+      const {section, title,onEditQuestion,onCreateQuestion,onDeleteQuestion,onEditAnswer,onCreateAnswer,onDeleteAnswer,showAddSectionButton,sections,sectionNumber, publish}= this.props;
         return (
             <Card style={{marginBottom:"16px", backgroundColor:'#d1eaff'}}>
+              <Form ref={this.formRef} name="control-ref">
                 <div style={{background: '#8fc9fb', padding: '0.5rem', display: 'inline-block', color: '#fff'}}>
                     {title}
                 </div>
                 <div style={{marginBottom: '1rem'}}>
                     <Card>
-                        <Form ref={this.formRef} name="control-ref">
+
                           <FormItem name='title' rules={[{ required: false }]}
                                     >
                             <TextArea style={{  resize: 'none', width: '100%', maxWidth: '100%', fontSize: '1.8rem'}} rows="1"
@@ -56,6 +59,7 @@ class Section extends PureComponent {
                                       placeholder={section.title === 'Untitled Section' ? section.title : ""}
                                       defaultValue={section.title === 'Untitled Section' ? null : section.title}
                                       onChange={this.handleEditSection}
+                                      disabled={publish}
                             ></TextArea>
                           </FormItem>
                           <FormItem name='subtitle' rules={[{ required: false }]}
@@ -65,9 +69,11 @@ class Section extends PureComponent {
                                       placeholder={section.subtitle === 'Description (Optional)' ? section.subtitle : ""}
                                       defaultValue={section.subtitle === 'Description (Optional)' ? null : section.subtitle}
                                       onChange={this.handleEditSection}
+                                      disabled={publish}
+
                             ></TextArea>
                           </FormItem>
-                        </Form>
+
                       <br/>
 
                       {section.questions.map(function (question, index) {
@@ -84,7 +90,8 @@ class Section extends PureComponent {
                           showDeleteButton:true,
                           sectionId:section.id,
                           title:`Question: ${index+1}`,
-                          index:index
+                          index:index,
+                          publish:publish
 
                         }
                         return <Question {...questionProps}/>
@@ -93,32 +100,49 @@ class Section extends PureComponent {
                     </Card>
                 </div>
               <Row gutter={16}>
-                <Col span={16}>
+                <Col span={3}>
+                  <span>After section {sectionNumber}</span> {' '}
+
+                </Col>
+                <Col span={12}>
                   <div>
-                    <span>After section {sectionNumber}</span> {' '}
-                    <Select defaultValue="Submit">
-                      <Option value="Submit">Submit Form&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Option>
-                      {sections.map(function (section, index) {
-                     return   <Option  value="" >Go to section {index+1} ({section.title})</Option>
+
+                    <FormItem name='goTo' rules={[{ required: false }]}
+                    >
+                    <Select defaultValue={section.goTo} disabled={publish}
+                            onChange={this.handleEditSection}
+                    >
+                    <Option value="NEXT">Go to next Section </Option>
+                      {sections.map(function (sec, index) {
+                        if(section.id === sec.id) return ;
+                     return   <Option  value={sec.id} >Go to section {index+1} ({sec.title})</Option>
+
                       })}
-
-
+                      <Option value="SUBMIT">Submit Form </Option>
                     </Select>
+
+                    </FormItem>
+
                   </div>
                 </Col>
 
                 <Col span={4}>
-                  {showAddSectionButton ? <Button  onClick={this.handleCreateSection} >
+                  {showAddSectionButton ? <Button  onClick={this.handleCreateSection}
+                                                   disabled={publish}
+                  >
                     Add Section
                   </Button>: <div></div>}
                 </Col>
                 <Col span={4}>
-                  <Button  onClick={this.handleDeleteSection} danger>
+                  <Button  onClick={this.handleDeleteSection} danger
+                           disabled={publish}
+
+                  >
                     Delete
                   </Button>
                 </Col>
               </Row>
-
+              </Form>
             </Card>
         )
     }
@@ -143,6 +167,7 @@ Section.propTypes = {
   showAddSectionButton:PropTypes.bool,
   surveyId:PropTypes.any,
   sections:PropTypes.array,
-  sectionNumber:PropTypes.any
+  sectionNumber:PropTypes.any,
+  publish:PropTypes.bool
 }
 export default Section

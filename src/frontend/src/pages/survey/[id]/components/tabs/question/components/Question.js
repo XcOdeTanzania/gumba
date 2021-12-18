@@ -86,7 +86,7 @@ class Question extends PureComponent {
 
   get answerProps() {
     const { type } = this.state
-    const {question,onEditAnswer,onCreateAnswer, onDeleteAnswer } = this.props
+    const {question,onEditAnswer,onCreateAnswer, onDeleteAnswer, publish } = this.props
 
 
     return {
@@ -95,14 +95,15 @@ class Question extends PureComponent {
       questionId:question.id,
       onEditAnswer:onEditAnswer,
       onCreateAnswer:onCreateAnswer,
-      onDeleteAnswer:onDeleteAnswer
+      onDeleteAnswer:onDeleteAnswer,
+      publish:publish
     }
   }
 
   render() {
       const {section } = this.props
       const { selectedCardIndex } = section
-      const {index,title,question, showAddButton,showDuplicateButton, showDeleteButton}= this.props;
+      const {index,title,question, showAddButton,showDuplicateButton, showDeleteButton,publish}= this.props;
         return (
             <div style={{marginBottom: '2rem'}}  onClick={() => this.setSelectedCardIndex(index)}>
 
@@ -122,6 +123,7 @@ class Question extends PureComponent {
                                   placeholder={question.title === 'Untitled Question' ? question.title : ""}
                                   defaultValue={question.title === 'Untitled Question' ? null : question.title}
                                   onChange={this.handleEditQuestion}
+                                  disabled={publish}
                         />
                       </FormItem>
                         </Col>
@@ -131,6 +133,7 @@ class Question extends PureComponent {
                         <Select
                           defaultValue={question.type}
                           onChange={this.onChangeQuestionType}
+                          disabled={publish}
                         >
                           <Option value="SHORT"> Short answer</Option>
                           <Option value="PARAGRAPH">Paragraph</Option>
@@ -156,7 +159,7 @@ class Question extends PureComponent {
 
                           <Tooltip title="add" key="add">
 
-                            <Button  onClick={this.handleCreateQuestion} >
+                            <Button  onClick={this.handleCreateQuestion}  disabled={publish} >
                               Add Question
                             </Button>
                           </Tooltip>
@@ -166,7 +169,7 @@ class Question extends PureComponent {
 
                           <Tooltip title="duplicate" key="duplicate">
 
-                            <Button  onClick={this.duplicateQuestion} >
+                            <Button  onClick={this.duplicateQuestion}  disabled={publish} >
                               DUPLICATE
                             </Button>
                           </Tooltip>
@@ -174,7 +177,7 @@ class Question extends PureComponent {
                         {showDeleteButton?    <div style={{paddingRight: '1rem'}}>
                           <Tooltip title="delete" key="delete">
 
-                            <Button  onClick={this.handleDeleteQuestion} danger>
+                            <Button  onClick={this.handleDeleteQuestion} danger  disabled={publish}>
                               DELETE
                             </Button>
                           </Tooltip>
@@ -192,6 +195,7 @@ class Question extends PureComponent {
                               unCheckedChildren="Not required"
                               defaultChecked={question.required}
                               onChange={this.handleEditQuestion}
+                              disabled={publish}
 
                             />
                           </FormItem>,
@@ -220,5 +224,7 @@ Question.propTypes ={
   showAddButton:PropTypes.bool,
   showDuplicateButton:PropTypes.bool,
   showDeleteButton:PropTypes.bool,
+  publish:PropTypes.bool
+
 }
 export default Question

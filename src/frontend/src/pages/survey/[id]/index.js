@@ -51,7 +51,7 @@ class SurveyDetail extends PureComponent {
     return {
       surveyId:data.id,
       sections: data.sections,
-
+      publish: data.publish,
       onEditSurvey: (data, id) => {
 
         dispatch({
@@ -59,7 +59,7 @@ class SurveyDetail extends PureComponent {
           payload: data,
           id:id
         }).then(() => {
-
+          this.handleRefresh();
         })
       },
 

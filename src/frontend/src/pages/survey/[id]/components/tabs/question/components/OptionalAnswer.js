@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
-import {Button, Card, Col, Form, Input, Row, Select, Switch, Tooltip} from 'antd';
+import {Button, Card, Col, Form, Input, Row, Select, Switch, Tag, Tooltip} from 'antd';
 import PropTypes from "prop-types";
 const FormItem = Form.Item
+
+const options = [{ value: 'gold' }, { value: 'lime' }, { value: 'green' }, { value: 'cyan' }];
 
 class OptionalAnswer extends PureComponent {
   formRef = React.createRef()
@@ -29,9 +31,29 @@ class OptionalAnswer extends PureComponent {
     onDeleteAnswer(answer.id);
   }
 
+   tagRender=(props)=> {
+    const { label, value, closable, onClose } = props;
+    const onPreventMouseDown = event => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+    return (
+      <Tag
+        color={value}
+        onMouseDown={onPreventMouseDown}
+        closable={closable}
+        onClose={onClose}
+        style={{ marginRight: 3 }}
+      >
+        {label}
+      </Tag>
+    );
+  }
 
   render() {
-    const {answer, number } = this.props
+     const {answer, number,publish } = this.props
+
+
 
     return (
       <>
@@ -43,18 +65,33 @@ class OptionalAnswer extends PureComponent {
               <Input  placeholder={answer.title === 'Option' ? answer.title + " " + `${number}` : ""}
                       defaultValue={answer.title === 'Option' ? null : answer.title}
                     onChange={this.handleEditAnswer}
+                      disabled={publish}
               ></Input>
             </FormItem>
           </Col>
           <Col span={2}>
             <Tooltip title="remove" key="remove">
-              <Button key="remove" onClick={this.handleDeleteAnswer}>
+              <Button key="remove" onClick={this.handleDeleteAnswer}
+              disabled={publish}>
                 X
               </Button>
             </Tooltip>
           </Col>
         </Row>
-
+        <Row gutter={16}>
+          <Col span={1}></Col>
+          <Col span={13}>
+            <Select
+              mode="multiple"
+              showArrow
+              tagRender={this.tagRender}
+              defaultValue={['gold', 'cyan']}
+              style={{ width: '100%' }}
+              options={options}
+            />
+          </Col>
+        </Row>
+        <br/>
       </Form>
 
         </>
@@ -68,6 +105,7 @@ OptionalAnswer.propTypes ={
   onCreateAnswer:PropTypes.func,
   onDeleteAnswer:PropTypes.func,
   questionId:PropTypes.any,
-  type:PropTypes.string
+  type:PropTypes.string,
+  publish:PropTypes.bool
 }
 export default OptionalAnswer
