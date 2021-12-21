@@ -103,14 +103,16 @@ class SurveyDetail extends PureComponent {
         })
       },
 
-      onEditQuestion: (data, id) => {
-
+      onEditQuestion: (data, id, refresh) => {
+      console.log(refresh);
         dispatch({
           type: `question/update`,
           payload: data,
           id:id
         }).then(() => {
-
+          if( refresh){
+            this.handleRefresh();
+          }
         })
       },
 

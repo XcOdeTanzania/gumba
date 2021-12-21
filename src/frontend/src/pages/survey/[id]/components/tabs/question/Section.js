@@ -46,7 +46,7 @@ class Section extends PureComponent {
         return (
             <Card style={{marginBottom:"16px", backgroundColor:'#d1eaff'}}>
               <Form ref={this.formRef} name="control-ref">
-                <div style={{background: '#8fc9fb', padding: '0.5rem', display: 'inline-block', color: '#fff'}}>
+                <div style={{background: '#4da4f0', padding: '0.5rem', display: 'inline-block', color: '#fff'}}>
                     {title}
                 </div>
                 <div style={{marginBottom: '1rem'}}>
@@ -91,7 +91,8 @@ class Section extends PureComponent {
                           sectionId:section.id,
                           title:`Question: ${index+1}`,
                           index:index,
-                          publish:publish
+                          publish:publish,
+                          sectionQuestions:section.questions
 
                         }
                         return <Question {...questionProps}/>

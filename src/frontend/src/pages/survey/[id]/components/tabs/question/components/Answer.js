@@ -41,7 +41,7 @@ class Answer extends PureComponent {
         <br/>
       </>
     if (value === 'MULTIPLE'||value === 'CHECKBOX'||value === 'DROPDOWN'){
-      const {onEditAnswer,onCreateAnswer, onDeleteAnswer,questionId, publish } = this.props;
+      const {onEditAnswer,onCreateAnswer, onDeleteAnswer,questionId, publish,hasSkips,sectionQuestions } = this.props;
       return <>
         {
           answers.map(function(answer,index){
@@ -54,7 +54,9 @@ class Answer extends PureComponent {
                onDeleteAnswer:onDeleteAnswer,
                questionId:questionId,
               type:value,
-              publish:publish
+              publish:publish,
+              hasSkips:hasSkips,
+              sectionQuestions:sectionQuestions
             }
             return  <OptionalAnswer {...answerProps}/>
           })
@@ -117,7 +119,9 @@ Answer.propTypes ={
   onDeleteAnswer:PropTypes.func,
   questionId:PropTypes.any,
   type:PropTypes.string,
-  publish:PropTypes.bool
+  publish:PropTypes.bool,
+  hasSkips:PropTypes.bool,
+  sectionQuestions:PropTypes.array
 
 }
 export default Answer

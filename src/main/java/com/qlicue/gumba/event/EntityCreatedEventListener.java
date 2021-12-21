@@ -37,7 +37,7 @@ public class EntityCreatedEventListener implements
 
         //create a question
         if (event.getEntity() != null && event.getEntity() instanceof Section) {
-            Question question = new Question("Untitled Question",false, QuestionType.MULTIPLE,( (Section)  event.getEntity()).getId() );
+            Question question = new Question("Untitled Question",false, QuestionType.MULTIPLE,( (Section)  event.getEntity()).getId(),false );
 
             questionService.addQuestion(question  );
         }

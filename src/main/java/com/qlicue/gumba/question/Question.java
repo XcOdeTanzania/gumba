@@ -53,6 +53,9 @@ public class Question implements Serializable {
     @Column(nullable = false)
     private boolean isRequired;
 
+    @NotNull
+    @Column(nullable = false)
+    private boolean hasSkips;
 
     @Column(nullable = false)
     private LocalDate createdAt;
@@ -87,11 +90,12 @@ public class Question implements Serializable {
     @JsonIgnore
     private Section section;
 
-    public Question(String title, boolean isRequired, QuestionType type, Long sectionId  ) {
+    public Question(String title, boolean isRequired, QuestionType type, Long sectionId, boolean hasSkips  ) {
         this.title = title;
         this.isRequired = isRequired;
         this.type= type;
         this.sectionId = sectionId;
+        this.hasSkips =hasSkips;
     }
 
     @Override

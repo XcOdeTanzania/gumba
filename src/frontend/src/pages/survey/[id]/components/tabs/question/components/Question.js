@@ -19,7 +19,7 @@ class Question extends PureComponent {
   }
   formRef = React.createRef()
 
-  handleEditQuestion = () => {
+  handleEditQuestion = ( ) => {
     const {question,   onEditQuestion } = this.props
 
     this.formRef.current.validateFields()
@@ -28,7 +28,23 @@ class Question extends PureComponent {
           ...values,
           key: question.id,
         }
-        onEditQuestion(data,question.id)
+        onEditQuestion(data,question.id,false)
+      })
+      .catch(errorInfo => {
+        console.log(errorInfo)
+      })
+  }
+
+  handleEditQuestionSkips = ( ) => {
+    const {question,   onEditQuestion } = this.props
+
+    this.formRef.current.validateFields()
+      .then(values => {
+        const data = {
+          ...values,
+          key: question.id,
+        }
+        onEditQuestion(data,question.id,true)
       })
       .catch(errorInfo => {
         console.log(errorInfo)
@@ -86,7 +102,7 @@ class Question extends PureComponent {
 
   get answerProps() {
     const { type } = this.state
-    const {question,onEditAnswer,onCreateAnswer, onDeleteAnswer, publish } = this.props
+    const {question,onEditAnswer,onCreateAnswer, onDeleteAnswer, publish, sectionQuestions } = this.props
 
 
     return {
@@ -96,7 +112,9 @@ class Question extends PureComponent {
       onEditAnswer:onEditAnswer,
       onCreateAnswer:onCreateAnswer,
       onDeleteAnswer:onDeleteAnswer,
-      publish:publish
+      publish:publish,
+      hasSkips:question.hasSkips,
+      sectionQuestions:sectionQuestions
     }
   }
 
@@ -107,12 +125,12 @@ class Question extends PureComponent {
         return (
             <div style={{marginBottom: '2rem'}}  onClick={() => this.setSelectedCardIndex(index)}>
 
-              <div style={{background: '#8fc9fb', padding: '0.5rem', display: 'inline-block', color: '#fff'}}>
+              <div style={{background: '#4da4f0', padding: '0.5rem', display: 'inline-block', color: '#fff'}}>
                 {title}
               </div>
                 <Card
                    className={selectedCardIndex === index ?  `${styles.customBorder}` : ''}
-                 style={{borderColor:"#8fc9fb"}}>
+                 style={{borderColor:"#4da4f0"}}>
                   <Form ref={this.formRef} name="control-ref">
 
                       <Row gutter={16}>
@@ -152,8 +170,8 @@ class Question extends PureComponent {
 
                     {selectedCardIndex === index ?
                       <div>
-                      <hr />
-                      <div  style={{display: 'flex',height:"30px", justifyContent: 'flex-end'}}>
+                       <hr />
+                       <div  style={{display: 'flex',height:"30px", justifyContent: 'flex-end'}}>
 
                         {showAddButton ? <div style={{paddingRight: '1rem'}}>
 
@@ -200,9 +218,26 @@ class Question extends PureComponent {
                             />
                           </FormItem>,
                         </div>
+
+                         <div  style={{paddingLeft:"5px"}} >
+                           <FormItem
+                             name="hasSkips"
+                             valuePropName="checked"
+
+                           >
+                             <Switch
+                               checkedChildren="Remove Skips"
+                               unCheckedChildren="Add Skips"
+                               defaultChecked={question.hasSkips}
+                               onChange={this.handleEditQuestionSkips}
+                               disabled={publish}
+
+                             />
+                           </FormItem>,
+                         </div>
                       </div>
 
-                    </div>
+                     </div>
                     :<div></div>}
 
                   </Form>
@@ -224,7 +259,8 @@ Question.propTypes ={
   showAddButton:PropTypes.bool,
   showDuplicateButton:PropTypes.bool,
   showDeleteButton:PropTypes.bool,
-  publish:PropTypes.bool
+  publish:PropTypes.bool,
+  sectionQuestions:PropTypes.array
 
 }
 export default Question

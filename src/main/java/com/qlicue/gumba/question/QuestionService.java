@@ -84,6 +84,10 @@ public class QuestionService {
         if (!Objects.equals(question.isRequired(), questionParams.isRequired())) {
             question.setRequired(questionParams.isRequired());
         }
+
+        if (!Objects.equals(question.isHasSkips(), questionParams.isHasSkips())) {
+            question.setHasSkips(questionParams.isHasSkips());
+        }
     }
 
     //events
