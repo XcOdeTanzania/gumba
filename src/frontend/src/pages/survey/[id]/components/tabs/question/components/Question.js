@@ -102,7 +102,7 @@ class Question extends PureComponent {
 
   get answerProps() {
     const { type } = this.state
-    const {question,onEditAnswer,onCreateAnswer, onDeleteAnswer, publish, sectionQuestions } = this.props
+    const {question,onEditAnswer,onCreateAnswer, onDeleteAnswer, publish, sectionQuestions, onAddSkipAnswer } = this.props
 
 
     return {
@@ -114,7 +114,8 @@ class Question extends PureComponent {
       onDeleteAnswer:onDeleteAnswer,
       publish:publish,
       hasSkips:question.hasSkips,
-      sectionQuestions:sectionQuestions
+      sectionQuestions:sectionQuestions,
+      onAddSkipAnswer:onAddSkipAnswer
     }
   }
 
@@ -260,7 +261,9 @@ Question.propTypes ={
   showDuplicateButton:PropTypes.bool,
   showDeleteButton:PropTypes.bool,
   publish:PropTypes.bool,
-  sectionQuestions:PropTypes.array
+  sectionQuestions:PropTypes.array,
+  onAddSkipAnswer:PropTypes.func
+
 
 }
 export default Question

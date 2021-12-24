@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -35,34 +36,44 @@ public class Skip implements Serializable {
     )
     private Long id;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private SkipType skippedType;
+
     @NotNull
     @Column(nullable = false)
-    private Long skippedId;
+    private Long questionId;
+
+    @NotNull
+    @Column(nullable = false)
+    private boolean skipAll;
+
+    @NotNull
+    @Column(nullable = false)
+    @ElementCollection
+    private List<Integer> logic;
+
 
     @Column(nullable = false)
     private LocalDate createdAt;
     @Column(nullable = false)
     private LocalDate updatedAt;
 
+    @Transient
+    private Long answerId;
 
 
     //@JsonBackReference
-    @ManyToOne( fetch = FetchType.EAGER, optional = false)
+    @ManyToOne( fetch = FetchType.EAGER )
     @JoinColumn(name = "answer_id", nullable = false)
     @ToString.Exclude
     @JsonIgnore
     private Answer answer;
 
-    public Skip(SkipType skippedType, Long skippedId, LocalDate createdAt, LocalDate updatedAt, Answer answer) {
-        this.skippedType = skippedType;
-        this.skippedId = skippedId;
+    public Skip(List<Integer>  logic, Long questionId, LocalDate createdAt, LocalDate updatedAt, Answer answer, boolean skipAll) {
+        this.logic = logic;
+        this.questionId = questionId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.answer = answer;
+        this.skipAll = skipAll;
     }
 
     @Override

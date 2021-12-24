@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Service
@@ -32,11 +33,15 @@ public class SkipService {
         return   skipRepository .findByAnswer(answer, Sort.by("id"));
     }
 
-    public void addSkip(Skip skip, Long answerId) {
+
+
+    public void addSkip(Skip skip ) {
 
         //find the answerType by id
-        Answer answer = answerRepository.findById(answerId).orElseThrow(() ->
-                new NotFoundException("Answer\twith\tid\t" + answerId + "\tdoes\tnot\texists"));
+        Answer answer = answerRepository.findById(skip.getAnswerId()).orElseThrow(() ->
+                new NotFoundException("Answer\twith\tid\t" + skip.getAnswerId() + "\tdoes\tnot\texists"));
+
+
 
         //add dates
         skip.setCreatedAt(LocalDate.now());
@@ -57,21 +62,24 @@ public class SkipService {
     }
 
     @Transactional
-    public void updateSkip(Long skipId, String title,   boolean isRequired) {
+    public void updateSkip(Long skipId, Skip skipParams  ) {
         Skip skip = skipRepository.findById(skipId).orElseThrow(() ->
                 new NotFoundException("Skip\twith\tid\t" + skipId + "\tdoes\tnot\texists"));
 
 
-//        if (title != null && title.length() > 0 && !Objects.equals(skip.getTitle(), title)) {
-//            skip.setTitle(title);
-//        }
-//
-//        if (type != null && !Objects.equals(skip.getType(), type)) {
-//            skip.setType(type);
-//        }
-//
-//        if (!Objects.equals(skip.getType(), isRequired)) {
-//            skip.setRequired(isRequired);
-//        }
+        if (skipParams.getLogic() != null && !Objects.equals(skip.getLogic(), skipParams.getLogic())) {
+            skip.setLogic(skipParams.getLogic());
+        }
+
+
+        if (  !Objects.equals(skip.isSkipAll(), skipParams.isSkipAll())) {
+            skip.setSkipAll(skipParams.isSkipAll());
+        }
+
+
     }
+
+
+
+
 }

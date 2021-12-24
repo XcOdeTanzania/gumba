@@ -15,6 +15,7 @@ const { TabPane } = Tabs;
 @connect(({ section }) => ({ section }))
 @connect(({ question }) => ({ question }))
 @connect(({ answer }) => ({ answer }))
+@connect(({ skip }) => ({ skip }))
 
 class SurveyDetail extends PureComponent {
 
@@ -172,6 +173,20 @@ console.log("reload this page again");
           this.handleRefresh();
 
           console.log("reload this page again");
+        })
+      },
+
+      onAddSkipAnswer: (data, id) => {
+     console.log('Am called regardless');
+        dispatch({
+          type: `skip/create`,
+          payload: data,
+          id:id
+        }).then((d) => {
+
+
+          // this.handleRefresh();
+
         })
       },
     }

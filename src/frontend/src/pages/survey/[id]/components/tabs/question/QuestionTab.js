@@ -33,7 +33,8 @@ class QuestionTab extends PureComponent {
         onCreateAnswer,
         onDeleteAnswer,
         surveyId,
-        publish} = this.props
+        publish,
+      onAddSkipAnswer} = this.props
 
         return (
             <>
@@ -59,7 +60,8 @@ class QuestionTab extends PureComponent {
                   onDeleteAnswer:onDeleteAnswer,
                   showAddSectionButton:index === sections.length -1,
                   surveyId:surveyId,
-                  publish:publish
+                  publish:publish,
+                  onAddSkipAnswer:onAddSkipAnswer
 
 
 
@@ -89,6 +91,8 @@ QuestionTab.propTypes = {
   onEditAnswer:PropTypes.func,
   onDeleteAnswer:PropTypes.func,
   surveyId:PropTypes.any,
-  publish:PropTypes.bool
+  publish:PropTypes.bool,
+
+  onAddSkipAnswer:PropTypes.func
  }
 export default QuestionTab

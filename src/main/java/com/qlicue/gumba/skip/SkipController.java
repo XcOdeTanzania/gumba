@@ -2,7 +2,6 @@ package com.qlicue.gumba.skip;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -27,19 +26,17 @@ public class SkipController {
 
     }
 
-    @PostMapping(path="{answerId}")
-    public  void addSkip(@PathVariable("answerId") Long answerId, @Valid @RequestBody Skip skip){
+    @PostMapping
+    public  void addSkip(  @Valid @RequestBody Skip skip){
 
-        skipService.addSkip(skip,answerId);
+        skipService.addSkip(skip );
     }
 
     @PutMapping(path = "{skipId}")
     public void updateSkip(@PathVariable("skipId") Long skipId,
-                               @RequestParam(required = false) String title,
-                               @RequestParam(required= false) SkipType type,
-                               @RequestParam(required = false) boolean isRequired
+                           @RequestBody Skip skip
                                ){
-        //skipService.updateSkip(skipId, title,type,isRequired);
+        skipService.updateSkip(skipId, skip);
     }
 
     @DeleteMapping(path="{skipId}")

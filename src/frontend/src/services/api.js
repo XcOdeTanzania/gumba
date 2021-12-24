@@ -49,7 +49,14 @@ export default {
   removeAnswerList: 'POST /answers/delete',
 
 
-  queryPostList: '/posts',
+  querySkip: '/skips/:id',
+  querySkipList: '/skips',
+  updateSkip: 'PUT /skips/:id',
+  createSkip: 'POST /skips',
+  removeSkip: 'DELETE /skips/:id',
+  removeSkipList: 'POST /skips/delete',
 
+
+  queryPostList: '/posts',
   queryDashboard: '/dashboard',
 }

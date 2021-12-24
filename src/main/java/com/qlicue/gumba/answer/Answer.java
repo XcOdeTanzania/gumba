@@ -60,7 +60,7 @@ public class Answer implements Serializable {
     @OrderBy("id ASC")
     private List<Skip> skip;
 
-    @ManyToOne( optional = false)
+    @ManyToOne( )
     @JoinColumn(name = "question_id", nullable = false)
     @ToString.Exclude
     @JsonIgnore
