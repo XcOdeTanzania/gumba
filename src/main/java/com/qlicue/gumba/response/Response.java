@@ -26,14 +26,8 @@ import java.util.Objects;
 
 public class Response implements Serializable {
     @Id
-    @SequenceGenerator(
-            name = "answer_sequence",
-            sequenceName = "answer_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            generator = "answer_sequence",
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
 

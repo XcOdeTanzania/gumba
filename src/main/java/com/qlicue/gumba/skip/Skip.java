@@ -25,14 +25,8 @@ import java.util.Objects;
 
 public class Skip implements Serializable {
     @Id
-    @SequenceGenerator(
-            name = "skip_sequence",
-            sequenceName = "skip_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            generator =   "skip_sequence",
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
 

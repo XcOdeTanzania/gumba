@@ -93,7 +93,7 @@ export default modelExtend(pageModel, {
     *update({ payload,id }, { select, call, put }) {
 
       const newSkip = { ...payload, id }
-
+      console.log('am here already tooo', newSkip)
       const data = yield call(updateSkip, newSkip)
 
       if (data.success) {

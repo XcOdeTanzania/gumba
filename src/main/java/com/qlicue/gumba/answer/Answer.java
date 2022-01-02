@@ -24,14 +24,8 @@ import java.util.Objects;
 
 public class Answer implements Serializable {
     @Id
-    @SequenceGenerator(
-            name = "answer_sequence",
-            sequenceName = "answer_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            generator =   "answer_sequence",
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
     @NotBlank
@@ -42,6 +36,10 @@ public class Answer implements Serializable {
     @NotNull
     @Column(nullable = false)
     private boolean selected;
+
+    @NotNull
+    @Column(nullable = false)
+    private boolean skipped;
 
 
     @Transient
@@ -56,7 +54,7 @@ public class Answer implements Serializable {
     //relationship
 
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "answer",
-            cascade = CascadeType.PERSIST, orphanRemoval = true)
+            cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<Skip> skip;
 

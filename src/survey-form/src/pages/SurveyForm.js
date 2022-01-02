@@ -7,7 +7,7 @@ import {
     Checkbox,
     Col,
     DatePicker,
-    Divider,
+
     Form,
     Input,
     Layout, Radio,
@@ -20,7 +20,6 @@ import {
 
 } from "antd";
 import {Content, Footer, Header} from "antd/es/layout/layout";
-import {Option} from "antd/es/mentions";
 import TextArea from "antd/es/input/TextArea";
 import {LoadingOutlined} from "@ant-design/icons";
 import moment from 'moment';
@@ -30,19 +29,13 @@ import ImgCrop from 'antd-img-crop';
 
 
 const { Paragraph, Text,Title } = Typography;
-
+const totalFormData = [];
 const antIcon = <LoadingOutlined style={{fontSize: 24, color: "white"}} spin/>;
-
-const CheckboxGroup = Checkbox.Group;
-
-const plainOptions = ['Ugali', 'Samaki', 'Pilau'];
-
-
 
 
 
 function onChangeSelect(value) {
-    console.log(`selected ${value}`);
+    console.log(`skipped ${value}`);
 }
 
 function onSearch(val) {
@@ -51,13 +44,32 @@ function onSearch(val) {
 
 function SurveyForm() {
     const [currentSectionIndex, setCurrentSection] = useState(0);
+    const [submitSections, setSubmitSections] = useState(false);
      const [survey, setSurvey] = useState({});
     const [fetching, setFetching] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [finishedSurvey, setFinishedSurvey] = useState(false);
+    // const [finishedSurvey, setFinishedSurvey] = useState(false);
+    let  respList =[];
+    const formData = [];
+
+    //response
+    const [responseList, setResponseList] = useState([
+
+    ]);
     //pagination
     const goToNextPage=()=> {
+
         // not yet implemented
         setCurrentSection((page) => page + 1);
+
+
+    }
+
+    const retakeSurvey = () => {
+        fetchSurvey(1);
+
+
     }
 
     const goToPreviousPage=()=> {
@@ -71,44 +83,59 @@ function SurveyForm() {
 
     const onFinish = surveyResponse => {
 
-         const formData = [];
+
 
 
         for (const [key, value] of Object.entries(surveyResponse)) {
 
             console.log(`${key}: ${value}`);
-             formData.push({
-                'answer':` ${value}`,
+            formData.push({
+                'answer':`${value}`,
                 'questionNumber':parseInt(key.replace("answer", "")),
-                'surveyId': 1,
-                 'sectionId':1});
-
-
+                'surveyId': survey.id,
+                'sectionId': survey.sections[currentSectionIndex].id});
 
         }
 
-        console.log("+++++++++++++++++++++++++++++++++++++++");
-        console.log(formData);
-        console.log("+++++++++++++++++++++++++++++++++++++++");
+        for (const data of formData ){
+            totalFormData.push(data);
+        }
 
 
-         alert(JSON.stringify(formData, null, 2));
-       setSubmitting(true);
 
-        addNewSurveyResponse(formData ).then(() => {
 
-            successNotification("Survey response successfully added", `Your response was added to gumba system`)
+        if(currentSectionIndex !==  (survey.sections.length-1)){
+            // alert(JSON.stringify(totalFormData, null, 2));
 
-        }).catch(err => {
-            console.log(err);
-            err.response.json().then(res => {
-                errorNotification("There was an issue", `${res.message}   [${res.status}]  [${res.error}]`, "bottomLeft");
-            });
+             goToNextPage();
+         }else{
+            setSubmitting(true);
 
-        }).finally(() => {
-            setSubmitting(false);
-        });
-        ///alert(JSON.stringify(values, null, 2));
+             // alert(JSON.stringify(totalFormData, null, 2));
+                 addNewSurveyResponse(totalFormData ).then(() => {
+                         successNotification("Survey response successfully added", `Your response was added to gumba system`)
+                         setFinishedSurvey(true);
+                 }).catch(err => {
+                     console.log(err);
+                     err.response.json().then(res => {
+                         errorNotification("There was an issue", `${res.message}   [${res.status}]  [${res.error}]`, "bottomLeft");
+                     });
+
+                 }).finally(() => {
+
+                         setSubmitting(false);
+
+
+                 });
+
+         }
+
+
+
+
+
+
+
     };
 
 
@@ -125,12 +152,15 @@ function SurveyForm() {
 
         }).catch(err => {
              console.log(err);
+             setSurvey({});
             err.response.json().then(res => {
                 console.log(res);
                 errorNotification("There was an issue", `${res.message} [${res.status}] [${res.error}]`)
             });
         }).finally(() => {
+            setFinishedSurvey(false);
             setFetching(false);
+
         });
 
     useEffect(() => {
@@ -139,32 +169,77 @@ function SurveyForm() {
     }, []);
 
 
-    ///check box logic
-
-    const [checkedList, setCheckedList] = useState([]);
-    const [indeterminate, setIndeterminate] = useState(true);
-    const [checkAll, setCheckAll] = useState(false);
 
     const onChange = list => {
-        setCheckedList(list);
-        setIndeterminate(!!list.length && list.length < plainOptions.length);
-        setCheckAll(list.length === plainOptions.length);
+        console.log(list);
+        // setCheckedList(list);
+        // setIndeterminate(!!list.length && list.length < plainOptions.length);
+        // setCheckAll(list.length === plainOptions.length);
     };
 
-    const onCheckAllChange = e => {
-        setCheckedList(e.target.checked ? plainOptions : []);
-        setIndeterminate(false);
-        setCheckAll(e.target.checked);
-    };
+
 
 
     /////
 
-   const onChangeRadio = e => {
-        console.log('radio checked', e.target.value);
+   const onChangeRadio =  (e, data)  => {
 
+         let selectedAnswer  = data;
+
+       let newSurvey = survey;
+       newSurvey.sections[currentSectionIndex].questions.forEach(question=>{
+
+          if(question.answers.find(item => item.id === selectedAnswer.id)){
+              question.answers.forEach(answer=>{
+
+                  if(selectedAnswer.id === answer.id){
+                      answer.selected=true;
+                  }else{
+                      answer.selected = false;
+                  }
+
+              })
+          }
+
+
+               for(const skip of  selectedAnswer.skip ){
+                   console.log('SKIP:=> ',  skip );
+                   if(question.id === skip.questionId){
+                       console.log('I reached here');
+                        for(const lg of skip.logic){
+                            question.answers.forEach(answer=>{
+
+                                if(lg === answer.id){
+                                    console.log('Here also....')
+                                    answer.skipped=true;
+                                }
+                            })
+
+                        }
+                   }
+               }
+
+    });
+
+
+
+
+       console.log('new Survey:=> ',  newSurvey );
+
+       localStorage.setItem('gumba_survey',JSON.stringify(newSurvey));
+
+
+       updateSurvey(JSON.parse(localStorage.getItem('gumba_survey')));
     };
 
+
+   function updateSurvey(survey){
+
+       setSurvey(survey);
+       console.log("*******************************")
+       console.log(survey);
+       console.log("++++++++++++++++++++++++++++++++++")
+   }
     /////
     function onChangeTime(time, timeString) {
         console.log(time, timeString);
@@ -198,8 +273,15 @@ function SurveyForm() {
 
     //pagination
     const paginationButtons=()=>{
-if(currentSectionIndex ==! (survey.sections.length-1)){
-    return <Row><Button  type="primary" onClick={goToNextPage}>NEXT</Button></Row>;
+if(currentSectionIndex !==  (survey.sections.length-1) ){
+    return <Row>
+        <Form.Item>
+            <Button type="primary" htmlType="submit">
+                  NEXT
+            </Button>
+        </Form.Item>
+
+    </Row>;
 }else
 if(currentSectionIndex === (survey.sections.length-1)){
     return  <Row><Form.Item>
@@ -212,7 +294,11 @@ if(currentSectionIndex < (survey.sections.length-1)){
     return <Row>
         <Button  type="primary" onClick={goToPreviousPage}>BACK</Button>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <Button  type="primary" onClick={goToNextPage}>NEXT</Button>
+        <Form.Item>
+            <Button type="primary" htmlType="submit">
+                NEXT
+            </Button>
+        </Form.Item>
     </Row>;}
 
     }
@@ -223,243 +309,279 @@ if(currentSectionIndex < (survey.sections.length-1)){
         if (fetching) {
             return <Spin/>;
         }
-       console.log("++++++++++++++++++++++++++++++++++++++++=");
-        console.log(currentSectionIndex);
-        console.log("++++++++++++++++++++++++++++++++++++++++=");
+
         return <>
-
-            <Layout>
-                <Header style={{backgroundColor:"#8fc9fb",fontSize:'1.8rem'}}>{survey.title}</Header>
-                <Content style={{padding:"20px"}}>
-                    {/*{survey ===! {}? */}
+            {
+              !finishedSurvey ? JSON.stringify(survey) === '{}'? <Layout>
+                    <Header style={{backgroundColor:"#8fc9fb",fontSize:'1.8rem'}}>GUMBA SURVEY</Header>
+                    <Content style={{padding:"20px"}}>
+                        <Text>NO Published Surveys</Text>
+                    </Content>
+                    <Footer style={{textAlign: 'center'}}>Gumba Survey Tool © Project Clear</Footer>
+                </Layout>:    <Layout>
+                    <Header style={{backgroundColor:"#8fc9fb",fontSize:'1.8rem'}}>{survey.title}</Header>
+                    <Content style={{padding:"20px"}}>
+                        {/*{survey ===! {}? */}
                         <Form layout="vertical"
-                                           onFinishFailed={onFinishFailed}
-                                           onFinish={onFinish}
-                                           >
-                        <Row>
-                            <Col span={4}></Col>
-                            <Col span={16}>      <Card style={{padding:"20px", borderRadius:"10px", marginBottom:"40px"}}>
+                              onFinishFailed={onFinishFailed}
+                              onFinish={onFinish}
+                        >
+                            <Row>
+                                <Col span={4}></Col>
+                                <Col span={16}>      <Card style={{padding:"20px", borderRadius:"10px", marginBottom:"40px"}}>
 
-                                <Title style={{textAlign:"start"}}>{survey.title}</Title>
-
-
-                                <Paragraph style={{textAlign:"start"}}>{survey.description}</Paragraph>
+                                    <Title style={{textAlign:"start"}}>{survey.title}</Title>
 
 
-                                <Paragraph style={{textAlign:"start"}}>{survey.summary}</Paragraph>
+                                    <Paragraph style={{textAlign:"start"}}>{survey.description}</Paragraph>
 
 
-                            </Card></Col>
-
-                            <Col span={4}></Col>
-                        </Row>
-                        <Row>
-                            <Col span={4}></Col>
-                            <Col span={16}>
-                                <>
-                                    <Card style={{padding:"20px", borderRadius:"10px", marginBottom:"40px", borderTop:"10px solid #8fc9fb"}} >
-                                        <Row>
-                                            <Title>{survey.sections[currentSectionIndex].title}</Title>
-                                        </Row>
-                                        <Row>
-                                            <Paragraph>{survey.sections[currentSectionIndex].subtitle}</Paragraph>
-                                        </Row>
+                                    <Paragraph style={{textAlign:"start"}}>{survey.summary}</Paragraph>
 
 
-                                    </Card>
-                                    {survey.sections[currentSectionIndex].questions.map(function (question,index) {
-                                        switch (question.type) {
-                                            case "SHORT":
-                                                return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}}>
-                                                    <Row gutter={16}>
+                                </Card></Col>
 
-                                                      <Col span="12">
-                                                          <Form.Item
-                                                              name={`answer`+question.id}
-                                                              label={question.title}
-                                                              rules={[{required: question.required, message: 'This field is required'}]}
-                                                          >
-                                                              <Input placeholder="Write your answer here.." />
-                                                          </Form.Item>
-                                                      </Col>
+                                <Col span={4}></Col>
+                            </Row>
+                            <Row>
+                                <Col span={4}></Col>
+                                <Col span={16}>
+                                    <>
+                                        <Card style={{padding:"20px", borderRadius:"10px", marginBottom:"40px", borderTop:"10px solid #8fc9fb"}} >
+                                            <Row>
+                                                <Title>{survey.sections[currentSectionIndex].title}</Title>
+                                            </Row>
+                                            <Row>
+                                                <Paragraph>{survey.sections[currentSectionIndex].subtitle}</Paragraph>
+                                            </Row>
 
 
-                                                    </Row>
-                                                </Card>
-                                            case "PARAGRAPH":
-                                                return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}}>
-                                                    <Row gutter={16}>
-                                                        <Col span="16">
-                                                        <Form.Item
-                                                            name={`answer`+question.id}
-                                                            label={question.title}
-                                                            rules={[{required: question.required, message: 'This field is required'}]}
-                                                        >
-                                                            <TextArea rows={4} placeholder="Write your answer here.."/>
-                                                        </Form.Item>
-                                                        </Col>
+                                        </Card>
+                                        {survey.sections[currentSectionIndex].questions.map(function (question,index) {
+                                            switch (question.type) {
+                                                case "SHORT":
+                                                    return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}} key={index}>
+                                                        <Row gutter={16}>
 
-                                                    </Row>
-                                                </Card>
-                                            case "MULTIPLE":
-                                                return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}} key={index}>
-                                                    <Row gutter={16}>
+                                                            <Col span="12">
+                                                                <Form.Item
+                                                                    name={`answer`+question.id}
+                                                                    label={question.title}
+                                                                    rules={[{required: question.required, message: 'This field is required'}]}
+                                                                >
+                                                                    <Input placeholder="Write your answer here.." />
+                                                                </Form.Item>
+                                                            </Col>
 
-                                                        <Form.Item
-                                                            name={`answer`+question.id}
-                                                            label={question.title}
-                                                            rules={[{required: question.required, message: 'This field is required'}]}
-                                                        >
-                                                            <Radio.Group onChange={onChangeRadio} value="0">
-                                                                <Space direction="vertical">
-                                                                    {question.answers.map(function (answer, index) {
-                                                                        return <Row> <Radio value={answer.title}>{answer.title}</Radio></Row>;
+
+                                                        </Row>
+                                                    </Card>
+                                                case "PARAGRAPH":
+                                                    return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}} key={index}>
+                                                        <Row gutter={16}>
+                                                            <Col span="16">
+                                                                <Form.Item
+                                                                    name={`answer`+question.id}
+                                                                    label={question.title}
+                                                                    rules={[{required: question.required, message: 'This field is required'}]}
+                                                                >
+                                                                    <TextArea rows={4} placeholder="Write your answer here.."/>
+                                                                </Form.Item>
+                                                            </Col>
+
+                                                        </Row>
+                                                    </Card>
+                                                case "MULTIPLE":
+                                                    return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}} key={`MULTIPLE`+index}>
+                                                        <Row gutter={16}>
+
+                                                            <Form.Item
+                                                                name={`answer`+question.id}
+                                                                label={question.title}
+                                                                rules={[{required: question.required, message: 'This field is highly required'}]}
+                                                            >
+                                                                <Radio.Group  value={ question.answers.find(item => item.selected) !==undefined ?  question.answers.find(item => item.selected)['title'] :""   }
+
+                                                                 >
+                                                                    <Space direction="vertical">
+                                                                        {question.answers.map(function (answer, index) {
+
+                                                                            return  !answer.skipped? <Row> <Radio value={ answer.title }  onChange={e=>{onChangeRadio(e,answer)}  } key={index} >{answer.title}</Radio></Row>:<></> ;
+                                                                        })}
+
+
+                                                                    </Space>
+                                                                </Radio.Group>
+
+
+                                                            </Form.Item>
+
+
+                                                        </Row>
+                                                    </Card>
+                                                case "CHECKBOX":
+                                                    return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}} key={index}>
+                                                        <Row gutter={16}>
+
+                                                            <Form.Item
+                                                                name={`answer`+question.id}
+                                                                label={question.title}
+                                                                rules={[{required: question.required, message: 'This field is required'}]}
+                                                            >
+                                                                <Checkbox.Group style={{ width: '100%' }}   onChange={onChange} >
+                                                                    <Space  direction="vertical">
+                                                                        {question.answers.map(function (answer, index) {
+                                                                            return <Row >  <Checkbox value={answer.title}>{answer.title}</Checkbox> </Row> ;
+                                                                        })}
+                                                                    </Space>
+
+                                                                </Checkbox.Group>
+                                                            </Form.Item>
+
+
+                                                        </Row>
+                                                    </Card>
+                                                case "DROPDOWN":
+                                                    return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}} key={index}>
+                                                        <Row gutter={16}>
+
+                                                            <Form.Item
+                                                                name={`answer`+question.id}
+                                                                label={question.title}
+                                                                rules={[{required: question.required, message: 'This field is required'}]}
+                                                            >
+                                                                <Select
+                                                                    showSearch
+                                                                    placeholder="Select an option"
+                                                                    optionFilterProp="children"
+                                                                    onChange={onChangeSelect}
+                                                                    onSearch={onSearch}
+                                                                    filterOption={(input, option) =>
+                                                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                                    }
+                                                                >
+                                                                    {question.answers.map(function (answer,index) {
+                                                                        return  <Select.Option value={answer.title} key={index}>{answer.title}</Select.Option>
                                                                     })}
 
 
-                                                                </Space>
-                                                            </Radio.Group>
-                                                        </Form.Item>
+                                                                </Select>
+                                                            </Form.Item>
 
 
-                                                    </Row>
-                                                </Card>
-                                            case "CHECKBOX":
-                                                return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}}>
-                                                    <Row gutter={16}>
+                                                        </Row>
+                                                    </Card>
+                                                case "FILE":
+                                                    return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}} key={index}>
+                                                        <Row gutter={16}>
 
-                                                        <Form.Item
-                                                            name={`answer`+question.id}
-                                                            label={question.title}
-                                                            rules={[{required: question.required, message: 'This field is required'}]}
-                                                        >
-                                                            <>
-                                                                <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
-                                                                    Check all
-                                                                </Checkbox>
-                                                                <Divider />
-                                                                <CheckboxGroup options={plainOptions} value={checkedList} onChange={onChange} />
-                                                            </>
-                                                        </Form.Item>
-
-
-                                                    </Row>
-                                                </Card>
-                                            case "DROPDOWN":
-                                                return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}}>
-                                                    <Row gutter={16}>
-
-                                                        <Form.Item
-                                                            name={`answer`+question.id}
-                                                            label={question.title}
-                                                            rules={[{required: question.required, message: 'This field is required'}]}
-                                                        >
-                                                            <Select
-                                                                showSearch
-                                                                placeholder="Select an option"
-                                                                optionFilterProp="children"
-                                                                onChange={onChangeSelect}
-                                                                onSearch={onSearch}
-                                                                filterOption={(input, option) =>
-                                                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                                }
+                                                            <Form.Item
+                                                                name={`answer`+question.id}
+                                                                label={question.title}
+                                                                rules={[{required: question.required, message: 'This field is required'}]}
                                                             >
-                                                                {question.answers.map(function (answer,index) {
-                                                                    return  <Option value={answer.title} key={index}>{answer.title}</Option>
-                                                                })}
+                                                                <ImgCrop rotate>
+                                                                    <Upload
+                                                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                                                        listType="picture-card"
+                                                                        fileList={fileList}
+                                                                        onChange={onChangeFile}
+                                                                        onPreview={onPreview}
+                                                                    >
+                                                                        {fileList.length < 5 && '+ Upload'}
+                                                                    </Upload>
+                                                                </ImgCrop>
+                                                            </Form.Item>
 
 
-                                                            </Select>
-                                                        </Form.Item>
+                                                        </Row>
+                                                    </Card>
+                                                case "DATE":
+                                                    return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}} key={index}>
+                                                        <Row gutter={16}>
+
+                                                            <Form.Item
+                                                                name={`answer`+question.id}
+                                                                label={question.title}
+                                                                rules={[{required: question.required, message: 'This field is required'}]}
+                                                            >
+                                                                <DatePicker/>
+                                                            </Form.Item>
 
 
-                                                    </Row>
-                                                </Card>
-                                            case "FILE":
-                                                return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}}>
-                                                    <Row gutter={16}>
+                                                        </Row>
+                                                    </Card>
+                                                case "TIME":
+                                                    return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}} key={index}>
+                                                        <Row gutter={16}>
 
-                                                        <Form.Item
-                                                            name={`answer`+question.id}
-                                                            label={question.title}
-                                                            rules={[{required: question.required, message: 'This field is required'}]}
-                                                        >
-                                                            <ImgCrop rotate>
-                                                                <Upload
-                                                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                                                    listType="picture-card"
-                                                                    fileList={fileList}
-                                                                    onChange={onChangeFile}
-                                                                    onPreview={onPreview}
+                                                            <Form.Item
+                                                                name={`answer`+question.id}
+                                                                label={question.title}
+                                                                rules={[{required: question.required, message: 'This field is required'}]}
+                                                            >
+                                                                <TimePicker onChange={onChangeTime} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
+                                                            </Form.Item>
+
+
+                                                        </Row>
+                                                    </Card>
+                                                default:
+                                                    return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}} key={index}>
+                                                        <Row gutter={16}>
+
+                                                            <Col span="12">
+                                                                <Form.Item
+                                                                    name={`answer`+question.id}
+                                                                    label={question.title}
+                                                                    rules={[{required: question.required, message: 'This field is required'}]}
                                                                 >
-                                                                    {fileList.length < 5 && '+ Upload'}
-                                                                </Upload>
-                                                            </ImgCrop>
-                                                        </Form.Item>
+                                                                    <Input placeholder="Write your answer here.." />
+                                                                </Form.Item>
+                                                            </Col>
 
 
-                                                    </Row>
-                                                </Card>
-                                            case "DATE":
-                                                return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}}>
-                                                    <Row gutter={16}>
+                                                        </Row>
+                                                    </Card>
 
-                                                        <Form.Item
-                                                            name={`answer`+question.id}
-                                                            label={question.title}
-                                                            rules={[{required: question.required, message: 'This field is required'}]}
-                                                        >
-                                                            <DatePicker/>
-                                                        </Form.Item>
+                                            }
+
+                                        })}
+                                    </>
+                                </Col>
+
+                                <Col span={4}></Col>
+                            </Row>
 
 
-                                                    </Row>
-                                                </Card>
-                                            case "TIME":
-                                                return   <Card style={{padding:"20px", borderRadius:"10px",marginBottom:"20px"}}>
-                                                    <Row gutter={16}>
+                            <Row>
+                                <Col span={4}></Col>
+                                <Col span={16}>
+                                    {paginationButtons() }
+                                </Col>
 
-                                                        <Form.Item
-                                                            name={`answer`+question.id}
-                                                            label={question.title}
-                                                            rules={[{required: question.required, message: 'This field is required'}]}
-                                                        >
-                                                            <TimePicker onChange={onChangeTime} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
-                                                        </Form.Item>
-
-
-                                                    </Row>
-                                                </Card>
-
-                                        }
-
-                                    })}
-                                </>
-                            </Col>
-
-                            <Col span={4}></Col>
-                        </Row>
-
-
-                        <Row>
-                            <Col span={4}></Col>
-                            <Col span={16}>
-                                {paginationButtons() }
-                            </Col>
-
-                            <Col span={4}></Col>
-                        </Row>
+                                <Col span={4}></Col>
+                            </Row>
 
 
 
-                    </Form>
+                        </Form>
 
-                        {/*: <Text>NO SURVEY</Text> }*/}
 
-                </Content>
 
-                <Footer style={{textAlign: 'center'}}>Gumba Survey Tool © Project Clear</Footer>
-            </Layout>
+                    </Content>
+
+                    <Footer style={{textAlign: 'center'}}>Gumba Survey Tool © Project Clear</Footer>
+                </Layout> : <Layout>
+                  <Header style={{backgroundColor:"#8fc9fb",fontSize:'1.8rem'}}>{survey.title}</Header>
+                  <Content style={{padding:"20px"}}>
+                      <Row><Text>Thank you for taking part on this survey, Your response has been recorded.</Text></Row>
+                      <Row><Button  type="primary" onClick={retakeSurvey}>Submit another response</Button></Row>
+                  </Content>
+                  <Footer style={{textAlign: 'center'}}>Gumba Survey Tool © Project Clear</Footer>
+              </Layout>
+            }
+
         </>
     }
 

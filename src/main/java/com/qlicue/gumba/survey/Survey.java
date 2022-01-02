@@ -30,14 +30,8 @@ import java.util.Set;
 @Table
 public class Survey {
     @Id
-    @SequenceGenerator(
-            name = "survey_sequence",
-            sequenceName = "survey_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            generator = "survey_sequence",
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
     @NotBlank
@@ -82,7 +76,7 @@ public class Survey {
     //relationships
     //@JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.REMOVE, orphanRemoval = true)
 
     @Fetch(value = FetchMode.SUBSELECT)
     @OrderBy("id ASC")

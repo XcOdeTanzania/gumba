@@ -34,14 +34,8 @@ import java.util.Set;
 
 public class Question implements Serializable {
     @Id
-    @SequenceGenerator(
-            name = "question_sequence",
-            sequenceName = "question_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            generator =   "question_sequence",
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
     @NotBlank
@@ -71,14 +65,14 @@ public class Question implements Serializable {
     //relationships
     //@JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "question",
-            cascade = CascadeType.PERSIST, orphanRemoval = true)
+            cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("id ASC")
     private List<Answer> answers;
 
     //relationships
     //@JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "question",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.REMOVE)
     @Fetch(value = FetchMode.SUBSELECT)
     //@JsonIgnore
     @OrderBy("id ASC")

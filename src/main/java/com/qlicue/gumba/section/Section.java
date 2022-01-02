@@ -23,14 +23,8 @@ import java.util.Objects;
 
 public class Section implements Serializable {
     @Id
-    @SequenceGenerator(
-            name = "answer_sequence",
-            sequenceName = "answer_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            generator =   "answer_sequence",
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
     @NotBlank
@@ -68,7 +62,7 @@ public class Section implements Serializable {
     //relationships
     //@JsonManagedReference
     //@JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "section" )
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "section",cascade = CascadeType.REMOVE, orphanRemoval = true )
     @OrderBy("id ASC")
 
     private List<Question> questions;

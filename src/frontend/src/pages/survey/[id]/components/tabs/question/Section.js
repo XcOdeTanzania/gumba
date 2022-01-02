@@ -42,7 +42,7 @@ class Section extends PureComponent {
   }
 
     render() {
-      const {section, title,onEditQuestion,onCreateQuestion,onDeleteQuestion,onEditAnswer,onCreateAnswer,onDeleteAnswer,showAddSectionButton,sections,sectionNumber, publish, onAddSkipAnswer}= this.props;
+      const {section, title,onEditQuestion,onCreateQuestion,onDeleteQuestion,onEditAnswer,onCreateAnswer,onDeleteAnswer,showAddSectionButton,sections,sectionNumber, publish, onAddSkipAnswer,onEditSkip,onDeleteSkip}= this.props;
         return (
             <Card style={{marginBottom:"16px", backgroundColor:'#d1eaff'}}>
               <Form ref={this.formRef} name="control-ref">
@@ -93,7 +93,9 @@ class Section extends PureComponent {
                           index:index,
                           publish:publish,
                           sectionQuestions:section.questions,
-                          onAddSkipAnswer:onAddSkipAnswer
+                          onAddSkipAnswer:onAddSkipAnswer,
+                          onEditSkip:onEditSkip,
+                          onDeleteSkip:onDeleteSkip
 
                         }
                         return <Question {...questionProps}/>
@@ -172,6 +174,8 @@ Section.propTypes = {
   sectionNumber:PropTypes.any,
   publish:PropTypes.bool,
 
-  onAddSkipAnswer:PropTypes.func
+  onAddSkipAnswer:PropTypes.func,
+  onEditSkip:PropTypes.func,
+  onDeleteSkip:PropTypes.func
 }
 export default Section

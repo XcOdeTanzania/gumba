@@ -17,14 +17,8 @@ import java.util.Objects;
 @Table
 public class Site {
     @Id
-    @SequenceGenerator(
-            name = "site_sequence",
-            sequenceName = "site_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            generator =   "site_sequence",
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
     @NotBlank

@@ -102,7 +102,7 @@ class Question extends PureComponent {
 
   get answerProps() {
     const { type } = this.state
-    const {question,onEditAnswer,onCreateAnswer, onDeleteAnswer, publish, sectionQuestions, onAddSkipAnswer } = this.props
+    const {question,onEditAnswer,onCreateAnswer, onDeleteAnswer, publish, sectionQuestions, onAddSkipAnswer,onEditSkip, onDeleteSkip} = this.props
 
 
     return {
@@ -115,7 +115,10 @@ class Question extends PureComponent {
       publish:publish,
       hasSkips:question.hasSkips,
       sectionQuestions:sectionQuestions,
-      onAddSkipAnswer:onAddSkipAnswer
+      onAddSkipAnswer:onAddSkipAnswer,
+      onEditSkip:onEditSkip,
+
+      onDeleteSkip:onDeleteSkip
     }
   }
 
@@ -220,7 +223,7 @@ class Question extends PureComponent {
                           </FormItem>,
                         </div>
 
-                         <div  style={{paddingLeft:"5px"}} >
+                         {(question.type ==="MULTIPLE" || question.type === "DROPDOWN")?<div  style={{paddingLeft:"5px"}} >
                            <FormItem
                              name="hasSkips"
                              valuePropName="checked"
@@ -235,8 +238,11 @@ class Question extends PureComponent {
 
                              />
                            </FormItem>,
+                         </div>:<div></div>}
+
+
+
                          </div>
-                      </div>
 
                      </div>
                     :<div></div>}
@@ -262,7 +268,9 @@ Question.propTypes ={
   showDeleteButton:PropTypes.bool,
   publish:PropTypes.bool,
   sectionQuestions:PropTypes.array,
-  onAddSkipAnswer:PropTypes.func
+  onAddSkipAnswer:PropTypes.func,
+  onEditSkip:PropTypes.func,
+  onDeleteSkip:PropTypes.func
 
 
 }

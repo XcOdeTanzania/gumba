@@ -6,10 +6,6 @@ const FormItem = Form.Item
 
 const randomColors=['gold','lime', 'green', 'cyan','magenta','red','volcano','orange','blue','geekblue','purple']
 
-//checkbox
-const CheckboxGroup = Checkbox.Group;
-
-
 class OptionalAnswer extends PureComponent {
      options = [ ];
 
@@ -18,10 +14,9 @@ class OptionalAnswer extends PureComponent {
     super(props)
 
     this.state = {
-      checkedList:  [],
-      indeterminate:true,
-      checkAll:true,
-      answerOptions:[]
+
+      currentAnswers: [],
+      currentSkip:{}
     }
 
 
@@ -32,30 +27,7 @@ class OptionalAnswer extends PureComponent {
   formRef = React.createRef()
 
 
-    onChangeCheckbox = list => {
 
-     //setState
-      this.setState({ checkedList: list
-      });
-
-      //setState
-      this.setState({
-        indeterminate:!!list.length && list.length < this.state.answerOptions.length
-       })
-
-      //setState
-      this.setState({ checkAll:list.length === this.state.answerOptions.length})
-
-  };
-
-  onCheckAllChange = e => {
-
-    this.setState({
-      checkedList: e.target.checked ? this.state.answerOptions : [],
-      indeterminate:false,
-      checkAll:e.target.checked
-    });
-  };
 
   handleEditAnswer = () => {
     const {answer,   onEditAnswer } = this.props
@@ -73,6 +45,7 @@ class OptionalAnswer extends PureComponent {
       })
   }
 
+  //skip functions...
   handleAddSkipAnswer = (data) => {
     const {answer,   onAddSkipAnswer } = this.props
     const defaultLogic = [ ];
@@ -106,32 +79,62 @@ class OptionalAnswer extends PureComponent {
     onAddSkipAnswer(skipData,answer.id)
   }
 
-onSelectQuestion=(data)=>{
- let plainOptions = [ ];
- let    defaultCheckedList = [ ];
 
-  let i=0;
+  handleEditSkip = (defaultLogic) => {
+    const { onEditSkip,answer } = this.props
+
+    const skipData = {
+
+      "skipAll": this.state.currentAnswers.length=== defaultLogic.length,
+      "logic":   defaultLogic
+    }
+
+
+    onEditSkip(skipData,this.state.currentSkip.id)
+  }
+  handleDeleteSkip = (data ) => {
+
+
+    const {answer,onDeleteSkip}=this.props;
+    //get the current skip
+    for(const skp  of answer.skip ){
+
+      if(parseInt(data.charAt(0)) === skp.questionId){
+          onDeleteSkip(skp.id);
+        break;
+      }
+
+
+
+    }
+
+  }
+  //end of skip functions
+onSelectQuestion=(data)=>{
+
+       const {answer}=this.props;
+    //get the current skip
+  for(const skp  of answer.skip ){
+
+    if(parseInt(data.charAt(0)) === skp.questionId){
+      this.setState({currentSkip:skp});
+    }
+
+
+
+  }
   let currentQuestion={};
   for(const opt of this.options){
-    if(opt.value === data){
+    if(opt.value === data ){
 
       currentQuestion = opt.question;
+      this.setState({currentAnswers:currentQuestion.answers});
 
       break;
     }
-  }
-  for(const ans  of currentQuestion.answers){
 
-
-    plainOptions[i] =  ans.title  ;
-
-    i++;
 
   }
-
-  this.setState({answerOptions:  plainOptions });
-   this.setState({checkedList:   defaultCheckedList
-  })
 
 }
 
@@ -142,7 +145,7 @@ onSelectQuestion=(data)=>{
 
   //Tag render method..
    tagRender=(props)=> {
-    const { label, value, closable, onClose } = props;
+    const { label,   closable, onClose } = props;
     const onPreventMouseDown = event => {
 
       event.preventDefault();
@@ -191,7 +194,7 @@ onSelectQuestion=(data)=>{
 
        if(questionId !== qs.id)
       this. options.push({
-         value:` ${qs.id} . ${qs.title}`,
+         value:`${qs.id} . ${qs.title}`,
           "question":qs
           });
      }
@@ -208,7 +211,7 @@ onSelectQuestion=(data)=>{
 
       for(const qn of sectionQuestions){
         if(qn.id === skp.questionId){
-          skippedList[i] = ` ${qn.id} . ${qn.title}`;
+          skippedList[i] = `${qn.id} . ${qn.title}`;
           i++;
         }
       }
@@ -228,7 +231,7 @@ onSelectQuestion=(data)=>{
         if(qn.id === skp.questionId){
 
           skippedList.push({
-            value:` ${qn.id} . ${qn.title}`,
+            value:`${qn.id} . ${qn.title}`,
             "question":qn
           });
 
@@ -239,6 +242,8 @@ onSelectQuestion=(data)=>{
     }
     return skippedList;
   }
+
+
 
   render() {
      const {answer, number,publish,hasSkips  } = this.props
@@ -287,6 +292,7 @@ onSelectQuestion=(data)=>{
                   style={{width: '100%'}}
                   options={this.getSectionQuestions()}
                   onSelect={this.handleAddSkipAnswer}
+                  onDeselect={this.handleDeleteSkip}
                 />
               </Col>
             </Row>
@@ -300,28 +306,32 @@ onSelectQuestion=(data)=>{
               <Select
                       style={{ width: 380 }}
                       placeholder="Select question to filter"
-                      options={this.getSkippedQuestionsOptions()}
                       onSelect={this.onSelectQuestion}
                       showArrow >
+                {this.getSkippedQuestionsOptions().map(function (skippedQuestion,index) {
+                  return     <Option value={ skippedQuestion.value } > {skippedQuestion.value} </Option>;
+
+                })}
               </Select>
             </Col>
           </Row>
            <br/>
-            <Row gutter={16}>
-              <Col span={1}></Col>
-              <Col>
-                <Checkbox indeterminate={this.state.indeterminate} onChange={this.onCheckAllChange} checked={this.state.checkAll}>
-                  Check all
-                </Checkbox>
-              </Col>
 
-           </Row>
           <Row gutter={16}>
             <Col span={1}></Col>
-           <Col>
-             <CheckboxGroup options={this.state.answerOptions} value={this.state.checkedList} onChange={this.onChangeCheckbox} />
+            <Col span={13}>
+            <Checkbox.Group style={{ width: '100%' }} onChange={this.handleEditSkip} >
+              <Row>
+                {this.state.currentAnswers.map(function (ans ,index) {
+                  // checked={ answer.skip[0].logic.includes(ans.id)}
+                  return    <Col span={8}>
+                    <Checkbox value={ans.id} key={index}  > {ans.title} </Checkbox>
+                  </Col>
+                })}
+              </Row>
 
-           </Col>
+            </Checkbox.Group>
+            </Col>
           </Row>
 
           <Row>
@@ -347,6 +357,8 @@ OptionalAnswer.propTypes ={
   type:PropTypes.string,
   publish:PropTypes.bool,
   sectionQuestions:PropTypes.array,
-  onAddSkipAnswer:PropTypes.func
+  onAddSkipAnswer:PropTypes.func,
+  onEditSkip:PropTypes.func,
+  onDeleteSkip:PropTypes.func
 }
 export default OptionalAnswer

@@ -41,7 +41,7 @@ class Answer extends PureComponent {
         <br/>
       </>
     if (value === 'MULTIPLE'||value === 'CHECKBOX'||value === 'DROPDOWN'){
-      const {onEditAnswer,onCreateAnswer, onDeleteAnswer,questionId, publish,hasSkips,sectionQuestions,onAddSkipAnswer} = this.props;
+      const {onEditAnswer,onCreateAnswer, onDeleteAnswer,questionId, publish,hasSkips,sectionQuestions,onAddSkipAnswer,onEditSkip,onDeleteSkip} = this.props;
       return <>
         {
           answers.map(function(answer,index){
@@ -57,7 +57,9 @@ class Answer extends PureComponent {
               publish:publish,
               hasSkips:hasSkips,
               sectionQuestions:sectionQuestions,
-              onAddSkipAnswer: onAddSkipAnswer           }
+              onAddSkipAnswer: onAddSkipAnswer ,
+            onEditSkip:onEditSkip,
+            onDeleteSkip:onDeleteSkip}
             return  <OptionalAnswer {...answerProps}/>
           })
 
@@ -122,7 +124,10 @@ Answer.propTypes ={
   publish:PropTypes.bool,
   hasSkips:PropTypes.bool,
   sectionQuestions:PropTypes.array,
-  onAddSkipAnswer:PropTypes.func
+
+  onAddSkipAnswer:PropTypes.func,
+  onEditSkip:PropTypes.func,
+  onDeleteSkip:PropTypes.func
 
 }
 export default Answer

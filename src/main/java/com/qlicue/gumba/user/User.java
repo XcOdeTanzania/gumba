@@ -25,14 +25,8 @@ import java.util.Set;
 @NamedEntityGraph(name ="user_entity_graph", attributeNodes = @NamedAttributeNode("responses"))
 public class User {
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            generator =   "user_sequence",
-            strategy = GenerationType.SEQUENCE
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
     @NotBlank
@@ -71,7 +65,7 @@ public class User {
 //    //relationship
    // @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.REMOVE, orphanRemoval = true)
      @JsonIgnore
     @OrderBy("id ASC")
     private Set<Response> responses;

@@ -184,11 +184,33 @@ console.log("reload this page again");
           id:id
         }).then((d) => {
 
-
-          // this.handleRefresh();
+       this.handleRefresh();
 
         })
       },
+      onEditSkip: (data, id) => {
+        console.log("The skip is here...")
+        dispatch({
+          type: `skip/update`,
+          payload: data,
+          id:id
+        }).then(() => {
+
+          this.handleRefresh();
+        })
+      },
+      onDeleteSkip:(id)=>{
+
+        dispatch({
+          type: 'skip/delete',
+          payload:id,
+        }).then((d) => {
+          // this.handleRefresh();
+
+          console.log("reload this page again");
+        })
+      },
+
     }
   }
 
