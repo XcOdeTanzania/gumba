@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import Header from './components/Header'
 import Section from './Section'
 import PropTypes from "prop-types";
-import {Button, Switch} from "antd";
+import {Button, Col, Row, Switch} from "antd";
 
 
 class QuestionTab extends PureComponent {
@@ -34,6 +34,7 @@ class QuestionTab extends PureComponent {
         onDeleteAnswer,
         surveyId,
         publish,
+        linkUrl,
       onAddSkipAnswer,
       onEditSkip,
       onDeleteSkip} = this.props
@@ -41,10 +42,18 @@ class QuestionTab extends PureComponent {
         return (
             <>
                 <Header />
+              <Row>
+                <Col>
+                  <Switch checkedChildren="Un-publish Survey" unCheckedChildren="Publish Survey"  onChange={this.handlePublishSurvey}  defaultChecked={publish}/>
 
-              <Switch checkedChildren="Un-publish Survey" unCheckedChildren="Publish Survey"  onChange={this.handlePublishSurvey}  defaultChecked={publish}/>
+                </Col>
+                <Col span={1}></Col>
+                <Col>
+                  {publish?  <Button onClick={() => {navigator.clipboard.writeText(`${linkUrl}` ) }}>COPY & SHARE LINK</Button>: <></>}
+                </Col>
+              </Row>
               <br/>
-              <br/>
+
               {sections.map(function (section, index) {
                 const sectionProps ={
                   section: section,
@@ -94,9 +103,11 @@ QuestionTab.propTypes = {
   onDeleteAnswer:PropTypes.func,
   surveyId:PropTypes.any,
   publish:PropTypes.bool,
+  linkUrl:PropTypes.string,
 
   onAddSkipAnswer:PropTypes.func,
   onEditSkip:PropTypes.func,
-  onDeleteSkip:PropTypes.func
+  onDeleteSkip:PropTypes.func,
+
  }
 export default QuestionTab

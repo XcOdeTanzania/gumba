@@ -106,6 +106,9 @@ class Answer extends PureComponent {
 
       </Row>
   }
+
+
+
   render() {
 
      const {type}= this.props;

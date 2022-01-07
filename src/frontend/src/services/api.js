@@ -56,6 +56,12 @@ export default {
   removeSkip: 'DELETE /skips/:id',
   removeSkipList: 'POST /skips/delete',
 
+  queryResponse: '/responses/:id',
+  queryResponseList: '/responses',
+  updateResponse: 'PUT /responses/:id',
+  createResponse: 'POST /responses',
+  removeResponse: 'DELETE /responses/:id',
+  removeResponseList: 'POST /responses/delete',
 
   queryPostList: '/posts',
   queryDashboard: '/dashboard',

@@ -4,12 +4,16 @@ import PropTypes from "prop-types";
 
 
 class ResponseTab extends PureComponent {
+  componentDidMount() {
+    console.log("Am called as soon as its mounted")
+  }
   get responseProps(){
-    const {  sections } = this.props
+    const {  sections,survey } = this.props
 
 
     return   {
-      sections: sections}
+      sections: sections,
+    survey:survey}
 
   }
     render() {
@@ -23,5 +27,6 @@ class ResponseTab extends PureComponent {
 
 ResponseTab.propTypes = {
   sections: PropTypes.array,
+  survey:PropTypes.object
 }
 export default ResponseTab

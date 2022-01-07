@@ -2,14 +2,13 @@ package com.qlicue.gumba.survey;
 
 
 
-import com.qlicue.gumba.response.Response;
 
+import com.qlicue.gumba.form.Form;
 import com.qlicue.gumba.section.Section;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
 
 import javax.validation.constraints.NotBlank;
@@ -34,6 +33,7 @@ public class Survey {
             strategy = GenerationType.IDENTITY
     )
     private Long id;
+
     @NotBlank
     @Column(nullable = false)
     @Lob
@@ -44,6 +44,9 @@ public class Survey {
     @Lob
     @Column
     private String slug;
+    @Lob
+    @Column
+    private String link;
     @Lob
     @Column
     private String summary;
@@ -72,6 +75,9 @@ public class Survey {
     @Column(nullable = false)
     private Accessibility accessibility;
 
+    @Column(nullable = false )
+    private Long totalResponses;
+
 
     //relationships
     //@JsonManagedReference
@@ -83,7 +89,13 @@ public class Survey {
     private List<Section> sections;
 
 
+    //@JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey",
+            cascade = CascadeType.REMOVE, orphanRemoval = true)
 
+    @Fetch(value = FetchMode.SUBSELECT)
+    @OrderBy("id ASC")
+    private Set<Form> forms;
 
     public Survey(String title,
                   String metaTitle,
@@ -97,7 +109,8 @@ public class Survey {
                   LocalDate endsAt,
                   String description,
                   Accessibility accessibility,
-                  String image) {
+                  String image,
+                  Long totalResponses) {
         this.title = title;
         this.metaTitle = metaTitle;
         this.slug = slug;
@@ -111,6 +124,7 @@ public class Survey {
         this.description = description;
         this.accessibility = accessibility;
         this.image = image;
+        this.totalResponses = totalResponses;
     }
 
 

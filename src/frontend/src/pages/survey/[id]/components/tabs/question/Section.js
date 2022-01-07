@@ -116,13 +116,13 @@ class Section extends PureComponent {
                     <Select defaultValue={section.goTo} disabled={publish}
                             onChange={this.handleEditSection}
                     >
-                    <Option value="NEXT">Go to next Section </Option>
+                    <Select.Option value="NEXT">Go to next Section </Select.Option>
                       {sections.map(function (sec, index) {
                         if(section.id === sec.id) return ;
-                     return   <Option  value={sec.id} >Go to section {index+1} ({sec.title})</Option>
+                     return   <Select.Option  value={sec.id} >Go to section {index+1} ({sec.title})</Select.Option>
 
                       })}
-                      <Option value="SUBMIT">Submit Form </Option>
+                      <Select.Option value="SUBMIT">Submit Form </Select.Option>
                     </Select>
 
                     </FormItem>

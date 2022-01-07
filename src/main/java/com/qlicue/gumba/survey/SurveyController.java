@@ -2,14 +2,14 @@ package com.qlicue.gumba.survey;
 
 
 import com.qlicue.gumba.resource.ResponseHandler;
-import com.qlicue.gumba.user.User;
+ 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.List; 
 
 @AllArgsConstructor
 @RestController
@@ -42,7 +42,7 @@ public class SurveyController {
     }
 
     @GetMapping(path="{surveyId}")
-    public Survey getSurvey(@PathVariable("surveyId")   Long surveyId) {
+    public Survey getSurvey(@PathVariable("surveyId") Long surveyId) {
 
         return surveyService.getSurvey(surveyId);
     }

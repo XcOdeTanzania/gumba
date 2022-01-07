@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Table, Modal, Avatar } from 'antd'
+import {Table, Modal, Avatar, Tag} from 'antd'
 import { DropOption } from 'components'
 import { t } from "@lingui/macro"
 import { Trans } from "@lingui/macro"
 import { Link } from 'umi'
 import styles from './List.less'
+import {Color} from "../../../utils";
 
 const { confirm } = Modal
 
@@ -43,11 +44,7 @@ class List extends PureComponent {
         key: 'name',
         render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
       },
-      {
-        title: <Trans>NickName</Trans>,
-        dataIndex: 'nickname',
-        key: 'nickname',
-      },
+
       {
         title: <Trans>Age</Trans>,
         dataIndex: 'age',
@@ -56,10 +53,11 @@ class List extends PureComponent {
       },
       {
         title: <Trans>Gender</Trans>,
-        dataIndex: 'isMale',
-        key: 'isMale',
+        dataIndex: 'gender',
+        key: 'gender',
         width: '7%',
-        render: text => <span>{text ? 'Male' : 'Female'}</span>,
+
+        render: text => <Tag color={text=== "MALE"? Color.green:  Color.peach }>{text}</Tag>
       },
       {
         title: <Trans>Phone</Trans>,
@@ -71,11 +69,7 @@ class List extends PureComponent {
         dataIndex: 'email',
         key: 'email',
       },
-      {
-        title: <Trans>Address</Trans>,
-        dataIndex: 'address',
-        key: 'address',
-      },
+
       {
         title: <Trans>CreateTime</Trans>,
         dataIndex: 'createdAt',

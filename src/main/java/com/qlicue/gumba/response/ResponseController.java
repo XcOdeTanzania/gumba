@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @RestController
@@ -27,10 +30,10 @@ public class ResponseController {
 
     }
 
-    @PostMapping(path="{userId}")
-    public  void addResponse( @PathVariable("userId" ) Long userId, @Valid @RequestBody List<Response> responses){
+    @PostMapping(path="{userId}/{surveyId}")
+    public  void addResponse( @PathVariable("userId" ) Long userId, @PathVariable("surveyId" ) Long surveyId,  @RequestBody List<Response> responses){
 
-        responseService.addResponse(responses, userId);
+        responseService.addResponse(responses, userId, surveyId);
     }
 
     @PutMapping(path = "{responseId}")

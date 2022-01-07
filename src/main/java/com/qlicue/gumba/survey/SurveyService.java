@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
+import java.util.Objects; 
 
 @AllArgsConstructor
 @Service
@@ -32,7 +32,7 @@ public class SurveyService {
     public void addSurvey(Survey survey) {
 
         //add meta
-        survey.setMetaTitle(survey.getTitle() + "Survey");
+        survey.setMetaTitle(survey.getTitle() + " Survey");
         survey.setSlug(survey.getTitle().toLowerCase(Locale.ROOT).replace(' ','_'));
 
         //add image
@@ -44,6 +44,7 @@ public class SurveyService {
         //add dates
         survey.setCreatedAt(LocalDate.now());
         survey.setUpdatedAt(LocalDate.now());
+        survey.setTotalResponses(0L);
         surveyRepository.save(survey);
 
         //publish event created event
@@ -108,11 +109,28 @@ public class SurveyService {
         if((surveyParams.isPublish() || !surveyParams.isPublish()) && !Objects.equals(survey.isPublish(),surveyParams.isPublish())) {
             survey.setPublish(surveyParams.isPublish());
             survey.setPublishedAt(LocalDate.now());
+            survey.setLink("http://localhost:3000/"+survey.getId());
         }
 
 
     }
 
+
+    @Transactional
+    public void updateSurveyResponseTotal(Long surveyId ) {
+
+        //find the survey by id
+        Survey survey = surveyRepository.findById(surveyId).orElseThrow(() ->
+                new NotFoundException("Survey\twith\tid\t" + surveyId + "\tdoes\tnot\texists"));
+
+
+          survey.setTotalResponses(survey.getTotalResponses()+1 );
+
+
+
+
+
+    }
     //events
 
     void publishSurveyCreatedEvent(final Survey survey) {

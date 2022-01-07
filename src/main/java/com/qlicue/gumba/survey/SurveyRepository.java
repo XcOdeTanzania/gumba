@@ -10,4 +10,10 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
     @Query("select s from Survey s LEFT join fetch s.sections")
     List<Survey> findAll();
+
+//    Optional<Survey> findById(UUID id);
+//
+//   void deleteById(UUID id);
+//
+//   boolean   existsById(UUID id);
 }

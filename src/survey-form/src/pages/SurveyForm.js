@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {addNewSurveyResponse, getSurvey} from "../components/client/SurveyClient";
+import {addNewSurveyResponse, addNewSurveyResponseForm, getSurvey} from "../components/client/SurveyClient";
 import {errorNotification, successNotification} from "../components/notifications/Notification";
 import {
     Button,
@@ -25,11 +25,12 @@ import {LoadingOutlined} from "@ant-design/icons";
 import moment from 'moment';
 
 import ImgCrop from 'antd-img-crop';
+import {useParams} from "react-router-dom";
 
 
 
 const { Paragraph, Text,Title } = Typography;
-const totalFormData = [];
+let totalFormData = [];
 const antIcon = <LoadingOutlined style={{fontSize: 24, color: "white"}} spin/>;
 
 
@@ -44,19 +45,15 @@ function onSearch(val) {
 
 function SurveyForm() {
     const [currentSectionIndex, setCurrentSection] = useState(0);
-    const [submitSections, setSubmitSections] = useState(false);
+
      const [survey, setSurvey] = useState({});
     const [fetching, setFetching] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [finishedSurvey, setFinishedSurvey] = useState(false);
-    // const [finishedSurvey, setFinishedSurvey] = useState(false);
-    let  respList =[];
+
     const formData = [];
+    const { surveyId } = useParams();
 
-    //response
-    const [responseList, setResponseList] = useState([
-
-    ]);
     //pagination
     const goToNextPage=()=> {
 
@@ -67,7 +64,7 @@ function SurveyForm() {
     }
 
     const retakeSurvey = () => {
-        fetchSurvey(1);
+        fetchSurvey(surveyId);
 
 
     }
@@ -105,16 +102,23 @@ function SurveyForm() {
 
 
         if(currentSectionIndex !==  (survey.sections.length-1)){
-            // alert(JSON.stringify(totalFormData, null, 2));
+
 
              goToNextPage();
          }else{
             setSubmitting(true);
-
-             // alert(JSON.stringify(totalFormData, null, 2));
-                 addNewSurveyResponse(totalFormData ).then(() => {
+            // alert(JSON.stringify(totalFormData, null, 2));
+                 addNewSurveyResponse(totalFormData,surveyId ).then(() => {
                          successNotification("Survey response successfully added", `Your response was added to gumba system`)
                          setFinishedSurvey(true);
+                         addNewSurveyResponseForm(totalFormData,surveyId ).then(()=>{
+                             totalFormData = [];
+                         }).catch(err=>{
+                             console.log(err);
+                             err.response.json().then(res => {
+                                 errorNotification("There was an issue", `${res.message}   [${res.status}]  [${res.error}]`, "bottomLeft");
+                             });
+                         })
                  }).catch(err => {
                      console.log(err);
                      err.response.json().then(res => {
@@ -140,7 +144,7 @@ function SurveyForm() {
 
 
     const onFinishFailed = errorInfo => {
-        alert(JSON.stringify(errorInfo, null, 2));
+        // alert(JSON.stringify(errorInfo, null, 2));
     };
     const fetchSurvey = (surveyId) => getSurvey(surveyId)
         .then(resp => resp.json())
@@ -165,7 +169,7 @@ function SurveyForm() {
 
     useEffect(() => {
         console.log("Invoke only on mount");
-        fetchSurvey(1);
+        fetchSurvey(surveyId);
     }, []);
 
 
@@ -311,11 +315,12 @@ if(currentSectionIndex < (survey.sections.length-1)){
         }
 
         return <>
+            {/*<Link to={`survey/1`}> TEST THE LINK</Link>*/}
             {
               !finishedSurvey ? JSON.stringify(survey) === '{}'? <Layout>
                     <Header style={{backgroundColor:"#8fc9fb",fontSize:'1.8rem'}}>GUMBA SURVEY</Header>
                     <Content style={{padding:"20px"}}>
-                        <Text>NO Published Surveys</Text>
+                        <Text>`NO Published Survey with ID:   {surveyId}`</Text>
                     </Content>
                     <Footer style={{textAlign: 'center'}}>Gumba Survey Tool © Project Clear</Footer>
                 </Layout>:    <Layout>

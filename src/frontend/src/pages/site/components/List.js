@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types'
-import { Table, Modal, Avatar } from 'antd';
+import {Table, Modal, Avatar, Tag} from 'antd';
 import { DropOption } from 'components';
 import { t } from "@lingui/macro"
 import { Trans } from "@lingui/macro"
 
 import styles from './List.less'
 import {Link} from "umi";
+import {Color} from "../../../utils";
 
 const { confirm } = Modal
 
@@ -44,23 +45,21 @@ class List extends PureComponent {
         render: (text, record) => <Link to={`site/${record.id}`}>{text}</Link>,
 
       },
-      {
-        title: <Trans>Description</Trans>,
-        dataIndex: 'description',
-        key: 'description',
-      },
 
+      {
+        title: t`Privacy`,
+        dataIndex: 'privacy',
+        width: '7%',
+        render: text => <Tag color={text=== "PUBLIC"? Color.green: (text=== "PRIVATE"? Color.red: Color.yellow) }>{text}</Tag>,
+
+      },
 
       {
         title: <Trans>Address</Trans>,
         dataIndex: 'address',
         key: 'address',
       },
-      {
-        title: t`Privacy`,
-        dataIndex: 'privacy',
-        width: '7%',
-      },
+
       {
         title: <Trans>CreateTime</Trans>,
         dataIndex: 'createdAt',

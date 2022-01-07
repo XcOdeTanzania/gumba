@@ -31,7 +31,7 @@ public class SectionService {
     public void addSection(Section section) {
 
         //find the survey by id
-        Survey survey = surveyRepository.findById(section.getSurveyId()).orElseThrow(() ->
+        Survey survey = surveyRepository.findById( section.getSurveyId()).orElseThrow(() ->
                 new NotFoundException("Survey\twith\tid\t" + section.getSurveyId() + "\tdoes\tnot\texists"));
 
         //add dates

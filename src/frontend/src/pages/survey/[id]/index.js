@@ -22,7 +22,9 @@ class SurveyDetail extends PureComponent {
   handleRefresh = newQuery => {
     const { location } = this.props
     const { query, pathname } = location
-
+    console.log('Atiiiiiiiiiiiiiiiiiiiii')
+    console.log(pathname);
+    console.log('Atiiiiiiiiiiiiiiiiiiiii')
     history.push({
       pathname,
       search: stringify(
@@ -41,7 +43,8 @@ class SurveyDetail extends PureComponent {
 
     const { data } = surveyDetail
   return   { surveyId:data.id,
-    sections: data.sections,}
+    sections: data.sections,
+    survey:data }
 
   }
   get questionTabProps() {
@@ -53,6 +56,7 @@ class SurveyDetail extends PureComponent {
       surveyId:data.id,
       sections: data.sections,
       publish: data.publish,
+      linkUrl:data.link,
       onEditSurvey: (data, id) => {
 
         dispatch({

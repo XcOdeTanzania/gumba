@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Table, Modal, Avatar } from 'antd';
+import {Table, Modal, Avatar, Tag} from 'antd';
 import { DropOption } from 'components';
 import { Ellipsis } from 'components';
 import { t } from "@lingui/macro";
@@ -8,6 +8,7 @@ import { Trans } from "@lingui/macro";
 import { Link } from 'umi';
 
 import styles from './List.less';
+import {Color} from "../../../utils";
 
 const { confirm } = Modal
 
@@ -47,6 +48,12 @@ class List extends PureComponent {
         render: (text, record) => <Ellipsis><Link to={`survey/${record.id}`}>{text}</Link></Ellipsis>,
       },
       {
+        title: t`Accessibility`,
+        dataIndex: 'accessibility',
+        render: text => <Tag color={text=== "PUBLIC"? Color.green: (text=== "PROTECTED"? Color.blue: Color.red) }>{text}</Tag>,
+
+      },
+      {
         title: <Trans>MetaTitle</Trans>,
         dataIndex: 'metaTitle',
         key: 'metaTitle',
@@ -58,11 +65,7 @@ class List extends PureComponent {
         dataIndex: 'slug',
         key: 'slug',
       },
-      {
-        title: t`Accessibility`,
-        dataIndex: 'accessibility',
 
-      },
       {
         title: <Trans>CreateTime</Trans>,
         dataIndex: 'createdAt',

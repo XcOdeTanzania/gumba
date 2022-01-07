@@ -15,13 +15,22 @@ export const addNewSurvey = survey =>
         body: JSON.stringify(survey)
     }).then(checkStatus);
 
-export const addNewSurveyResponse = (surveyResponse) =>
-    fetch(`api/v1/responses/1`, {
+export const addNewSurveyResponse = (surveyResponse, surveyId) =>
+    fetch(`api/v1/responses/1/${surveyId}`, {
         headers: {
             'Content-Type': 'application/json'
         },
         method: 'POST',
         body: JSON.stringify(surveyResponse)
+    }).then(checkStatus);
+
+export const addNewSurveyResponseForm = (surveyResponse, surveyId) =>
+    fetch(`api/v1/forms/${surveyId}`, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify( {"formAttributes":{"data":surveyResponse}})
     }).then(checkStatus);
 
 export const deleteSurvey = surveyId =>

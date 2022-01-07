@@ -111,15 +111,10 @@ const Dashboard = Mock.mock({
     {
       icon: 'team',
       color: Color.green,
-      title: 'Surveys',
+      title: 'Users',
       number: 2781,
     },
-    {
-      icon: 'team',
-      color: Color.blue,
-      title: 'Surveyors',
-      number: 3241,
-    },
+
     {
       icon: 'edit',
       color: Color.purple,
@@ -129,7 +124,7 @@ const Dashboard = Mock.mock({
     {
       icon: 'code-o',
       color: Color.red,
-      title: 'Pending',
+      title: 'Surveys',
       number: 4324,
     },
   ],
