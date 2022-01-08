@@ -2,6 +2,7 @@
 
  import com.fasterxml.jackson.annotation.JsonIgnore;
  import com.qlicue.gumba.glee.Glee;
+ import com.qlicue.gumba.response.Response;
  import lombok.AllArgsConstructor;
  import lombok.Data;
  import lombok.NoArgsConstructor;
@@ -9,23 +10,26 @@
 
  import javax.persistence.*;
  import javax.validation.constraints.Email;
- import javax.validation.constraints.NotEmpty;
+ import javax.validation.constraints.NotBlank;
  import javax.validation.constraints.NotNull;
  import java.util.Collection;
+ import java.util.Set;
 
  @Data
  @Entity
  @AllArgsConstructor
  @NoArgsConstructor
- @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
+ @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
  public class User {
 
      public enum Role {USER, ADMIN, USER_MANAGER}
 
      @Id
-     @GeneratedValue(strategy = GenerationType.AUTO)
+     @GeneratedValue(
+             strategy = GenerationType.IDENTITY
+     )
      private Long id;
-     @NotEmpty
+     @NotBlank
      @Email
      private String email;
      @JsonIgnore
@@ -35,10 +39,32 @@
      @Enumerated(EnumType.STRING)
      private Role role;
      private Double minGleePerDay;
+
+     public User(String email, String password, Role role, Double minGleePerDay){
+         this.email = email;
+         this.password =password;
+         this.role =role;
+         this.minGleePerDay =minGleePerDay;
+
+     }
+
      @JsonIgnore
      @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
      @ToString.Exclude
      private Collection<Glee> glee;
+
+
+
+
+     //    //relationship
+   // @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user",
+            cascade = CascadeType.REMOVE, orphanRemoval = true)
+     @JsonIgnore
+    @OrderBy("id ASC")
+    private Set<Response> responses;
+
+
  }
 
 

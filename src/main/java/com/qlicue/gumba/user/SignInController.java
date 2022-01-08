@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/api/signin")
+@RequestMapping("api/v1/signIn")
 public class SignInController {
 
     private final UserRepository repository;
@@ -24,7 +24,7 @@ public class SignInController {
 
     @PostMapping
     User signin(@RequestParam String email, @RequestParam String password) {
-        User u = new User(null, email, passwordEncoder.encode(password), User.Role.USER, 0D, null);
+        User u = new User(null, email, passwordEncoder.encode(password), User.Role.USER, 0D, null,null);
         return repository.save(u);
     }
 

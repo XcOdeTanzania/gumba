@@ -2,6 +2,8 @@ package com.qlicue.gumba.glee;
 
 import com.qlicue.gumba.user.User;
 import com.qlicue.gumba.user.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,12 +14,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Configuration
 @Slf4j
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoadDatabase {
 
-    @Value("${data.users:admin,userman,user1,user2,user3,user4,user5}")
+    @Value("${data.users:admin,user,user1,user2,user3,user4,user5}")
     private String[] users;
     @Value("${data.nouns:sky,winter,sun,moon,spring,weekend,fall,summer,mountain,wolf,bird}")
     private String[] nouns;
@@ -28,7 +33,7 @@ public class LoadDatabase {
     @Value("${data.timeOfDay:morning,afternoon,evening,night}")
     private String[] timeOfDay;
 
-    @Autowired
+     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Value("clientSecret:secret")
@@ -42,13 +47,18 @@ public class LoadDatabase {
     CommandLineRunner initUsers(UserRepository repo) {
 
         return args -> {
+
             for (int i = 0; i < users.length; i++) {
                 String email = users[i] + "@" + users[i] + ".com";
                 User.Role role = i > 1 ? User.Role.USER : i == 0 ? User.Role.ADMIN : User.Role.USER_MANAGER;
                 double minGleePerDay = rnd(1000 * feelings.length);
                 String pwd = passwordEncoder.encode("pwd");
-                log.info("save {}", repo.save(new User(null, email, pwd, role, minGleePerDay, null)));
+
+                log.info("save {}", repo.save(new User(  email, pwd, role, minGleePerDay )));
+
             }
+
+
         };
     }
 

@@ -1,6 +1,7 @@
 package com.qlicue.gumba.user;
 
 import com.qlicue.gumba.errors.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+
 
 @RestController
 @RequestMapping("api/v1/users")
